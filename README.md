@@ -1,6 +1,5 @@
-"# east-west" 
-
-IDE: IntelliJ
-Build System: Gradle
-Project management app: Jira Software
-Java Version: 21
+##East Meets West Production
+- IDE: IntelliJ
+- Build System: Gradle
+- Project management app: Jira Software
+- Java Version: 21

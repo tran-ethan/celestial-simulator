@@ -1,7 +1,0 @@
-Project Ideas:
-
-1. Gravity Simulator 3D
-2. Particle Life 2D/3D
-3. Cellular Automata 3D
-4. Schrodinger's cat box
-5. Vector fields

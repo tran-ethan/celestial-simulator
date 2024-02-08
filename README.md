@@ -1,5 +1,7 @@
 # East Meets West Production
+INTEGRATIVE PROJECT IN COMPUTER SCIENCE AND MATHEMATICS
 
+## Project Information
 - IDE: IntelliJ
 - Build System: Gradle 8.5
 - Project management app: Jira Software

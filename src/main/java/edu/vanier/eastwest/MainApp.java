@@ -8,14 +8,24 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainApp extends Application {
+
+    private static Scene scene;
+
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("main.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hello!");
+
+        FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("main.fxml"));
+        scene = new Scene(loader.load());
+
+        stage.setTitle("Celestial Simulator");
         stage.setScene(scene);
         stage.sizeToScene();
         stage.show();
+    }
+
+    public static void setRoot(String fxml) throws IOException {
+        FXMLLoader loader = new FXMLLoader(MainApp.class.getResource(fxml));
+        scene.setRoot(loader.load());
     }
 
     public static void main(String[] args) {

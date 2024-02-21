@@ -5,4 +5,6 @@ module edu.vanier.eastwest {
                             
     opens edu.vanier.eastwest to javafx.fxml;
     exports edu.vanier.eastwest;
+    exports edu.vanier.eastwest.controllers;
+    opens edu.vanier.eastwest.controllers to javafx.fxml;
 }

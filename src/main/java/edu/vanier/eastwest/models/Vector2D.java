@@ -13,7 +13,8 @@ public class Vector2D {
     public void draw(){
 
     }
-    public String getColor(){
+    public String getColor(double highest, double lowest){
+        if()
         return null;
     }
 }

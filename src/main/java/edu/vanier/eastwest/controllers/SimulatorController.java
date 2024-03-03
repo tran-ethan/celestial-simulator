@@ -12,6 +12,9 @@ public class SimulatorController {
     private AnimationTimer timer;
     private ArrayList<Body> bodies;
     private TreeNode node;
+    private ArrayList<Vector2D>;
+    //The highest and lowest magnitude found in the
+    private double highestMagnitude, lowestMagnitude;
 
 
     public void generateGrid(){

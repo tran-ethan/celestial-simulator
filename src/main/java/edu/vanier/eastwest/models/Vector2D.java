@@ -7,17 +7,23 @@ public class Vector2D {
     private Point2D direction, start, end;
     private double magnitude;
 
+    /**
+     * Update the magnitude, direction and end of the vector
+     */
     public void update(){
 
     }
+
+    /**
+     * Draw the updated version of the vector with it's new direction, end and color.
+     */
     public void draw(){
 
     }
 
     /**
-     * Compare the magnitude of the vect
-     * or to the highest and lowest found in
-     * the list of vectors and assigne him a hexadecimal color code based on that
+     * Compare the magnitude of the vector to the highest and lowest found in
+     * the list of vectors and assign him a hexadecimal color code based on that
      * @param maxMagnitude The highest magnitude found in the list of vectors
      * @param minMagnitude The lowest magnitude found in the list of vectors
      * @return The hexadecimal color code that needs to be applied to this vector

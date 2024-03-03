@@ -13,8 +13,25 @@ public class Vector2D {
     public void draw(){
 
     }
-    public String getColor(double highest, double lowest){
-        if()
+
+    /**
+     * Compare the magnitude of the vector to the highest and lowest found in
+     * the list of vectors and assigne him a hexadecimal color code based on that
+     * @param maxMagnitude The highest magnitude found in the list of vectors
+     * @param minMagnitude The lowest magnitude found in the list of vectors
+     * @return The hexadecimal color code that needs to be applied to this vector
+     */
+    public String getColor(double maxMagnitude, double minMagnitude){
+        double percentage = (magnitude-minMagnitude)/(maxMagnitude-minMagnitude)
+        if(highest == null||lowest == null){
+            return "nullMinMax"
+        }
+        else if(magnitude == null){
+            return "nullMagnitude"
+        }
+        else if(percentage == 0){
+            return
+        }
         return null;
     }
 }

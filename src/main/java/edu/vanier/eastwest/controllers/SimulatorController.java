@@ -25,8 +25,7 @@ public class SimulatorController {
     private Group entities;
 
     private static final float WIDTH = 1280;
-    private static final float HEIGHT = 9209;
-
+    private static final float HEIGHT = 920;
 
     @FXML
     public void initialize() {
@@ -48,7 +47,6 @@ public class SimulatorController {
         SubScene subScene = new SubScene(entities, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
         subScene.setCamera(camera);
         pane.getChildren().add(subScene);
-
     }
 
     private void initBodies() {
@@ -59,22 +57,28 @@ public class SimulatorController {
     public void generateGrid(){
 
     }
+
     public void updateBodies(){
 
     }
+
     public void updateVectors(Vector2D v, Body b){
 
     }
-    public Point2D getGravity(Body b1, Body b2){
 
+    public Point2D getGravity(Body b1, Body b2){
         return null;
     }
+
+    //TODO: build2 @Author: 
     public void updateNodes(){
 
     }
+
     public void updateAnim(){
 
     }
+
     public void collide(Body b1, Body b2){
         
     }

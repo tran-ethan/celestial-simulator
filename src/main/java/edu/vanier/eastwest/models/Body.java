@@ -14,7 +14,7 @@ public class Body extends Sphere {
 
     public Body(double radius, double mass, Point3D position, Color color) {
         super(radius);
-        mass = 1000;
+        this.mass = mass;
         setPosition(position);
         velocity = new Point3D(0, 0 , 0);
         acceleration = new Point3D(0, 0, 0);

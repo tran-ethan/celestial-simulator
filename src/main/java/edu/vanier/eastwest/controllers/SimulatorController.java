@@ -5,9 +5,13 @@ import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.Vector2D;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 
 
 public class SimulatorController {
@@ -29,15 +33,27 @@ public class SimulatorController {
         System.out.println("Starting application...");
         entities = new Group();
 
-        // Camera
-        camera = new PerspectiveCamera(true);
-        camera.setNearClip(1);
-        camera.setFarClip(10000);
+        initBodies();
 
         // Camera
+        camera = new PerspectiveCamera();
+        camera.setNearClip(1);
+        camera.setFarClip(10000);
+        Translate zoom = new Translate(0, 0, -10);
+        camera.getTransforms().addAll(
+                zoom
+        );
+
+        // Sub scene
         SubScene subScene = new SubScene(entities, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
         subScene.setCamera(camera);
         pane.getChildren().add(subScene);
+
+    }
+
+    private void initBodies() {
+        Body b1 = new Body(10, 1000, new Point3D(0, 0, 0), Color.RED);
+        entities.getChildren().add(b1);
     }
 
     public void generateGrid(){

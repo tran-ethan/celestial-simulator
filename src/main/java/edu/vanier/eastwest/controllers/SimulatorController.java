@@ -9,7 +9,6 @@ import javafx.scene.*;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 
-import java.util.ArrayList;
 
 public class SimulatorController {
 

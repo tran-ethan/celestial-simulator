@@ -1,18 +1,45 @@
 package edu.vanier.eastwest.controllers;
 
-import edu.vanier.eastwest.TreeNode;
+import edu.vanier.eastwest.models.TreeNode;
 import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.Vector2D;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Point2D;
+import javafx.scene.*;
+import javafx.fxml.FXML;
+import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
 
 public class SimulatorController {
-    private AnimationTimer timer;
-    private ArrayList<Body> bodies;
-    private TreeNode node;
 
+    @FXML
+    private AnchorPane pane;
+
+    private AnimationTimer timer;
+    private TreeNode node;
+    private Camera camera;
+    private Group entities;
+
+    private static final float WIDTH = 1280;
+    private static final float HEIGHT = 9209;
+
+
+    @FXML
+    public void initialize() {
+        System.out.println("Starting application...");
+        entities = new Group();
+
+        // Camera
+        camera = new PerspectiveCamera(true);
+        camera.setNearClip(1);
+        camera.setFarClip(10000);
+
+        // Camera
+        SubScene subScene = new SubScene(entities, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
+        subScene.setCamera(camera);
+        pane.getChildren().add(subScene);
+    }
 
     public void generateGrid(){
 

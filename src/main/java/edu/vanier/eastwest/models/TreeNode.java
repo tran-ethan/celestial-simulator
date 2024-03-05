@@ -1,4 +1,4 @@
-package edu.vanier.eastwest;
+package edu.vanier.eastwest.models;
 
 import javafx.geometry.Point2D;
 

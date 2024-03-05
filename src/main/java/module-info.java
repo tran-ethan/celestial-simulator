@@ -7,4 +7,6 @@ module edu.vanier.eastwest {
     exports edu.vanier.eastwest;
     exports edu.vanier.eastwest.controllers;
     opens edu.vanier.eastwest.controllers to javafx.fxml;
+    exports edu.vanier.eastwest.models;
+    opens edu.vanier.eastwest.models to javafx.fxml;
 }

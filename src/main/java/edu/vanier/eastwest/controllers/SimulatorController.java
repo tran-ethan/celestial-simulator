@@ -1,21 +1,65 @@
 package edu.vanier.eastwest.controllers;
 
-import edu.vanier.eastwest.TreeNode;
+import edu.vanier.eastwest.models.TreeNode;
 import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.Vector2D;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
+import javafx.scene.*;
+import javafx.fxml.FXML;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 
-import java.util.ArrayList;
 
 public class SimulatorController {
-    private AnimationTimer timer;
+    
     private ArrayList<Body> bodies;
-    private TreeNode node;
     private ArrayList<Vector2D>;
     //The highest and lowest magnitude found in the
     private double highestMagnitude, lowestMagnitude;
 
+    @FXML
+    private AnchorPane pane;
+
+    private AnimationTimer timer;
+    private TreeNode node;
+    private Camera camera;
+    private Group entities;
+
+    private static final float WIDTH = 1280;
+    private static final float HEIGHT = 9209;
+
+
+    @FXML
+    public void initialize() {
+        System.out.println("Starting application...");
+        entities = new Group();
+
+        initBodies();
+
+        // Camera
+        camera = new PerspectiveCamera();
+        camera.setNearClip(1);
+        camera.setFarClip(10000);
+        Translate zoom = new Translate(0, 0, -10);
+        camera.getTransforms().addAll(
+                zoom
+        );
+
+        // Sub scene
+        SubScene subScene = new SubScene(entities, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
+        subScene.setCamera(camera);
+        pane.getChildren().add(subScene);
+
+    }
+
+    private void initBodies() {
+        Body b1 = new Body(10, 1000, new Point3D(0, 0, 0), Color.RED);
+        entities.getChildren().add(b1);
+    }
 
     public void generateGrid(){
 

@@ -2,7 +2,7 @@ package edu.vanier.eastwest.controllers;
 
 import edu.vanier.eastwest.models.TreeNode;
 import edu.vanier.eastwest.models.Body;
-import edu.vanier.eastwest.models.Vector2D;
+import edu.vanier.eastwest.models.Vector3D;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
@@ -10,14 +10,15 @@ import javafx.scene.*;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
+
+import java.util.ArrayList;
 
 
 public class SimulatorController {
     
     private ArrayList<Body> bodies;
-    private ArrayList<Vector2D>;
+    private ArrayList<Vector3D> vectors;
     //The highest and lowest magnitude found in the
     private double highestMagnitude, lowestMagnitude;
 
@@ -67,7 +68,7 @@ public class SimulatorController {
     public void updateBodies(){
 
     }
-    public void updateVectors(Vector2D v, Body b){
+    public void updateVectors(Vector3D v, Body b){
 
     }
     public Point2D getGravity(Body b1, Body b2){

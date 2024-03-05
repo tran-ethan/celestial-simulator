@@ -1,10 +1,10 @@
 package edu.vanier.eastwest.models;
 
-import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 
-public class Vector2D {
+public class Vector3D {
 
-    private Point2D direction, start, end;
+    private Point3D direction, start, end;
     private double magnitude;
 
     /**

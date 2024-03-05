@@ -29,14 +29,14 @@ public class Vector3D {
      * @return The hexadecimal color code that needs to be applied to this vector
      */
     public String getColor(double maxMagnitude, double minMagnitude){
-        double percentage = (magnitude-minMagnitude)/(maxMagnitude-minMagnitude);
-        if(maxMagnitude == 0||minMagnitude == 0){
+        double percentage = (magnitude - minMagnitude) / (maxMagnitude - minMagnitude);
+        if (maxMagnitude == 0|| minMagnitude == 0){
             return "zeroMinMax";
         }
-        else if(magnitude == 0){
+        else if (magnitude == 0) {
             return "zeroMagnitude";
         }
-        else if(percentage == 0){
+        else if (percentage == 0) {
             return "#0000ff";
         }
         return null;

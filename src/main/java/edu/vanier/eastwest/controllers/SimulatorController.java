@@ -1,5 +1,6 @@
 package edu.vanier.eastwest.controllers;
 
+import edu.vanier.eastwest.MainApp;
 import edu.vanier.eastwest.models.TreeNode;
 import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.Vector3D;
@@ -29,6 +30,7 @@ public class SimulatorController {
     private TreeNode node;
     private Camera camera;
     private Group entities;
+    private SubScene subScene;
 
     private static final float WIDTH = 1280;
     private static final float HEIGHT = 920;
@@ -37,8 +39,6 @@ public class SimulatorController {
     public void initialize() {
         System.out.println("Starting application...");
         entities = new Group();
-
-        initBodies();
 
         // Camera
         camera = new PerspectiveCamera();
@@ -50,14 +50,31 @@ public class SimulatorController {
         );
 
         // Sub scene
-        SubScene subScene = new SubScene(entities, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
+        subScene = new SubScene(entities, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
         subScene.setCamera(camera);
         pane.getChildren().add(subScene);
+
+        // Initialize
+        initBodies();
+        pane.requestFocus();
+        initControls();
     }
 
     private void initBodies() {
-        Body b1 = new Body(10, 1000, new Point3D(0, 0, 0), Color.RED);
+        Body b1 = new Body(30, 1000, new Point3D(0, 0, 0), Color.RED);
         entities.getChildren().add(b1);
+    }
+
+    private void initControls() {
+        MainApp.scene.setOnKeyPressed(e -> {
+            switch (e.getCode()) {
+                case W -> System.out.println("forward");
+                case A -> camera.setTranslateX(camera.getTranslateX() - 10);
+                case S -> camera.setTranslateZ(camera.getTranslateZ() - 10);
+                case D -> camera.setTranslateX(camera.getTranslateX() + 10);
+                case SPACE -> System.out.println("HELLO");
+            }
+        });
     }
 
     public void generateGrid(){

@@ -1,5 +1,6 @@
 package edu.vanier.eastwest;
 
+import edu.vanier.eastwest.controllers.SimulatorController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,7 +10,7 @@ import java.io.IOException;
 
 public class MainApp extends Application {
 
-    private static Scene scene;
+    public static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {

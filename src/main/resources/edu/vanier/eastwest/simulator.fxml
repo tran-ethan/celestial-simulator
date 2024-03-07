@@ -15,11 +15,11 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.SimulatorController">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1280.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.SimulatorController">
    <children>
       <BorderPane prefHeight="920.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <MenuBar style="-fx-border-color: #7b7b7b; -fx-border-width: 2; -fx-border-style: solid none none none;" BorderPane.alignment="CENTER">
+            <MenuBar style="-fx-border-color: #7b7b7b; -fx-border-width: 2; -fx-border-style: solid none none none; -fx-background-color: #D3D3D3;" BorderPane.alignment="CENTER">
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
@@ -94,11 +94,11 @@
             </VBox>
          </left>
          <right>
-            <SplitPane dividerPositions="0.196" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c;" BorderPane.alignment="CENTER">
+            <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c;" BorderPane.alignment="CENTER">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="172.0" prefWidth="158.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox alignment="CENTER" prefHeight="440.0" prefWidth="154.0" style="-fx-background-color: #D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Label text="Properties of">
                                  <font>
@@ -117,9 +117,9 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #D3D3D3;">
                      <children>
-                        <VBox layoutX="-27.0" layoutY="10.0" prefHeight="715.0" prefWidth="185.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <VBox layoutX="-27.0" layoutY="10.0" prefHeight="709.0" prefWidth="154.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
               </items>

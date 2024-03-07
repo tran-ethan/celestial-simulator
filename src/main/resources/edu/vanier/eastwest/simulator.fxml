@@ -55,11 +55,11 @@
                         <Insets />
                      </VBox.margin>
                   </Line>
-                  <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="110.0" text="Pan" textAlignment="CENTER" />
-                  <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Selection Tool" textAlignment="CENTER" />
-                  <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Add Body" textAlignment="CENTER" />
-                  <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Remove" textAlignment="CENTER" />
-                  <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Vector Field" textAlignment="CENTER" />
+                  <Button fx:id="btnPan" mnemonicParsing="false" prefHeight="100.0" prefWidth="110.0" text="Pan" textAlignment="CENTER" />
+                  <Button fx:id="btnSelection" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Selection Tool" textAlignment="CENTER" />
+                  <Button fx:id="btnAdd" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Add Body" textAlignment="CENTER" />
+                  <Button fx:id="btnRemove" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Remove" textAlignment="CENTER" />
+                  <Button fx:id="btnVector" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Vector Field" textAlignment="CENTER" />
                   <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Etc." textAlignment="CENTER" />
                   <Line endX="-2.7071075439453125" endY="-0.20710676908493042" startX="-100.0" stroke="#7c7c7c" strokeLineCap="ROUND" strokeWidth="2.0">
                      <VBox.margin>
@@ -68,23 +68,23 @@
                   </Line>
                   <VBox alignment="CENTER" prefHeight="334.0" prefWidth="100.0">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Play">
+                        <Button fx:id="btnPlay" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Play">
                            <VBox.margin>
                               <Insets bottom="20.0" />
                            </VBox.margin>
                         </Button>
-                        <Label text="Speed" />
-                        <Slider>
+                        <Label text="Simulation Speed" />
+                        <Slider fx:id="sldrSpeed">
                            <VBox.margin>
                               <Insets bottom="20.0" />
                            </VBox.margin>
                         </Slider>
-                        <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Pause">
+                        <Button fx:id="btnPause" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Pause">
                            <VBox.margin>
                               <Insets bottom="20.0" />
                            </VBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Reset" />
+                        <Button fx:id="btnReset" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Reset" />
                      </children>
                   </VBox>
                </children>
@@ -126,7 +126,7 @@
             </SplitPane>
          </right>
          <center>
-            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #7b7b7b; -fx-border-width: 2; -fx-border-style: solid none none none;" BorderPane.alignment="CENTER" />
+            <Pane fx:id="paneCamera" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #7b7b7b; -fx-border-width: 2; -fx-border-style: solid none none none;" BorderPane.alignment="CENTER" />
          </center>
       </BorderPane>
    </children>

@@ -74,7 +74,7 @@
                            </VBox.margin>
                         </Button>
                         <Label text="Simulation Speed" />
-                        <Slider fx:id="sldrSpeed">
+                        <Slider fx:id="sliderSpeed">
                            <VBox.margin>
                               <Insets bottom="20.0" />
                            </VBox.margin>

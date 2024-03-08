@@ -61,7 +61,7 @@ public class SimulatorController {
     private Pane pane;
 
     @FXML
-    private Slider sldrSpeed;
+    private Slider sliderSpeed;
 
     private AnimationTimer timer;
     private TreeNode node;
@@ -126,8 +126,8 @@ public class SimulatorController {
      * Each axis is oriented along a different axis direction (X, Y, or Z) and colored accordingly.
      * The intersection of the 3 axes represent the coordinate (0, 0, 0).
      *
-     * @param scale The scaling factor applied to the axes.
-     * @return A Group object containing the X, Y, and Z axes with specified scaling.
+     * @param scale The scaling factor applied to the axes
+     * @return a Group object containing the X, Y, and Z axes with specified scaling
      */
     public Group getAxes(double scale) {
         Cylinder axisX = new Cylinder(1, 1000);
@@ -154,11 +154,11 @@ public class SimulatorController {
     /**
      * Creates a polygon mesh based on specified width, height, and subdivision parameters.
      *
-     * @param width     The width of the mesh.
-     * @param height    The height of the mesh.
-     * @param subDivX   The number of subdivisions along the X-axis.
-     * @param subDivY   The number of subdivisions along the Y-axis.
-     * @return A PolygonMesh object representing the created mesh.
+     * @param width     The width of the mesh
+     * @param height    The height of the mesh
+     * @param subDivX   The number of subdivisions along the X-axis
+     * @param subDivY   The number of subdivisions along the Y-axis
+     * @return a PolygonMesh object representing the created mesh
      */
     private PolygonMesh createMesh(float width, float height, int subDivX, int subDivY) {
         final float minX = - width / 2f;
@@ -231,9 +231,9 @@ public class SimulatorController {
     /**
      * Generates a group containing grid lines in the XY, XZ, and YZ planes, with specified size and spacing.
      *
-     * @param size  The size of the grid in the X and Y directions.
-     * @param delta The spacing between grid lines.
-     * @return A Group object containing grid lines in the XZ plane and its subgrid
+     * @param size  The size of the grid in the X and Y directions
+     * @param delta The spacing between grid lines
+     * @return a Group object containing grid lines in the XZ plane and its subgrid
      */
     public Group getGrid(float size, float delta) {
         if (delta < 1) {
@@ -275,6 +275,7 @@ public class SimulatorController {
         meshViewYZ2.getTransforms().add(new Rotate(90, Rotate.Y_AXIS));
 
         // return new Group(meshViewXY, meshViewXZ, meshViewYZ, meshViewXY2, meshViewXZ2, meshViewYZ2 );
+        // For now, only render the XZ plane
         return new Group(meshViewXZ, meshViewXZ2);
     }
 

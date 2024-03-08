@@ -1,8 +1,9 @@
 module edu.vanier.eastwest {
     requires javafx.controls;
     requires javafx.fxml;
-            
-                            
+    requires org.fxyz3d.core;
+
+
     opens edu.vanier.eastwest to javafx.fxml;
     exports edu.vanier.eastwest;
     exports edu.vanier.eastwest.controllers;

@@ -45,6 +45,7 @@ dependencies {
   testCompileOnly 'org.projectlombok:lombok:1.18.30'
   testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 
+  implementation 'org.fxyz3d:fxyz3d:0.6.0'
 }
 
 test {

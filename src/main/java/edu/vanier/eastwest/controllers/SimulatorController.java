@@ -14,7 +14,10 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 
 import java.util.ArrayList;
@@ -70,6 +73,7 @@ public class SimulatorController {
     public void initialize() {
         System.out.println("Starting application...");
         entities = new Group();
+        entities.getChildren().add(getAxes(1));
 
         // Camera
         camera = new PerspectiveCamera();
@@ -114,14 +118,36 @@ public class SimulatorController {
         );
     }
 
-    public void generateGrid(){
+    public Group getAxes(double scale) {
+        Cylinder axisX = new Cylinder(1, 1000);
+        axisX.getTransforms().addAll(new Rotate(90, Rotate.Z_AXIS));
+        axisX.getTransforms().addAll(new Translate(0, -500, 0));
+        PhongMaterial redMat = new PhongMaterial();
+        redMat.setDiffuseColor(Color.RED);
+        axisX.setMaterial(redMat);
+
+        Cylinder axisY = new Cylinder(1, 1000);
+        axisY.setMaterial(new PhongMaterial(Color.GREEN));
+        axisY.getTransforms().addAll(new Translate(0, 500, 0));
+
+        Cylinder axisZ = new Cylinder(1, 1000);
+        axisZ.setMaterial(new PhongMaterial(Color.BLUE));
+        axisZ.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS));
+        axisZ.getTransforms().addAll(new Translate(0, 500, 0));
+
+        Group group = new Group(axisX, axisY, axisZ);
+        group.getTransforms().add(new Scale(scale, scale, scale));
+        return group;
+    }
+
+    public void generateGrid() {
 
     }
 
-    public void updateBodies(){
+    public void updateBodies() {
 
     }
-    public void updateVectors(Vector3D v, Body b){
+    public void updateVectors(Vector3D v, Body b) {
 
     }
 
@@ -130,15 +156,15 @@ public class SimulatorController {
     }
 
     //TODO: build2 @Author: 
-    public void updateNodes(){
+    public void updateNodes() {
 
     }
 
-    public void updateAnim(){
+    public void updateAnim() {
 
     }
 
-    public void collide(Body b1, Body b2){
+    public void collide(Body b1, Body b2) {
         
     }
 }

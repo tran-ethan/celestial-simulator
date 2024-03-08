@@ -9,8 +9,12 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
 import java.util.ArrayList;
@@ -24,7 +28,34 @@ public class SimulatorController {
     private double highestMagnitude, lowestMagnitude;
 
     @FXML
-    private AnchorPane pane;
+    private Button btnAdd;
+
+    @FXML
+    private Button btnPan;
+
+    @FXML
+    private Button btnPause;
+
+    @FXML
+    private Button btnPlay;
+
+    @FXML
+    private Button btnRemove;
+
+    @FXML
+    private Button btnReset;
+
+    @FXML
+    private Button btnSelection;
+
+    @FXML
+    private Button btnVector;
+
+    @FXML
+    private Pane pane;
+
+    @FXML
+    private Slider sldrSpeed;
 
     private AnimationTimer timer;
     private TreeNode node;
@@ -44,10 +75,6 @@ public class SimulatorController {
         camera = new PerspectiveCamera();
         camera.setNearClip(1);
         camera.setFarClip(10000);
-        Translate zoom = new Translate(0, 0, -10);
-        camera.getTransforms().addAll(
-                zoom
-        );
 
         // Sub scene
         subScene = new SubScene(entities, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
@@ -56,7 +83,6 @@ public class SimulatorController {
 
         // Initialize
         initBodies();
-        pane.requestFocus();
         initControls();
     }
 
@@ -68,13 +94,24 @@ public class SimulatorController {
     private void initControls() {
         MainApp.scene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
-                case W -> System.out.println("forward");
+                case W -> camera.setTranslateZ(camera.getTranslateZ() + 10);
                 case A -> camera.setTranslateX(camera.getTranslateX() - 10);
                 case S -> camera.setTranslateZ(camera.getTranslateZ() - 10);
                 case D -> camera.setTranslateX(camera.getTranslateX() + 10);
-                case SPACE -> System.out.println("HELLO");
             }
         });
+
+        Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
+        Rotate yRotate = new Rotate(0, Rotate.Y_AXIS);
+        Rotate autoRotateY = new Rotate(0, Rotate.Y_AXIS);
+        Translate zoom = new Translate(0, 0, -500);
+        camera.getTransforms().addAll(
+                xRotate,
+                yRotate,
+                autoRotateY,
+                new Rotate(-30, Rotate.X_AXIS),
+                zoom                                  // Move camera -50px in z direction
+        );
     }
 
     public void generateGrid(){

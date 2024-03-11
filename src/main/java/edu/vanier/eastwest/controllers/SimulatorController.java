@@ -5,6 +5,8 @@ import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.TreeNode;
 import edu.vanier.eastwest.models.Vector3D;
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
@@ -24,6 +26,8 @@ import org.fxyz3d.shapes.polygon.PolygonMesh;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class SimulatorController {
@@ -79,7 +83,7 @@ public class SimulatorController {
         entities.getChildren().addAll(getAxes(1), getGrid(500, 10));
 
         // Camera
-        camera = new PerspectiveCamera();
+        camera = new PerspectiveCamera(true);
         camera.setNearClip(1);
         camera.setFarClip(10000);
 
@@ -117,8 +121,9 @@ public class SimulatorController {
                 yRotate,
                 autoRotateY,
                 new Rotate(-30, Rotate.X_AXIS),
-                zoom                                  // Move camera -50px in z direction
+                zoom
         );
+
     }
 
     /**
@@ -277,6 +282,10 @@ public class SimulatorController {
         // return new Group(meshViewXY, meshViewXZ, meshViewYZ, meshViewXY2, meshViewXZ2, meshViewYZ2 );
         // For now, only render the XZ plane
         return new Group(meshViewXZ, meshViewXZ2);
+    }
+
+    public List<Body> bodies() {
+        return entities.getChildren().stream().filter(n -> n instanceof Body).map(n -> (Body) n).collect(Collectors.toList());
     }
 
     public void updateBodies() {

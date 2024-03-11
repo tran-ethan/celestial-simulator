@@ -5,6 +5,9 @@ import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.TreeNode;
 import edu.vanier.eastwest.models.Vector3D;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
@@ -13,6 +16,7 @@ import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -22,6 +26,7 @@ import javafx.scene.shape.DrawMode;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
+import javafx.util.Duration;
 import org.fxyz3d.shapes.polygon.PolygonMesh;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
@@ -72,6 +77,14 @@ public class SimulatorController {
     private Camera camera;
     private Group entities;
     private SubScene subScene;
+
+
+    private double anchorX, anchorY;
+
+    private double anchorAngleX, anchorAngleY = 0;
+
+    private final DoubleProperty angleX = new SimpleDoubleProperty(0);
+    private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
     private static final float WIDTH = 1280;
     private static final float HEIGHT = 920;
@@ -124,6 +137,34 @@ public class SimulatorController {
                 zoom
         );
 
+        // animate the camera position.
+        Timeline timeline = new Timeline(
+                new KeyFrame(
+                        Duration.seconds(0),
+                        new KeyValue(autoRotateY.angleProperty(), 0)
+                ),
+                new KeyFrame(
+                        Duration.seconds(30),
+                        new KeyValue(autoRotateY.angleProperty(), 360)
+                )
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+
+        xRotate.angleProperty().bind(angleX);
+        yRotate.angleProperty().bind(angleY);
+
+        MainApp.scene.setOnMousePressed(event -> {
+            anchorX = event.getSceneX();
+            anchorY = event.getSceneY();
+            anchorAngleX = angleX.get();
+            anchorAngleY = angleY.get();
+        });
+
+        MainApp.scene.setOnMouseDragged(event -> {
+            angleX.set(anchorAngleX - (anchorY - event.getSceneY()));
+            angleY.set(anchorAngleY + anchorX - event.getSceneX());
+        });
     }
 
     /**

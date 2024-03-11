@@ -137,7 +137,7 @@ public class SimulatorController {
                 zoom
         );
 
-        // animate the camera position.
+        // Camera auto spin
         Timeline timeline = new Timeline(
                 new KeyFrame(
                         Duration.seconds(0),
@@ -149,11 +149,12 @@ public class SimulatorController {
                 )
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+        timeline.play(); // Comment this line to disable
 
         xRotate.angleProperty().bind(angleX);
         yRotate.angleProperty().bind(angleY);
 
+        // Mouse controls
         MainApp.scene.setOnMousePressed(event -> {
             anchorX = event.getSceneX();
             anchorY = event.getSceneY();
@@ -161,9 +162,16 @@ public class SimulatorController {
             anchorAngleY = angleY.get();
         });
 
+        // Mouse dragging controls
         MainApp.scene.setOnMouseDragged(event -> {
             angleX.set(anchorAngleX - (anchorY - event.getSceneY()));
             angleY.set(anchorAngleY + anchorX - event.getSceneX());
+        });
+
+        // Zoom controls
+        MainApp.scene.addEventHandler(ScrollEvent.SCROLL, e -> {
+            double delta = e.getDeltaY();
+            zoom.setZ(zoom.getZ() + delta);
         });
     }
 

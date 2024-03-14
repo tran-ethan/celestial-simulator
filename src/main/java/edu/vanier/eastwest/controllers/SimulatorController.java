@@ -16,8 +16,10 @@ import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.control.SplitPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.CullFace;
@@ -68,6 +70,9 @@ public class SimulatorController {
 
     @FXML
     private Pane pane;
+
+    @FXML
+    private SplitPane spProperties;
 
     @FXML
     private Slider sliderSpeed;
@@ -160,6 +165,11 @@ public class SimulatorController {
             anchorY = event.getSceneY();
             anchorAngleX = angleX.get();
             anchorAngleY = angleY.get();
+            timeline.pause();
+        });
+
+        MainApp.scene.setOnMouseReleased(mouseEvent -> {
+            timeline.play();
         });
 
         // Mouse dragging controls

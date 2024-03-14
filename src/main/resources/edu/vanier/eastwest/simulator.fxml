@@ -12,14 +12,13 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1280.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.SimulatorController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1280.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.SimulatorController">
    <children>
       <BorderPane prefHeight="920.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <MenuBar style="-fx-border-color: #7b7b7b; -fx-border-width: 2; -fx-border-style: solid none none none; -fx-background-color: #D3D3D3;" BorderPane.alignment="CENTER">
+            <MenuBar style="-fx-border-color: #7b7b7b; -fx-border-width: 2; -fx-border-style: solid none solid none; -fx-background-color: #D3D3D3;" BorderPane.alignment="CENTER">
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
@@ -31,6 +30,11 @@
                     <MenuItem mnemonicParsing="false" text="Delete" />
                   </items>
                 </Menu>
+                  <Menu mnemonicParsing="false" text="Options">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                    </items>
+                  </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                   <items>
                     <MenuItem mnemonicParsing="false" text="About" />
@@ -39,94 +43,92 @@
               </menus>
             </MenuBar>
          </top>
-         <left>
-            <VBox alignment="TOP_CENTER" prefHeight="895.0" prefWidth="100.0" style="-fx-border-style: solid solid none none; -fx-border-width: 2; -fx-border-color: #7c7c7c;" BorderPane.alignment="CENTER">
-               <children>
-                  <Label alignment="CENTER" text="Tools">
-                     <VBox.margin>
-                        <Insets bottom="20.0" top="20.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Line endX="-2.7071075439453125" endY="-0.20710676908493042" startX="-100.0" stroke="#7c7c7c" strokeLineCap="ROUND" strokeWidth="2.0">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Line>
-                  <Button fx:id="btnPan" mnemonicParsing="false" prefHeight="100.0" prefWidth="110.0" text="Pan" textAlignment="CENTER" />
-                  <Button fx:id="btnSelection" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Selection Tool" textAlignment="CENTER" />
-                  <Button fx:id="btnAdd" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Add Body" textAlignment="CENTER" />
-                  <Button fx:id="btnRemove" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Remove" textAlignment="CENTER" />
-                  <Button fx:id="btnVector" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Vector Field" textAlignment="CENTER" />
-                  <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Etc." textAlignment="CENTER" />
-                  <Line endX="-2.7071075439453125" endY="-0.20710676908493042" startX="-100.0" stroke="#7c7c7c" strokeLineCap="ROUND" strokeWidth="2.0">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Line>
-                  <VBox alignment="CENTER" prefHeight="334.0" prefWidth="100.0">
-                     <children>
-                        <Button fx:id="btnPlay" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Play">
-                           <VBox.margin>
-                              <Insets bottom="20.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Label text="Simulation Speed" />
-                        <Slider fx:id="sliderSpeed">
-                           <VBox.margin>
-                              <Insets bottom="20.0" />
-                           </VBox.margin>
-                        </Slider>
-                        <Button fx:id="btnPause" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Pause">
-                           <VBox.margin>
-                              <Insets bottom="20.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="btnReset" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Reset" />
-                     </children>
-                  </VBox>
-               </children>
-               <BorderPane.margin>
-                  <Insets />
-               </BorderPane.margin>
-            </VBox>
-         </left>
-         <right>
-            <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c;" BorderPane.alignment="CENTER">
-              <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                     <children>
-                        <VBox alignment="CENTER" prefHeight="440.0" prefWidth="154.0" style="-fx-background-color: #D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <Label text="Properties of">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Label>
-                              <Label text="&lt;No Object Selected&gt;">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: #D3D3D3;">
-                     <children>
-                        <VBox layoutX="-27.0" layoutY="10.0" prefHeight="709.0" prefWidth="154.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-              </items>
-            </SplitPane>
-         </right>
          <center>
-            <Pane fx:id="pane" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #7b7b7b; -fx-border-width: 2; -fx-border-style: solid none none none;" BorderPane.alignment="CENTER" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <SplitPane dividerPositions="0.15, 0.8" prefHeight="891.0" prefWidth="1176.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="116.0" style="-fx-background-color: #D3D3D3;">
+                           <children>
+                              <VBox fx:id="vbTools" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="889.0" prefWidth="176.0" style="-fx-border-style: solid solid none none; -fx-border-width: 2; -fx-border-color: #7c7c7c;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Tools">
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="btnPan" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="100.0" prefWidth="110.0" text="Pan" textAlignment="CENTER">
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                    <Button fx:id="btnSelection" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Selection Tool" textAlignment="CENTER" />
+                                    <Button fx:id="btnAdd" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Add Body" textAlignment="CENTER" />
+                                    <Button fx:id="btnRemove" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Remove" textAlignment="CENTER" />
+                                    <Button fx:id="btnVector" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Vector Field" textAlignment="CENTER" />
+                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Etc." textAlignment="CENTER" />
+                                    <VBox alignment="CENTER" prefHeight="334.0" prefWidth="149.0" spacing="20.0" style="-fx-border-color: black; -fx-border-style: solid none none none;">
+                                       <children>
+                                          <Button fx:id="btnPlay" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Play">
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </Button>
+                                          <Label text="Simulation Speed" />
+                                          <Slider fx:id="sliderSpeed">
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </Slider>
+                                          <Button fx:id="btnPause" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Pause">
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </Button>
+                                          <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Reset" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                        <Pane fx:id="pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <SplitPane fx:id="spProperties" dividerPositions="0.24067796610169492" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="887.0" prefWidth="144.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c; -fx-background-color: #D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <items>
+                                    <VBox alignment="CENTER" prefHeight="440.0" prefWidth="154.0">
+                                       <children>
+                                          <Label text="Properties of">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="&lt;No Object Selected&gt;">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </VBox>
+                                    <VBox prefHeight="709.0" prefWidth="154.0" />
+                                 </items>
+                              </SplitPane>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
          </center>
       </BorderPane>
    </children>

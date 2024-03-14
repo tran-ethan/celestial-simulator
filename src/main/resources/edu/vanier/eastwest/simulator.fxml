@@ -46,7 +46,7 @@
          <center>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <SplitPane dividerPositions="0.15, 0.8" prefHeight="891.0" prefWidth="1176.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.15, 0.85" prefHeight="891.0" prefWidth="1176.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="116.0" style="-fx-background-color: #D3D3D3;">
                            <children>
@@ -77,18 +77,18 @@
                                                 <Insets />
                                              </VBox.margin>
                                           </Button>
-                                          <Label text="Simulation Speed" />
-                                          <Slider fx:id="sliderSpeed">
-                                             <VBox.margin>
-                                                <Insets />
-                                             </VBox.margin>
-                                          </Slider>
                                           <Button fx:id="btnPause" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Pause">
                                              <VBox.margin>
                                                 <Insets />
                                              </VBox.margin>
                                           </Button>
                                           <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Reset" />
+                                          <Label text="Simulation Speed" />
+                                          <Slider fx:id="sliderSpeed">
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </Slider>
                                        </children>
                                        <VBox.margin>
                                           <Insets top="20.0" />

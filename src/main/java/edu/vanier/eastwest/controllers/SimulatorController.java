@@ -2,6 +2,7 @@ package edu.vanier.eastwest.controllers;
 
 import edu.vanier.eastwest.MainApp;
 import edu.vanier.eastwest.models.Body;
+import edu.vanier.eastwest.models.MySplitPaneSkin;
 import edu.vanier.eastwest.models.TreeNode;
 import edu.vanier.eastwest.models.Vector3D;
 import javafx.animation.AnimationTimer;
@@ -72,7 +73,7 @@ public class SimulatorController {
     private Pane pane;
 
     @FXML
-    private SplitPane spProperties;
+    private SplitPane splitPane;
 
     @FXML
     private Slider sliderSpeed;
@@ -99,6 +100,9 @@ public class SimulatorController {
         System.out.println("Starting application...");
         entities = new Group();
         entities.getChildren().addAll(getAxes(1), getGrid(500, 10));
+
+        // To make the mouse events on the pane work, we need to prevent the splitpane from consuming mouse events. https://stackoverflow.com/questions/54736344/javafx-splitpane-does-not-bubble-up-mouse-event
+        splitPane.setSkin(new MySplitPaneSkin(splitPane));
 
         // Camera
         camera = new PerspectiveCamera(true);

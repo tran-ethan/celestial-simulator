@@ -46,6 +46,8 @@ dependencies {
   testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 
   implementation 'org.fxyz3d:fxyz3d:0.6.0'
+
+  implementation 'org.controlsfx:controlsfx:11.2.1'
 }
 
 test {

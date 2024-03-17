@@ -2,6 +2,7 @@ module edu.vanier.eastwest {
     requires javafx.controls;
     requires javafx.fxml;
     requires org.fxyz3d.core;
+    requires org.controlsfx.controls;
 
 
     opens edu.vanier.eastwest to javafx.fxml;

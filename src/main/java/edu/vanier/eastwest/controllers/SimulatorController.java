@@ -20,13 +20,11 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
-import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -40,8 +38,7 @@ import java.util.stream.Collectors;
 
 
 public class SimulatorController {
-    
-    private ArrayList<Body> bodies;
+
     private ArrayList<Vector3D> vectors;
     //The highest and lowest magnitude found in the
     private double highestMagnitude, lowestMagnitude;
@@ -139,6 +136,8 @@ public class SimulatorController {
 
                     Point3D a = getGravity(p1, p2, m2, iBody.getRadius(), jBody.getRadius());
                     iBody.update(0.01, a);
+
+                    collide(iBody, jBody, iBody.getPosition().distance(jBody.getPosition()));
                 }
             }
         }
@@ -408,7 +407,6 @@ public class SimulatorController {
 
     }
 
-    public void collide(Body b1, Body b2) {
-        
+    private void collide(Body a, Body b, double distance) {
     }
 }

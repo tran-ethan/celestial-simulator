@@ -59,6 +59,10 @@ public class Body extends Sphere {
         this.velocity = velocity;
     }
 
+    public Point3D getVelocity() {
+        return velocity;
+    }
+
     public double getMass() {
         return mass;
     }

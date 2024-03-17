@@ -1,6 +1,5 @@
 package edu.vanier.eastwest;
 
-import edu.vanier.eastwest.controllers.SimulatorController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

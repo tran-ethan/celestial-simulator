@@ -408,5 +408,40 @@ public class SimulatorController {
     }
 
     private void collide(Body a, Body b, double distance) {
+        if (distance > a.getRadius() + b.getRadius()) return;
+
+        // Normal vector
+        Point3D p1 = a.getPosition();
+        Point3D p2 = b.getPosition();
+        Point3D n = p1.subtract(p2);
+        double n_mag = n.magnitude();
+
+        // Minimum translation distance to push balls after intersecting
+        Point3D mtd = n.multiply(((a.getRadius() + b.getRadius()) - n_mag) / n_mag);
+
+        // Inverse mass quantities
+        double im1 = 1 / a.getMass();
+        double im2 = 1 / b.getMass();
+        double im = im1 + im2;
+
+        // Push-pull apart
+        a.setPosition(a.getPosition().add(mtd.multiply(im1 / im)));
+        b.setPosition(b.getPosition().subtract(mtd.multiply(im2 / im)));
+
+        // Impact speed
+        Point3D v = a.getVelocity().subtract(b.getVelocity());
+        double vn = v.dotProduct(mtd.normalize());
+
+        // Sphere intersecting but moving away from each other already
+        if (vn > 0.0) return;
+
+        // Collision impulse
+        double res = 0.5;
+        double i = (-(1.0f + res) * vn) / im;
+        Point3D impulse = mtd.normalize().multiply(i);
+
+        // Change in momentum
+        a.setVelocity(a.getVelocity().add(impulse.multiply(im1)));
+        b.setVelocity(b.getVelocity().subtract(impulse.multiply(im2)));
     }
 }

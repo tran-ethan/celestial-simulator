@@ -16,6 +16,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.input.ScrollEvent;
@@ -76,6 +77,9 @@ public class SimulatorController {
     @FXML
     private Slider sliderSpeed;
 
+    @FXML
+    private CheckBox dsblSpin;
+
     private AnimationTimer timer;
     private TreeNode node;
     private Camera camera;
@@ -92,6 +96,7 @@ public class SimulatorController {
 
     private static final float WIDTH = 890;
     private static final float HEIGHT = 890;
+    private static Boolean spinning = true;
 
     @FXML
     public void initialize() {
@@ -199,17 +204,32 @@ public class SimulatorController {
         xRotate.angleProperty().bind(angleX);
         yRotate.angleProperty().bind(angleY);
 
+        // Disable camera spin checkbox
+        dsblSpin.setOnAction(actionEvent -> {
+            if(spinning){
+                spinning = false;
+                timeline.pause();
+            }else{
+                spinning = true;
+                timeline.play();
+            }
+        });
+
         // Mouse controls
         MainApp.scene.setOnMousePressed(event -> {
             anchorX = event.getSceneX();
             anchorY = event.getSceneY();
             anchorAngleX = angleX.get();
             anchorAngleY = angleY.get();
-            timeline.pause();
+            if(spinning){
+                timeline.pause();
+            }
         });
 
         MainApp.scene.setOnMouseReleased(mouseEvent -> {
-            timeline.play();
+            if (spinning){
+                timeline.play();
+            }
         });
 
         // Mouse dragging controls

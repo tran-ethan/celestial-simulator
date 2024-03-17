@@ -26,6 +26,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
+import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -92,8 +93,8 @@ public class SimulatorController {
     private final DoubleProperty angleX = new SimpleDoubleProperty(0);
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
-    private static final float WIDTH = 1280;
-    private static final float HEIGHT = 920;
+    private static final float WIDTH = 890;
+    private static final float HEIGHT = 890;
 
     @FXML
     public void initialize() {
@@ -117,11 +118,47 @@ public class SimulatorController {
         // Initialize
         initBodies();
         initControls();
+
+        // Animation timer
+        timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                update();
+            }
+        };
+        timer.start();
+    }
+
+    public void update() {
+        for (Body iBody : bodies()) {
+            Point3D p1 = iBody.getPosition();
+            for (Body jBody : bodies()) {
+                if (iBody != jBody) {
+                    Point3D p2 = jBody.getPosition();
+                    double m2 = jBody.getMass();
+
+                    Point3D a = getGravity(p1, p2, m2, iBody.getRadius(), jBody.getRadius());
+                    iBody.update(0.01, a);
+                }
+            }
+        }
+    }
+
+    private Point3D getGravity(Point3D p1, Point3D p2, double m2, double r1, double r2) {
+        Point3D r = p2.subtract(p1);
+        double r_mag = r.magnitude();
+
+        double r_min = r1 + r2;
+        return r.multiply((m2 / Math.pow(Math.max(r_mag, r_min), 3)));
     }
 
     private void initBodies() {
-        Body b1 = new Body(30, 1000, new Point3D(0, 0, 0), Color.RED);
-        entities.getChildren().add(b1);
+        Body sun = new Body(30, 100000, new Point3D(0, 0, 0), Color.YELLOW);
+        Body p1 = new Body(15, 1000, new Point3D(100, 0, 100), Color.BLUE);
+        Body p2 = new Body(15, 1000, new Point3D(0, 0, 100), Color.GREEN);
+        p1.setVelocity(new Point3D(0, 0, 10));
+        p2.setVelocity(new Point3D(-20, 0, 0));
+        entities.getChildren().addAll(sun, p1, p2);
     }
 
     private void initControls() {

@@ -34,7 +34,11 @@ public class Body extends Sphere {
      * @param acceleration
      */
     public void update(double time, Point3D acceleration){
+        // Update position
+        setPosition(getPosition().add(velocity.multiply(time)));
 
+        // Update velocity
+        velocity = velocity.add(acceleration.multiply(time));
     }
 
     /**
@@ -45,5 +49,17 @@ public class Body extends Sphere {
         setTranslateX(position.getX());
         setTranslateY(position.getY());
         setTranslateZ(position.getZ());
+    }
+
+    public Point3D getPosition() {
+        return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
+    }
+
+    public void setVelocity(Point3D velocity) {
+        this.velocity = velocity;
+    }
+
+    public double getMass() {
+        return mass;
     }
 }

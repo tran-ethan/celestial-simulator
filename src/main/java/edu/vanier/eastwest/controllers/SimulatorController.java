@@ -5,10 +5,7 @@ import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.MySplitPaneSkin;
 import edu.vanier.eastwest.models.TreeNode;
 import edu.vanier.eastwest.models.Vector3D;
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
@@ -26,6 +23,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
+import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -85,6 +83,7 @@ public class SimulatorController {
     private Camera camera;
     private Group entities;
     private SubScene subScene;
+    Body selected;
 
 
     private double anchorX, anchorY;
@@ -146,6 +145,14 @@ public class SimulatorController {
                 }
             }
         }
+
+        // Move camera around selected planet
+        if (selected != null) {
+            camera.setTranslateX(selected.getTranslateX());
+            camera.setTranslateY(selected.getTranslateY());
+            camera.setTranslateZ(selected.getTranslateZ());
+        }
+
     }
 
     private Point3D getGravity(Point3D p1, Point3D p2, double m2, double r1, double r2) {
@@ -160,9 +167,11 @@ public class SimulatorController {
         Body sun = new Body(30, 100000, new Point3D(0, 0, 0), Color.YELLOW);
         Body p1 = new Body(15, 1000, new Point3D(100, 0, 100), Color.BLUE);
         Body p2 = new Body(15, 1000, new Point3D(0, 0, 100), Color.GREEN);
+        Body p3 = new Body(15, 1000, new Point3D(0, 0, 200), Color.WHITE);
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
-        entities.getChildren().addAll(sun, p1, p2);
+        p3.setVelocity(new Point3D(10, -10, 10));
+        entities.getChildren().addAll(sun, p1, p2, p3);
     }
 
     private void initControls() {
@@ -175,6 +184,10 @@ public class SimulatorController {
             }
         });
 
+        // Select planet by clicking it with LMB
+        bodies().forEach(n -> n.setOnMouseClicked(e -> selected = n));
+
+        // Bind rotation angle to camera with mouse movement
         Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
         Rotate yRotate = new Rotate(0, Rotate.Y_AXIS);
         Rotate autoRotateY = new Rotate(0, Rotate.Y_AXIS);
@@ -206,10 +219,10 @@ public class SimulatorController {
 
         // Disable camera spin checkbox
         dsblSpin.setOnAction(actionEvent -> {
-            if(spinning){
+            if (spinning) {
                 spinning = false;
                 timeline.pause();
-            }else{
+            } else {
                 spinning = true;
                 timeline.play();
             }
@@ -221,13 +234,13 @@ public class SimulatorController {
             anchorY = event.getSceneY();
             anchorAngleX = angleX.get();
             anchorAngleY = angleY.get();
-            if(spinning){
+            if (spinning) {
                 timeline.pause();
             }
         });
 
         MainApp.scene.setOnMouseReleased(mouseEvent -> {
-            if (spinning){
+            if (spinning) {
                 timeline.play();
             }
         });

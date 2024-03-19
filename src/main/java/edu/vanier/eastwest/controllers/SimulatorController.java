@@ -130,7 +130,7 @@ public class SimulatorController {
         timer.start();
     }
 
-    public void update() {
+    private void update() {
         for (Body iBody : bodies()) {
             Point3D p1 = iBody.getPosition();
             for (Body jBody : bodies()) {
@@ -155,7 +155,7 @@ public class SimulatorController {
 
     }
 
-    private Point3D getGravity(Point3D p1, Point3D p2, double m2, double r1, double r2) {
+    public Point3D getGravity(Point3D p1, Point3D p2, double m2, double r1, double r2) {
         Point3D r = p2.subtract(p1);
         double r_mag = r.magnitude();
 
@@ -297,7 +297,7 @@ public class SimulatorController {
      * @param subDivY   The number of subdivisions along the Y-axis
      * @return a PolygonMesh object representing the created mesh
      */
-    private PolygonMesh createMesh(float width, float height, int subDivX, int subDivY) {
+    public PolygonMesh createMesh(float width, float height, int subDivX, int subDivY) {
         final float minX = - width / 2f;
         final float minY = - height / 2f;
         final float maxX = width / 2f;
@@ -425,10 +425,6 @@ public class SimulatorController {
     }
     public void updateVectors(Vector3D v, Body b) {
 
-    }
-
-    public Point2D getGravity(Body b1, Body b2){
-        return null;
     }
 
     //TODO: build2 @Author: 

@@ -3,7 +3,6 @@ module edu.vanier.eastwest {
     requires javafx.fxml;
     requires org.fxyz3d.core;
     requires org.controlsfx.controls;
-    requires lombok;
 
 
     opens edu.vanier.eastwest to javafx.fxml;

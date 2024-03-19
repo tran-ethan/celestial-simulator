@@ -1,10 +1,12 @@
 package edu.vanier.eastwest.models;
 
 import javafx.geometry.Point3D;
+import javafx.scene.shape.Cylinder;
 
-public class Vector3D {
+public class Vector3D{
     //2D Array of the turbo colormap in rgb taken from https://gist.github.com/mikhailov-work/6a308c20e494d9e0ccc29036b28faa7a
-    int[][] turbo_srgb_bytes = {
+    //Import code?: https://stackoverflow.com/questions/32392456/how-to-create-hollow-cylinder-and-truncated-cone-with-javafx
+    static int[][] turbo_srgb_bytes = {
             {48,18,59},{50,21,67},{51,24,74},{52,27,81},{53,30,88},{54,33,95},{55,36,102},{56,39,109},
             {57,42,115},{58,45,121},{59,47,128},{60,50,134},{61,53,139},{62,56,145},{63,59,151},{63,62,156},
             {64,64,162},{65,67,167},{65,70,172},{66,73,177},{66,75,181},{67,78,186},{68,81,191},{68,84,195},
@@ -40,7 +42,7 @@ public class Vector3D {
     };
     private Point3D direction, start, end;
     private double magnitude;
-
+    private Cylinder base;
     /**
      * Update the magnitude, direction and end of the vector
      */

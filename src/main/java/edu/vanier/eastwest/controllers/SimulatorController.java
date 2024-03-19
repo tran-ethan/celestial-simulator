@@ -1,10 +1,7 @@
 package edu.vanier.eastwest.controllers;
 
 import edu.vanier.eastwest.MainApp;
-import edu.vanier.eastwest.models.Body;
-import edu.vanier.eastwest.models.MySplitPaneSkin;
-import edu.vanier.eastwest.models.TreeNode;
-import edu.vanier.eastwest.models.Vector3D;
+import edu.vanier.eastwest.models.*;
 import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -23,7 +20,6 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
-import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -168,10 +164,12 @@ public class SimulatorController {
         Body p1 = new Body(15, 1000, new Point3D(100, 0, 100), Color.BLUE);
         Body p2 = new Body(15, 1000, new Point3D(0, 0, 100), Color.GREEN);
         Body p3 = new Body(15, 1000, new Point3D(0, 0, 200), Color.WHITE);
+        Arrow p4 = new Arrow(16, 100, new Point3D(50, 0,50));
+        p4.setPosition(p4.getPosition());
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
         p3.setVelocity(new Point3D(10, -10, 10));
-        entities.getChildren().addAll(sun, p1, p2, p3);
+        entities.getChildren().addAll(sun, p1, p2, p3, p4);
     }
 
     private void initControls() {

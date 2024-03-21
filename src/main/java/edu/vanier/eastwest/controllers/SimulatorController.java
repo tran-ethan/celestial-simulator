@@ -164,8 +164,9 @@ public class SimulatorController {
         Body p1 = new Body(15, 1000, new Point3D(100, 0, 100), Color.BLUE);
         Body p2 = new Body(15, 1000, new Point3D(0, 0, 100), Color.GREEN);
         Body p3 = new Body(15, 1000, new Point3D(0, 0, 200), Color.WHITE);
-        Arrow p4 = new Arrow(16, 100, new Point3D(50, 0,50));
+        Vector3D p4 = new Vector3D (4, 20, new Point3D(50, 0,50));
         p4.setPosition(p4.getPosition());
+        p4.getTransforms().add(new Rotate(90, 1, 0, 0));
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
         p3.setVelocity(new Point3D(10, -10, 10));

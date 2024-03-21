@@ -12,7 +12,6 @@ import javafx.scene.transform.Rotate;
 public class Vector3D extends Group{
     //Imported Code: https://stackoverflow.com/a/43736085
     //2D Array of the turbo colormap in rgb taken from https://gist.github.com/mikhailov-work/6a308c20e494d9e0ccc29036b28faa7a
-    //Import code?: https://stackoverflow.com/questions/32392456/how-to-create-hollow-cylinder-and-truncated-cone-with-javafx
     static int[][] turbo_srgb_bytes = {
             {48,18,59},{50,21,67},{51,24,74},{52,27,81},{53,30,88},{54,33,95},{55,36,102},{56,39,109},
             {57,42,115},{58,45,121},{59,47,128},{60,50,134},{61,53,139},{62,56,145},{63,59,151},{63,62,156},
@@ -55,6 +54,8 @@ public class Vector3D extends Group{
 
     Point3D position;
 
+
+    //TODO @Yihweh divide it into smaller parts
     public Vector3D(int r, int h, Point3D p) {
         position = p;
         radius = r;
@@ -140,20 +141,22 @@ public class Vector3D extends Group{
     }
 
     /**
-     * Update the magnitude, direction and end of the vector
+     * TODO @Yihweh
+     * Update the magnitude and direction of vector
      */
     public void update(){
 
     }
 
     /**
-     * Draw the updated version of the vector with it's new direction, end and color.
+     * TODO @Yihweh Draw the updated version of the vector with it's new direction and color.
      */
     public void draw(){
 
     }
 
     /**
+     * TODO @Yihweh TestCase
      * Compare the magnitude of the vector to the highest and lowest found in
      * the list of vectors and assign him a hexadecimal color code based on that
      * @param maxMagnitude The highest magnitude found in the list of vectors
@@ -162,7 +165,7 @@ public class Vector3D extends Group{
      */
     public String getColor(double maxMagnitude, double minMagnitude){
         float percentage = (float) ((magnitude - minMagnitude) / (maxMagnitude - minMagnitude));
-        if (maxMagnitude == 0|| minMagnitude == 0){
+        if (maxMagnitude == 0 || minMagnitude == 0){
             return "zeroMinMax";
         }
         else if (magnitude == 0) {

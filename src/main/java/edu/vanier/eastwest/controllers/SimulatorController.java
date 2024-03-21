@@ -142,6 +142,19 @@ public class SimulatorController {
             }
         }
 
+        //TODO @@Yihweh
+        for (Vector3D vector : vectors()) {
+            Point3D vectorPosition = vector.getPosition();
+            for (Body jBody : bodies()) {
+                    Point3D p2 = jBody.getPosition();
+                    double m2 = jBody.getMass();
+
+                    Point3D a = getGravity(vectorPosition, p2, m2, 1, jBody.getRadius());
+
+
+            }
+        }
+
         // Move camera around selected planet
         if (selected != null) {
             camera.setTranslateX(selected.getTranslateX());
@@ -164,13 +177,13 @@ public class SimulatorController {
         Body p1 = new Body(15, 1000, new Point3D(100, 0, 100), Color.BLUE);
         Body p2 = new Body(15, 1000, new Point3D(0, 0, 100), Color.GREEN);
         Body p3 = new Body(15, 1000, new Point3D(0, 0, 200), Color.WHITE);
-        Vector3D p4 = new Vector3D (4, 20, new Point3D(50, 0,50));
-        p4.setPosition(p4.getPosition());
-        p4.getTransforms().add(new Rotate(90, 1, 0, 0));
+        Vector3D v1 = new Vector3D (4, 20, new Point3D(50, 0,50));
+        v1.setPosition(v1.getPosition());
+        v1.getTransforms().add(new Rotate(90, 1, 0, 0));
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
         p3.setVelocity(new Point3D(10, -10, 10));
-        entities.getChildren().addAll(sun, p1, p2, p3, p4);
+        entities.getChildren().addAll(sun, p1, p2, p3, v1);
     }
 
     private void initControls() {
@@ -417,6 +430,10 @@ public class SimulatorController {
 
     public List<Body> bodies() {
         return entities.getChildren().stream().filter(n -> n instanceof Body).map(n -> (Body) n).collect(Collectors.toList());
+    }
+
+    public List<Vector3D> vectors() {
+        return entities.getChildren().stream().filter(n -> n instanceof Vector3D).map(n -> (Vector3D) n).collect(Collectors.toList());
     }
 
     public void updateBodies() {

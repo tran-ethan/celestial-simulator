@@ -96,6 +96,7 @@ public class SimulatorController {
     private static final float WIDTH = 890;
     private static final float HEIGHT = 890;
     private static Boolean spinning = true;
+    private String currentTool = "";
 
     @FXML
     public void initialize() {

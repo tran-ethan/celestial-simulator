@@ -92,6 +92,7 @@ public class SimulatorController {
     private static final float WIDTH = 890;
     private static final float HEIGHT = 890;
     private static Boolean spinning = true;
+    private String currentTool = "";
 
     @FXML
     public void initialize() {
@@ -166,10 +167,10 @@ public class SimulatorController {
 
     public Point3D getGravity(Point3D p1, Point3D p2, double m2, double r1, double r2) {
         Point3D r = p2.subtract(p1);
-        double r_mag = r.magnitude();
+        double rMag = r.magnitude();
 
-        double r_min = r1 + r2;
-        return r.multiply((m2 / Math.pow(Math.max(r_mag, r_min), 3)));
+        double rMin = r1 + r2;
+        return r.multiply((m2 / Math.pow(Math.max(rMag, rMin), 3)));
     }
 
     private void initBodies() {

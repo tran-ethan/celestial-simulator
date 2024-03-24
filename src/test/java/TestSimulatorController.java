@@ -1,3 +1,4 @@
+
 import edu.vanier.eastwest.controllers.SimulatorController;
 import javafx.geometry.Point3D;
 import org.junit.jupiter.api.Test;

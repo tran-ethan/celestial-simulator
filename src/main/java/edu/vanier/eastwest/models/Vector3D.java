@@ -8,8 +8,7 @@ import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
-
-public class Vector3D extends Group{
+public class Vector3D extends Group {
     //Imported Code: https://stackoverflow.com/a/43736085
     //2D Array of the turbo colormap in rgb taken from https://gist.github.com/mikhailov-work/6a308c20e494d9e0ccc29036b28faa7a
     static int[][] turbo_srgb_bytes = {
@@ -51,7 +50,7 @@ public class Vector3D extends Group{
     int height;
     int radius;
     int rounds = 360;
-
+    @lombok.Getter
     Point3D position;
 
 
@@ -59,6 +58,7 @@ public class Vector3D extends Group{
     public Vector3D(int r, int h, Point3D p) {
         position = p;
         radius = r;
+        magnitude = 0;
         height = h/5*2;
         Group cone = new Group();
         PhongMaterial material = new PhongMaterial(Color.BLUE);
@@ -134,10 +134,6 @@ public class Vector3D extends Group{
         setTranslateX(position.getX());
         setTranslateY(position.getY());
         setTranslateZ(position.getZ());
-    }
-
-    public Point3D getPosition() {
-        return position;
     }
 
     /**

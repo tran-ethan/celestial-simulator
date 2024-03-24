@@ -30,8 +30,8 @@ public class Body extends Sphere {
 
     /**
      * Updates the velocity of the Body object instance.
-     * @param time
-     * @param acceleration
+     * @param time The time that passes
+     * @param acceleration The acceleration of the body
      */
     public void update(double time, Point3D acceleration){
         // Update position

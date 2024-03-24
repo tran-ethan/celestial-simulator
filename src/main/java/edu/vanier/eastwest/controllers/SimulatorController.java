@@ -1,10 +1,7 @@
 package edu.vanier.eastwest.controllers;
 
 import edu.vanier.eastwest.MainApp;
-import edu.vanier.eastwest.models.Body;
-import edu.vanier.eastwest.models.MySplitPaneSkin;
-import edu.vanier.eastwest.models.TreeNode;
-import edu.vanier.eastwest.models.Vector3D;
+import edu.vanier.eastwest.models.*;
 import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -23,7 +20,6 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
-import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -147,6 +143,19 @@ public class SimulatorController {
             }
         }
 
+        //TODO @@Yihweh
+        for (Vector3D vector : vectors()) {
+            Point3D vectorPosition = vector.getPosition();
+            for (Body jBody : bodies()) {
+                    Point3D p2 = jBody.getPosition();
+                    double m2 = jBody.getMass();
+
+                    Point3D a = getGravity(vectorPosition, p2, m2, 1, jBody.getRadius());
+
+
+            }
+        }
+
         // Move camera around selected planet
         if (selected != null) {
             camera.setTranslateX(selected.getTranslateX());
@@ -169,10 +178,13 @@ public class SimulatorController {
         Body p1 = new Body(15, 1000, new Point3D(100, 0, 100), Color.BLUE);
         Body p2 = new Body(15, 1000, new Point3D(0, 0, 100), Color.GREEN);
         Body p3 = new Body(15, 1000, new Point3D(0, 0, 200), Color.WHITE);
+        Vector3D v1 = new Vector3D (4, 20, new Point3D(50, 0,50));
+        v1.setPosition(v1.getPosition());
+        v1.getTransforms().add(new Rotate(90, 1, 0, 0));
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
         p3.setVelocity(new Point3D(10, -10, 10));
-        entities.getChildren().addAll(sun, p1, p2, p3);
+        entities.getChildren().addAll(sun, p1, p2, p3, v1);
     }
 
     private void initControls() {
@@ -419,6 +431,10 @@ public class SimulatorController {
 
     public List<Body> bodies() {
         return entities.getChildren().stream().filter(n -> n instanceof Body).map(n -> (Body) n).collect(Collectors.toList());
+    }
+
+    public List<Vector3D> vectors() {
+        return entities.getChildren().stream().filter(n -> n instanceof Vector3D).map(n -> (Vector3D) n).collect(Collectors.toList());
     }
 
     public void updateBodies() {

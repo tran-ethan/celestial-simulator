@@ -3,13 +3,14 @@ package edu.vanier.eastwest.models;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 
+//TODO
 public class Particle extends Body{
 
     private Color color;
     private Point3D position;
 
     /**
-     * Draws the particle.
+     * TODO Draws the particle.
      */
     public void draw(){
 

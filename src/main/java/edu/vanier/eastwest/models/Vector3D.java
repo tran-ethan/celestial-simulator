@@ -62,34 +62,7 @@ public class Vector3D extends Group {
         radius = r;
         magnitude = 0;
         height = h / 5 * 2;
-        Group cone = new Group();
-        PhongMaterial material = new PhongMaterial(Color.BLUE);
-
-        float[] points = new float[rounds * 12];
-        float[] textCoords = {
-                0.5f, 0,
-                0, 1,
-                1, 1
-        };
-        int[] faces = new int[rounds * 12];
-
-        TriangleMesh mesh = creatingTriangleMesh(height, radius, points, faces, textCoords);
-
-        Cylinder c1 = new Cylinder(radius, 0.01);
-        c1.setMaterial(material);
-
-        Cylinder c2 = new Cylinder(radius / 2, height / 2 * 3);
-        c2.setTranslateY(height / 4 * 3);
-        c2.setMaterial(material);
-
-        MeshView meshView = new MeshView();
-        meshView.setMesh(mesh);
-        meshView.setMaterial(material);
-        meshView.setTranslateZ(height / 2);
-        cone.getChildren().addAll(meshView);
-        Rotate r1 = new Rotate(90, Rotate.X_AXIS);
-        cone.getTransforms().add(r1);
-        getChildren().addAll(cone, c1, c2);
+        Group cone = creatingArrow();
 
     }
 
@@ -143,7 +116,14 @@ public class Vector3D extends Group {
     }
 
     //TODO
-    private TriangleMesh creatingTriangleMesh(int height, int radius, float points[], int faces[], float textCoords[]) {
+    private TriangleMesh creatingTriangleMesh() {
+        float[] points = new float[rounds * 12];
+        float[] textCoords = {
+                0.5f, 0,
+                0, 1,
+                1, 1
+        };
+        int[] faces = new int[rounds * 12];
         for (int i = 0; i < rounds; i++) {
             int index = i * 12;
             //0
@@ -183,6 +163,32 @@ public class Vector3D extends Group {
         mesh.getFaces().addAll(faces);
 
         return mesh;
+    }
+
+    //TODO
+    private Group creatingArrow(){
+        Group cone = new Group();
+        PhongMaterial material = new PhongMaterial(Color.BLUE);
+
+
+        TriangleMesh mesh = creatingTriangleMesh();
+
+        Cylinder c1 = new Cylinder(radius, 0.01);
+        c1.setMaterial(material);
+
+        Cylinder c2 = new Cylinder(radius / 2, height / 2 * 3);
+        c2.setTranslateY(height / 4 * 3);
+        c2.setMaterial(material);
+
+        MeshView meshView = new MeshView();
+        meshView.setMesh(mesh);
+        meshView.setMaterial(material);
+        meshView.setTranslateZ(height / 2);
+        cone.getChildren().addAll(meshView);
+        Rotate r1 = new Rotate(90, Rotate.X_AXIS);
+        cone.getTransforms().add(r1);
+        getChildren().addAll(cone, c1, c2);
+        return cone;
     }
 
 }

@@ -46,6 +46,8 @@ public class Vector3D extends Group {
             {146,11,1},{142,10,1},{139,9,2},{136,8,2},{133,7,2},{129,6,2},{126,5,2},{122,4,3}
     };
     private Point3D direction, start, end;
+    @lombok.Getter
+    @lombok.Setter
     private double magnitude;
     int height;
     int radius;
@@ -160,18 +162,25 @@ public class Vector3D extends Group {
      * @return The hexadecimal color code that needs to be applied to this vector
      */
     public String getColor(double maxMagnitude, double minMagnitude){
-        float percentage = (float) ((magnitude - minMagnitude) / (maxMagnitude - minMagnitude));
-        if (maxMagnitude == 0 || minMagnitude == 0){
+        if(magnitude < 0 || maxMagnitude < 0 || minMagnitude < 0){
+            return "negativeMagnitude";
+        }
+        else if (maxMagnitude == 0 || minMagnitude == 0){
             return "zeroMinMax";
         }
         else if (magnitude == 0) {
             return "zeroMagnitude";
         }
-        else {
-            int r =turbo_srgb_bytes[Math.round(256.0f*(percentage))][0];
-            int g =turbo_srgb_bytes[Math.round(256.0f*(percentage))][1];
-            int b =turbo_srgb_bytes[Math.round(256.0f*(percentage))][2];
-            return String.format("#%02X%02X%02X", r, g, b);
+        else if(maxMagnitude < minMagnitude){
+            return "brokenBounds";
         }
+        else if(magnitude > maxMagnitude || magnitude < minMagnitude){
+            return "magnitudeOutOfBounds";
+        }
+        float percentage = (float) ((magnitude - minMagnitude) / (maxMagnitude - minMagnitude));
+            int r =turbo_srgb_bytes[Math.round(255.0f*(percentage))][0];
+            int g =turbo_srgb_bytes[Math.round(255.0f*(percentage))][1];
+            int b =turbo_srgb_bytes[Math.round(255.0f*(percentage))][2];
+            return String.format("#%02X%02X%02X", r, g, b);
     }
 }

@@ -7,7 +7,7 @@ public class TreeNode {
     private Point3D center;
     private double totalMass, sideLenght;
 
-
+    //TODO
     public void draw(){
 
     }

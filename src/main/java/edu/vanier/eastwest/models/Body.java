@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
+import lombok.Getter;
 
 public class Body extends Sphere {
 
@@ -51,18 +52,22 @@ public class Body extends Sphere {
         setTranslateZ(position.getZ());
     }
 
+    //TODO lombok
     public Point3D getPosition() {
         return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
     }
 
+    //TODO lombok
     public void setVelocity(Point3D velocity) {
         this.velocity = velocity;
     }
 
+    //TODO lombok
     public Point3D getVelocity() {
         return velocity;
     }
 
+    //TODO lombok
     public double getMass() {
         return mass;
     }

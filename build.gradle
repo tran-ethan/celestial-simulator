@@ -13,6 +13,13 @@ repositories {
   mavenCentral()
 }
 
+sourceSets {
+  test {
+    java {
+      srcDirs = ['src/test/java']
+    }
+  }
+}
 ext {
   junitVersion = '5.9.2'
 }
@@ -39,11 +46,11 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 
-  compileOnly 'org.projectlombok:lombok:1.18.30'
-  annotationProcessor 'org.projectlombok:lombok:1.18.30'
+  compileOnly 'org.projectlombok:lombok:1.18.32'
+  annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
-  testCompileOnly 'org.projectlombok:lombok:1.18.30'
-  testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+  testCompileOnly 'org.projectlombok:lombok:1.18.32'
+  testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
 
   implementation 'org.fxyz3d:fxyz3d:0.6.0'
 

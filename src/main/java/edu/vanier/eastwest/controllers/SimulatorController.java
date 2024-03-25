@@ -185,6 +185,7 @@ public class SimulatorController {
         p2.setVelocity(new Point3D(-20, 0, 0));
         p3.setVelocity(new Point3D(10, -10, 10));
         entities.getChildren().addAll(sun, p1, p2, p3, v1);
+        System.out.println();
     }
 
     private void initControls() {
@@ -437,9 +438,12 @@ public class SimulatorController {
         return entities.getChildren().stream().filter(n -> n instanceof Vector3D).map(n -> (Vector3D) n).collect(Collectors.toList());
     }
 
+    //TODO
     public void updateBodies() {
 
     }
+
+    //TODO
     public void updateVectors(Vector3D v, Body b) {
 
     }
@@ -449,6 +453,7 @@ public class SimulatorController {
 
     }
 
+    //TODO
     public void updateAnim() {
 
     }

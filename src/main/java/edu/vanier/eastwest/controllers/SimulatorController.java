@@ -444,7 +444,7 @@ public class SimulatorController {
         }
     }
 
-    //TODO
+    //TODO Solve rotation problem nd maybe use barnes hut
     public void updateVectors() {
         //TODO @@Yihweh
         for (Vector3D vector : vectors()) {
@@ -464,7 +464,7 @@ public class SimulatorController {
             }
             direction = new Point3D(x, y, z);
             double rotationAngle = vectorPosition.angle(vector.getDirection(),direction);
-            vector.getTransforms().add(new Rotate(rotationAngle, vectorPosition));
+            vector.getTransforms().add(new Rotate(rotationAngle, vector.getRotationAxis().getY(), vector.getRotationAxis().getZ()));
 
         }
     }

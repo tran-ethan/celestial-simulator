@@ -8,6 +8,9 @@ import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
+import lombok.Getter;
+import lombok.Setter;
+
 public class Vector3D extends Group {
     //Imported Code: https://stackoverflow.com/a/43736085
     //2D Array of the turbo colormap in rgb taken from https://gist.github.com/mikhailov-work/6a308c20e494d9e0ccc29036b28faa7a
@@ -45,7 +48,9 @@ public class Vector3D extends Group {
             {169, 22, 1}, {167, 20, 1}, {164, 19, 1}, {161, 18, 1}, {158, 16, 1}, {155, 15, 1}, {152, 14, 1}, {149, 13, 1},
             {146, 11, 1}, {142, 10, 1}, {139, 9, 2}, {136, 8, 2}, {133, 7, 2}, {129, 6, 2}, {126, 5, 2}, {122, 4, 3}
     };
-    private Point3D direction, start, end;
+    @Getter
+    @Setter
+    private Point3D direction = new Point3D(0,0,0);
     @lombok.Getter
     @lombok.Setter
     private double magnitude;
@@ -55,13 +60,12 @@ public class Vector3D extends Group {
     @lombok.Getter
     Point3D position;
 
-
-    //TODO @Yihweh divide it into smaller parts
     public Vector3D(int r, int h, Point3D p) {
         position = p;
         radius = r;
         magnitude = 0;
         height = h / 5 * 2;
+
         Group cone = creatingArrow();
 
     }

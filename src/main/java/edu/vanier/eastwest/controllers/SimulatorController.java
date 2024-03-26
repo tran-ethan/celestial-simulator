@@ -128,33 +128,8 @@ public class SimulatorController {
     }
 
     private void update() {
-        for (Body iBody : bodies()) {
-            Point3D p1 = iBody.getPosition();
-            for (Body jBody : bodies()) {
-                if (iBody != jBody) {
-                    Point3D p2 = jBody.getPosition();
-                    double m2 = jBody.getMass();
-
-                    Point3D a = getGravity(p1, p2, m2, iBody.getRadius(), jBody.getRadius());
-                    iBody.update(0.01, a);
-
-                    collide(iBody, jBody, iBody.getPosition().distance(jBody.getPosition()));
-                }
-            }
-        }
-
-        //TODO @@Yihweh
-        for (Vector3D vector : vectors()) {
-            Point3D vectorPosition = vector.getPosition();
-            for (Body jBody : bodies()) {
-                    Point3D p2 = jBody.getPosition();
-                    double m2 = jBody.getMass();
-
-                    Point3D a = getGravity(vectorPosition, p2, m2, 1, jBody.getRadius());
-
-
-            }
-        }
+        updateBodies();
+        updateVectors();
 
         // Move camera around selected planet
         if (selected != null) {
@@ -178,12 +153,12 @@ public class SimulatorController {
         Body p1 = new Body(15, 1000, new Point3D(100, 0, 100), Color.BLUE);
         Body p2 = new Body(15, 1000, new Point3D(0, 0, 100), Color.GREEN);
         Body p3 = new Body(15, 1000, new Point3D(0, 0, 200), Color.WHITE);
-        Vector3D v1 = new Vector3D (4, 20, new Point3D(50, 0,50));
+        Vector3D v1 = new Vector3D (4, 20, new Point3D(50, 0,100));
         v1.setPosition(v1.getPosition());
         v1.getTransforms().add(new Rotate(90, 1, 0, 0));
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
-        p3.setVelocity(new Point3D(10, -10, 10));
+        p3.setVelocity(new Point3D(10, 0, 10));
         entities.getChildren().addAll(sun, p1, p2, p3, v1);
         System.out.println();
     }
@@ -440,12 +415,45 @@ public class SimulatorController {
 
     //TODO
     public void updateBodies() {
+        for (Body iBody : bodies()) {
+            Point3D p1 = iBody.getPosition();
+            for (Body jBody : bodies()) {
+                if (iBody != jBody) {
+                    Point3D p2 = jBody.getPosition();
+                    double m2 = jBody.getMass();
 
+                    Point3D a = getGravity(p1, p2, m2, iBody.getRadius(), jBody.getRadius());
+                    iBody.update(0.01, a);
+
+                    collide(iBody, jBody, iBody.getPosition().distance(jBody.getPosition()));
+                }
+            }
+        }
     }
 
     //TODO
-    public void updateVectors(Vector3D v, Body b) {
+    public void updateVectors() {
+        //TODO @@Yihweh
+        for (Vector3D vector : vectors()) {
+            Point3D direction;
+            int x = 0;
+            int y = 0;
+            int z = 0;
+            Point3D vectorPosition = vector.getPosition();
+            for (Body jBody : bodies()) {
+                Point3D p2 = jBody.getPosition();
+                double m2 = jBody.getMass();
 
+                Point3D a = getGravity(vectorPosition, p2, m2, 1, jBody.getRadius());
+                x += a.getX();
+                y += a.getY();
+                z += a.getZ();
+            }
+            direction = new Point3D(x, y, z);
+            double rotationAngle = vectorPosition.angle(vector.getDirection(),direction);
+            vector.getTransforms().add(new Rotate(rotationAngle, vectorPosition));
+           vector.setDirection(direction);
+        }
     }
 
     //TODO: build2 @Author: 

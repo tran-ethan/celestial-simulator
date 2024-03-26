@@ -1,12 +1,17 @@
 package edu.vanier.eastwest.controllers;
 
 import edu.vanier.eastwest.MainApp;
-import edu.vanier.eastwest.models.*;
-import javafx.animation.*;
+import edu.vanier.eastwest.models.Body;
+import edu.vanier.eastwest.models.MySplitPaneSkin;
+import edu.vanier.eastwest.models.TreeNode;
+import edu.vanier.eastwest.models.Vector3D;
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.Button;
@@ -140,6 +145,15 @@ public class SimulatorController {
 
     }
 
+    /**
+     * Returns a Point3D vector
+     * @param p1
+     * @param p2
+     * @param m2
+     * @param r1
+     * @param r2
+     * @return
+     */
     public Point3D getGravity(Point3D p1, Point3D p2, double m2, double r1, double r2) {
         Point3D r = p2.subtract(p1);
         double rMag = r.magnitude();
@@ -154,7 +168,6 @@ public class SimulatorController {
         Body p2 = new Body(15, 1000, new Point3D(0, 0, 100), Color.GREEN);
         Body p3 = new Body(15, 1000, new Point3D(0, 0, 200), Color.WHITE);
         Vector3D v1 = new Vector3D (4, 20, new Point3D(50, 0,100));
-        v1.setPosition(v1.getPosition());
         v1.getTransforms().add(new Rotate(90, 1, 0, 0));
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
@@ -440,11 +453,11 @@ public class SimulatorController {
             int y = 0;
             int z = 0;
             Point3D vectorPosition = vector.getPosition();
-            for (Body jBody : bodies()) {
-                Point3D p2 = jBody.getPosition();
-                double m2 = jBody.getMass();
+            for (Body body : bodies()) {
+                Point3D p2 = body.getPosition();
+                double m2 = body.getMass();
 
-                Point3D a = getGravity(vectorPosition, p2, m2, 1, jBody.getRadius());
+                Point3D a = getGravity(vectorPosition, p2, m2, 1, body.getRadius());
                 x += a.getX();
                 y += a.getY();
                 z += a.getZ();
@@ -452,7 +465,7 @@ public class SimulatorController {
             direction = new Point3D(x, y, z);
             double rotationAngle = vectorPosition.angle(vector.getDirection(),direction);
             vector.getTransforms().add(new Rotate(rotationAngle, vectorPosition));
-           vector.setDirection(direction);
+
         }
     }
 

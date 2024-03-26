@@ -57,17 +57,18 @@ public class Vector3D extends Group {
     int height;
     int radius;
     int rounds = 360;
-    @lombok.Getter
-    Point3D position;
 
     public Vector3D(int r, int h, Point3D p) {
-        position = p;
+        setPosition(p);
         radius = r;
         magnitude = 0;
         height = h / 5 * 2;
 
         Group cone = creatingArrow();
 
+    }
+    public Point3D getPosition() {
+        return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
     }
 
     public void setPosition(Point3D position) {

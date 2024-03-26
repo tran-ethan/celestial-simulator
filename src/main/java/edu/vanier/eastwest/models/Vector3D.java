@@ -50,7 +50,7 @@ public class Vector3D extends Group {
     };
     @Getter
     @Setter
-    private Point3D direction = new Point3D(0,0,0);
+    private Point3D direction = new Point3D(1,0,0);
     @lombok.Getter
     @lombok.Setter
     private double magnitude;

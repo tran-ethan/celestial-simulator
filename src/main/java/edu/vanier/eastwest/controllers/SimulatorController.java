@@ -169,7 +169,7 @@ public class SimulatorController {
         Body p3 = new Body(15, 1000, new Point3D(0, 0, 200), Color.WHITE);
         Vector3D v1 = new Vector3D (4, 20, new Point3D(50, 0,100));
         v1.getTransforms().add(new Rotate(90, 1, 0, 0));
-       p1.setVelocity(new Point3D(0, 0, 10));
+        p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
         p3.setVelocity(new Point3D(10, 0, 10));
         entities.getChildren().addAll(sun, p1, p2, p3, v1);

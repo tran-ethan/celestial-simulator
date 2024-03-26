@@ -84,7 +84,7 @@
                                                 <Insets />
                                              </VBox.margin>
                                           </Button>
-                                          <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Reset" />
+                                          <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Clear" />
                                           <Label text="Simulation Speed" />
                                           <Slider fx:id="sliderSpeed">
                                              <VBox.margin>

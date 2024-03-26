@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
-import lombok.Getter;
 
 public class Body extends Sphere {
 
@@ -44,7 +43,7 @@ public class Body extends Sphere {
 
     /**
      * Updates the position of the Body object instance.
-     * @param position
+     * @param position The current x, y, z position of the body.
      */
     public void setPosition(Point3D position) {
         setTranslateX(position.getX());

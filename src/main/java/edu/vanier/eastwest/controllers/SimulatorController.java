@@ -19,6 +19,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -130,6 +132,11 @@ public class SimulatorController {
         );
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
+    }
+
+    @FXML
+    void onSpeedChange(MouseEvent event) {
+        timer.setRate(sliderSpeed.getValue());
     }
 
     private void update(ActionEvent event) {
@@ -276,7 +283,7 @@ public class SimulatorController {
             zoom.setZ(zoom.getZ() + delta);
         });
 
-        //Play,pause, reset buttons
+        // Play,pause, reset buttons
         btnPlay.setOnAction(event -> {
             timer.play();
         });

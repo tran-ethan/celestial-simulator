@@ -5,6 +5,8 @@ import edu.vanier.eastwest.models.*;
 import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
@@ -24,6 +26,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+import org.controlsfx.control.action.Action;
 import org.fxyz3d.shapes.polygon.PolygonMesh;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
@@ -74,7 +77,7 @@ public class SimulatorController {
     @FXML
     private CheckBox dsblSpin;
 
-    private AnimationTimer timer;
+    private Timeline timer;
     private TreeNode node;
     private Camera camera;
     private Group entities;
@@ -118,16 +121,15 @@ public class SimulatorController {
         initControls();
 
         // Animation timer
-        timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                update();
-            }
-        };
-        timer.start();
+        EventHandler<ActionEvent> onFinished = this::update;
+        timer = new Timeline(
+                new KeyFrame(Duration.millis(10), onFinished)
+        );
+        timer.setCycleCount(Animation.INDEFINITE);
+        timer.play();
     }
 
-    private void update() {
+    private void update(ActionEvent event) {
         for (Body iBody : bodies()) {
             Point3D p1 = iBody.getPosition();
             for (Body jBody : bodies()) {

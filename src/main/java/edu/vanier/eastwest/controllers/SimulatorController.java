@@ -1,14 +1,18 @@
 package edu.vanier.eastwest.controllers;
 
 import edu.vanier.eastwest.MainApp;
-import edu.vanier.eastwest.models.*;
-import javafx.animation.*;
+import edu.vanier.eastwest.models.Body;
+import edu.vanier.eastwest.models.MySplitPaneSkin;
+import edu.vanier.eastwest.models.TreeNode;
+import edu.vanier.eastwest.models.Vector3D;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.Button;
@@ -26,7 +30,6 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
-import org.controlsfx.control.action.Action;
 import org.fxyz3d.shapes.polygon.PolygonMesh;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
@@ -125,7 +128,7 @@ public class SimulatorController {
         timer = new Timeline(
                 new KeyFrame(Duration.millis(10), onFinished)
         );
-        timer.setCycleCount(Animation.INDEFINITE);
+        timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
     }
 
@@ -185,7 +188,7 @@ public class SimulatorController {
         v1.getTransforms().add(new Rotate(90, 1, 0, 0));
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
-        p3.setVelocity(new Point3D(10, -10, 10));
+        p3.setVelocity(new Point3D(10, 0, 10));
         entities.getChildren().addAll(sun, p1, p2, p3, v1);
         System.out.println();
     }
@@ -248,8 +251,8 @@ public class SimulatorController {
         MainApp.scene.setOnMousePressed(event -> {
             anchorX = event.getSceneX();
             anchorY = event.getSceneY();
-            anchorAngleX = angleX.get();
-            anchorAngleY = angleY.get();
+            anchorAngleX = -angleX.get();
+            anchorAngleY = -angleY.get();
             if (spinning) {
                 timeline.pause();
             }
@@ -272,6 +275,19 @@ public class SimulatorController {
             double delta = e.getDeltaY();
             zoom.setZ(zoom.getZ() + delta);
         });
+
+        //Play,pause, reset buttons
+        btnPlay.setOnAction(event -> {
+            timer.play();
+        });
+        btnPause.setOnAction(event -> {
+            timer.stop();
+        });
+        btnReset.setOnAction(event -> {
+            entities.getChildren().removeIf(object -> object instanceof Body);
+            timer.play();
+        });
+
     }
 
     /**

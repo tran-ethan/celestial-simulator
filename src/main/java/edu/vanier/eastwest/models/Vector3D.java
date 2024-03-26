@@ -190,8 +190,7 @@ public class Vector3D extends Group {
         meshView.setMaterial(material);
         meshView.setTranslateZ(height / 2);
         cone.getChildren().addAll(meshView);
-        Rotate r1 = new Rotate(90, Rotate.X_AXIS);
-        cone.getTransforms().add(r1);
+        cone.getTransforms().add(new Rotate(90, Rotate.X_AXIS));
         getChildren().addAll(cone, c1, c2);
         return cone;
     }

@@ -164,15 +164,16 @@ public class SimulatorController {
 
     private void initBodies() {
         Body sun = new Body(30, 100000, new Point3D(0, 0, 0), Color.YELLOW);
-        Body p1 = new Body(15, 1000, new Point3D(100, 0, 100), Color.BLUE);
-        Body p2 = new Body(15, 1000, new Point3D(0, 0, 100), Color.GREEN);
-        Body p3 = new Body(15, 1000, new Point3D(0, 0, 200), Color.WHITE);
+       // Body p1 = new Body(15, 1000, new Point3D(100, 0, 100), Color.BLUE);
+       // Body p2 = new Body(15, 1000, new Point3D(0, 0, 100), Color.GREEN);
+       // Body p3 = new Body(15, 1000, new Point3D(0, 0, 200), Color.WHITE);
         Vector3D v1 = new Vector3D (4, 20, new Point3D(50, 0,100));
         v1.getTransforms().add(new Rotate(90, 1, 0, 0));
-        p1.setVelocity(new Point3D(0, 0, 10));
-        p2.setVelocity(new Point3D(-20, 0, 0));
-        p3.setVelocity(new Point3D(10, 0, 10));
-        entities.getChildren().addAll(sun, p1, p2, p3, v1);
+      //  p1.setVelocity(new Point3D(0, 0, 10));
+       // p2.setVelocity(new Point3D(-20, 0, 0));
+       // p3.setVelocity(new Point3D(10, 0, 10));
+        //entities.getChildren().addAll(sun, p1, p2, p3, v1);
+        entities.getChildren().addAll(sun, v1);
         System.out.println();
     }
 
@@ -463,9 +464,9 @@ public class SimulatorController {
                 z += a.getZ();
             }
             direction = new Point3D(x, y, z);
-            double rotationAngle = vectorPosition.angle(vector.getDirection(),direction);
+            double rotationAngle = vector.getDirection().angle(direction);
             vector.getTransforms().add(new Rotate(rotationAngle, vector.getRotationAxis().getY(), vector.getRotationAxis().getZ()));
-
+            vector.setDirection(direction);
         }
     }
 

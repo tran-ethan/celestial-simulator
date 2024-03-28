@@ -8,8 +8,7 @@ import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 public class Vector3D extends Group {
     //Imported Code: https://stackoverflow.com/a/43736085
@@ -48,18 +47,19 @@ public class Vector3D extends Group {
             {169, 22, 1}, {167, 20, 1}, {164, 19, 1}, {161, 18, 1}, {158, 16, 1}, {155, 15, 1}, {152, 14, 1}, {149, 13, 1},
             {146, 11, 1}, {142, 10, 1}, {139, 9, 2}, {136, 8, 2}, {133, 7, 2}, {129, 6, 2}, {126, 5, 2}, {122, 4, 3}
     };
-    @Getter
-    @Setter
-    private Point3D direction = new Point3D(1,0,0);
-    @lombok.Getter
-    @lombok.Setter
+    @Getter @Setter
+    private double angle;
+    @Getter @Setter
     private double magnitude;
+    @Getter
+    private Point3D position;
     int height;
     int radius;
     int rounds = 360;
 
     public Vector3D(int r, int h, Point3D p) {
         setPosition(p);
+        position = p;
         radius = r;
         magnitude = 0;
         height = h / 5 * 2;

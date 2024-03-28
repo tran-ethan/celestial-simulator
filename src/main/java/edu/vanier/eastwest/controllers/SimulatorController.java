@@ -120,6 +120,7 @@ public class SimulatorController {
 
         // Initialize
         initBodies();
+        initVectors();
         initControls();
 
         // Animation timer
@@ -164,16 +165,23 @@ public class SimulatorController {
 
     private void initBodies() {
         Body sun = new Body(30, 100000, new Point3D(0, 0, 0), Color.YELLOW);
-        Body p1 = new Body(15, 1000, new Point3D(100, 0, 100), Color.BLUE);
-        Body p2 = new Body(15, 1000, new Point3D(0, 0, 100), Color.GREEN);
-        Body p3 = new Body(15, 1000, new Point3D(0, 0, 200), Color.WHITE);
-        Vector3D v1 = new Vector3D (4, 20, new Point3D(50, 0,100));
-        v1.getTransforms().add(new Rotate(90, 1, 0, 0));
+        Body p1 = new Body(10, 20000, new Point3D(150, 0, 100), Color.BLUE);
+        Body p2 = new Body(10, 5000, new Point3D(0, 0, 100), Color.GREEN);
+        Body p3 = new Body(10, 5000, new Point3D(0, 0, 200), Color.WHITE);
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
         p3.setVelocity(new Point3D(10, 0, 10));
-        entities.getChildren().addAll(sun, p1, p2, p3, v1);
-        System.out.println();
+        entities.getChildren().addAll(sun, p1, p2, p3);
+    }
+
+    private void initVectors(){
+        for (int i = -5; i <= 5; i++) {
+            for (int j = -5; j <= 5; j++) {
+                Vector3D v = new Vector3D(4, 20, new Point3D(i * 100, 0, j * 100));
+                v.getTransforms().add(new Rotate(90, 1, 0, 0));
+                entities.getChildren().add(v);
+            }
+        }
     }
 
     private void initControls() {
@@ -428,44 +436,51 @@ public class SimulatorController {
 
     //TODO
     public void updateBodies() {
-        for (Body iBody : bodies()) {
-            Point3D p1 = iBody.getPosition();
-            for (Body jBody : bodies()) {
-                if (iBody != jBody) {
-                    Point3D p2 = jBody.getPosition();
-                    double m2 = jBody.getMass();
+        for (Body currentBody : bodies()) {
+            Point3D p1 = currentBody.getPosition();
+            for (Body comparedBody : bodies()) {
+                if (currentBody != comparedBody) {
+                    Point3D p2 = comparedBody.getPosition();
+                    double m2 = comparedBody.getMass();
 
-                    Point3D a = getGravity(p1, p2, m2, iBody.getRadius(), jBody.getRadius());
-                    iBody.update(0.01, a);
+                    Point3D a = getGravity(p1, p2, m2, currentBody.getRadius(), comparedBody.getRadius());
+                    currentBody.update(0.01, a);
 
-                    collide(iBody, jBody, iBody.getPosition().distance(jBody.getPosition()));
+                    collide(currentBody, comparedBody, currentBody.getPosition().distance(comparedBody.getPosition()));
                 }
             }
         }
     }
 
-    //TODO Solve rotation problem nd maybe use barnes hut
+    //TODO Solve rotation problem past 180 degrees and maybe use barnes hut
     public void updateVectors() {
-        //TODO @@Yihweh
+        //TODO @Yihweh
         for (Vector3D vector : vectors()) {
-            Point3D direction;
-            int x = 0;
-            int y = 0;
-            int z = 0;
             Point3D vectorPosition = vector.getPosition();
+            double currentAngle = vector.getAngle();
+            double x = 0;
+            double y = 0;
+            double z = 0;
             for (Body body : bodies()) {
                 Point3D p2 = body.getPosition();
                 double m2 = body.getMass();
-
                 Point3D a = getGravity(vectorPosition, p2, m2, 1, body.getRadius());
+                //Summing the gravitational field forces
                 x += a.getX();
                 y += a.getY();
                 z += a.getZ();
             }
-            direction = new Point3D(x, y, z);
-            double rotationAngle = vector.getDirection().angle(direction);
-            vector.getTransforms().add(new Rotate(rotationAngle, Rotate.X_AXIS));
-            vector.setDirection(direction);
+            Point3D sumDirection = new Point3D(x, y, z);
+            sumDirection.add(vectorPosition);
+            double newAngle = sumDirection.angle(new Point3D(1,0,0));
+
+            if(vector.getPosition().getZ() > 0){
+                vector.getTransforms().add(new Rotate(newAngle-currentAngle, Rotate.X_AXIS));
+            }
+            else {
+                vector.getTransforms().add(new Rotate(currentAngle-newAngle, Rotate.X_AXIS));
+            }
+            vector.setAngle(newAngle);
         }
     }
 

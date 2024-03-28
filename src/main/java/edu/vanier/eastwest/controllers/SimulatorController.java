@@ -230,12 +230,11 @@ public class SimulatorController {
         // Disable camera spin checkbox
         dsblSpin.setOnAction(actionEvent -> {
             if (spinning) {
-                spinning = false;
                 timeline.pause();
             } else {
-                spinning = true;
                 timeline.play();
             }
+            spinning = !spinning;
         });
 
         // Mouse controls
@@ -308,8 +307,8 @@ public class SimulatorController {
      * @return a PolygonMesh object representing the created mesh
      */
     public PolygonMesh createMesh(float width, float height, int subDivX, int subDivY) {
-        final float minX = - width / 2f;
-        final float minY = - height / 2f;
+        final float minX = -width / 2f;
+        final float minY = -height / 2f;
         final float maxX = width / 2f;
         final float maxY = height / 2f;
 
@@ -427,7 +426,10 @@ public class SimulatorController {
     }
 
     public List<Body> bodies() {
-        return entities.getChildren().stream().filter(n -> n instanceof Body).map(n -> (Body) n).collect(Collectors.toList());
+        return entities.getChildren().stream()
+                .filter(n -> n instanceof Body)
+                .map(n -> (Body) n)
+                .collect(Collectors.toList());
     }
 
     public List<Vector3D> vectors() {
@@ -474,12 +476,8 @@ public class SimulatorController {
             sumDirection.add(vectorPosition);
             double newAngle = sumDirection.angle(new Point3D(1,0,0));
 
-            if(vector.getPosition().getZ() > 0){
-                vector.getTransforms().add(new Rotate(newAngle-currentAngle, Rotate.X_AXIS));
-            }
-            else {
-                vector.getTransforms().add(new Rotate(currentAngle-newAngle, Rotate.X_AXIS));
-            }
+            double angle = (vector.getPosition().getZ() > 0) ? newAngle-currentAngle : currentAngle-newAngle;       // conditional operator
+            vector.getTransforms().add(new Rotate(angle, Rotate.X_AXIS));
             vector.setAngle(newAngle);
         }
     }
@@ -495,7 +493,9 @@ public class SimulatorController {
     }
 
     private void collide(Body a, Body b, double distance) {
-        if (distance > a.getRadius() + b.getRadius()) return;
+        if (distance > a.getRadius() + b.getRadius()) {
+            return;
+        }
 
         // Normal vector
         Point3D p1 = a.getPosition();
@@ -524,7 +524,7 @@ public class SimulatorController {
 
         // Collision impulse
         double res = 0.5;
-        double i = (-(1.0f + res) * vn) / im;
+        double i = (1 + res) * -vn / im;
         Point3D impulse = mtd.normalize().multiply(i);
 
         // Change in momentum

@@ -164,8 +164,8 @@ public class SimulatorController {
     }
 
     private void initBodies() {
-        Body sun = new Body(30, 100000, new Point3D(0, 0, 0), Color.YELLOW);
-        Body p1 = new Body(10, 20000, new Point3D(150, 0, 100), Color.BLUE);
+        Body sun = new Body(30, 100000, new Point3D(0, 0, -50), Color.YELLOW);
+        Body p1 = new Body(10, 20000, new Point3D(150, 0, -100), Color.BLUE);
         Body p2 = new Body(10, 5000, new Point3D(0, 0, 100), Color.GREEN);
         Body p3 = new Body(10, 5000, new Point3D(0, 0, 200), Color.WHITE);
         p1.setVelocity(new Point3D(0, 0, 10));
@@ -472,11 +472,23 @@ public class SimulatorController {
                 y += a.getY();
                 z += a.getZ();
             }
-            Point3D sumDirection = new Point3D(x, y, z);
-            sumDirection.add(vectorPosition);
-            double newAngle = sumDirection.angle(new Point3D(1,0,0));
 
-            double angle = (vector.getPosition().getZ() > 0) ? newAngle-currentAngle : currentAngle-newAngle;       // conditional operator
+
+            Point3D sumDirection = new Point3D(x, y, z);
+            double newAngle = sumDirection.angle(new Point3D(100,0,0));
+
+            double angle;
+            if(vector.getPosition().getZ() > 0){
+                angle = newAngle-currentAngle;
+                if(sumDirection.getZ() > 0){
+                    angle = -angle;
+                }
+            }else{
+                angle = currentAngle-newAngle;
+                if(sumDirection.getZ() < 0){
+                    angle = -angle;
+                }
+            }
             vector.getTransforms().add(new Rotate(angle, Rotate.X_AXIS));
             vector.setAngle(newAngle);
         }

@@ -455,6 +455,8 @@ public class SimulatorController {
     //TODO Solve rotation problem past 180 degrees and maybe use barnes hut
     public void updateVectors() {
         //TODO @Yihweh
+        double minMagnitude = 0, maxMagnitude = 0;
+        boolean start = false;
         for (Vector3D vector : vectors()) {
             Point3D vectorPosition = vector.getPosition();
             double currentAngle = vector.getAngle();
@@ -472,15 +474,30 @@ public class SimulatorController {
             }
             Point3D sumDirection = new Point3D(x, y, z);
             sumDirection.add(vectorPosition);
-            double newAngle = sumDirection.angle(new Point3D(1,0,0));
+            double newAngle = sumDirection.angle(new Point3D(1, 0, 0));
 
-            if(vector.getPosition().getZ() > 0){
-                vector.getTransforms().add(new Rotate(newAngle-currentAngle, Rotate.X_AXIS));
-            }
-            else {
-                vector.getTransforms().add(new Rotate(currentAngle-newAngle, Rotate.X_AXIS));
+            if (vector.getPosition().getZ() > 0) {
+                vector.getTransforms().add(new Rotate(newAngle - currentAngle, Rotate.X_AXIS));
+            } else {
+                vector.getTransforms().add(new Rotate(currentAngle - newAngle, Rotate.X_AXIS));
             }
             vector.setAngle(newAngle);
+            double magnitude = sumDirection.magnitude();
+            if (start == false) {
+                maxMagnitude = magnitude;
+                minMagnitude = magnitude;
+                start = true;
+            } else {
+                if (magnitude > maxMagnitude) {
+                    maxMagnitude = magnitude;
+                }
+                if (magnitude < minMagnitude) {
+                    minMagnitude = magnitude;
+                }
+            }
+            for (Vector3D vectorM : vectors()) {
+                vector.setArrowColor(maxMagnitude, minMagnitude);
+            }
         }
     }
 

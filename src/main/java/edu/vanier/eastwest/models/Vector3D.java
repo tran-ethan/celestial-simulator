@@ -2,13 +2,14 @@ package edu.vanier.eastwest.models;
 
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.MeshView;
-import javafx.scene.shape.TriangleMesh;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import lombok.*;
+
+import java.util.List;
 
 public class Vector3D extends Group {
     //Imported Code: https://stackoverflow.com/a/43736085
@@ -56,6 +57,7 @@ public class Vector3D extends Group {
     int height;
     int radius;
     int rounds = 360;
+    Group arrow;
 
     public Vector3D(int r, int h, Point3D p) {
         setPosition(p);
@@ -64,8 +66,8 @@ public class Vector3D extends Group {
         magnitude = 0;
         height = h / 5 * 2;
 
-        Group cone = creatingArrow();
-
+        arrow = creatingArrow();
+        System.out.println(getChildren());
     }
     public Point3D getPosition() {
         return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
@@ -118,6 +120,22 @@ public class Vector3D extends Group {
         int g = turbo_srgb_bytes[Math.round(255.0f * (percentage))][1];
         int b = turbo_srgb_bytes[Math.round(255.0f * (percentage))][2];
         return String.format("#%02X%02X%02X", r, g, b);
+    }
+
+    //TODO solve the color problem (comes from magnitude or hex)
+    public void setArrowColor(double maxMagnitude, double minMagnitude){
+        if(getColor(maxMagnitude, minMagnitude).contains("#")){
+        for(Node n: getChildren()){
+            if(n instanceof Shape3D){
+                Shape3D temp = (Shape3D) n;
+                temp.setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
+            }
+            else if(n instanceof MeshView){
+                MeshView temp = (MeshView) n;
+                temp.setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
+            }
+        }
+        }
     }
 
     //TODO
@@ -189,7 +207,7 @@ public class Vector3D extends Group {
         meshView.setMesh(mesh);
         meshView.setMaterial(material);
         meshView.setTranslateZ(height / 2);
-        cone.getChildren().addAll(meshView);
+        cone.getChildren().addAll(meshView, c1, c2);
         cone.getTransforms().add(new Rotate(90, Rotate.X_AXIS));
         getChildren().addAll(cone, c1, c2);
         return cone;

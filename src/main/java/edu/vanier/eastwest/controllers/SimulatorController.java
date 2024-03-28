@@ -164,8 +164,8 @@ public class SimulatorController {
     }
 
     private void initBodies() {
-        Body sun = new Body(30, 100000, new Point3D(0, 0, 0), Color.YELLOW);
-        Body p1 = new Body(10, 20000, new Point3D(150, 0, 100), Color.BLUE);
+        Body sun = new Body(30, 100000, new Point3D(0, 0, -50), Color.YELLOW);
+        Body p1 = new Body(10, 20000, new Point3D(150, 0, -100), Color.BLUE);
         Body p2 = new Body(10, 5000, new Point3D(0, 0, 100), Color.GREEN);
         Body p3 = new Body(10, 5000, new Point3D(0, 0, 200), Color.WHITE);
         p1.setVelocity(new Point3D(0, 0, 10));
@@ -230,12 +230,11 @@ public class SimulatorController {
         // Disable camera spin checkbox
         dsblSpin.setOnAction(actionEvent -> {
             if (spinning) {
-                spinning = false;
                 timeline.pause();
             } else {
-                spinning = true;
                 timeline.play();
             }
+            spinning = !spinning;
         });
 
         // Mouse controls
@@ -308,8 +307,8 @@ public class SimulatorController {
      * @return a PolygonMesh object representing the created mesh
      */
     public PolygonMesh createMesh(float width, float height, int subDivX, int subDivY) {
-        final float minX = - width / 2f;
-        final float minY = - height / 2f;
+        final float minX = -width / 2f;
+        final float minY = -height / 2f;
         final float maxX = width / 2f;
         final float maxY = height / 2f;
 
@@ -427,7 +426,10 @@ public class SimulatorController {
     }
 
     public List<Body> bodies() {
-        return entities.getChildren().stream().filter(n -> n instanceof Body).map(n -> (Body) n).collect(Collectors.toList());
+        return entities.getChildren().stream()
+                .filter(n -> n instanceof Body)
+                .map(n -> (Body) n)
+                .collect(Collectors.toList());
     }
 
     public List<Vector3D> vectors() {
@@ -472,15 +474,23 @@ public class SimulatorController {
                 y += a.getY();
                 z += a.getZ();
             }
-            Point3D sumDirection = new Point3D(x, y, z);
-            sumDirection.add(vectorPosition);
-            double newAngle = sumDirection.angle(new Point3D(1, 0, 0));
 
-            if (vector.getPosition().getZ() > 0) {
-                vector.getTransforms().add(new Rotate(newAngle - currentAngle, Rotate.X_AXIS));
-            } else {
-                vector.getTransforms().add(new Rotate(currentAngle - newAngle, Rotate.X_AXIS));
+            Point3D sumDirection = new Point3D(x, y, z);
+            double newAngle = sumDirection.angle(new Point3D(100,0,0));
+
+            double angle;
+            if(vector.getPosition().getZ() > 0){
+                angle = newAngle-currentAngle;
+                if(sumDirection.getZ() > 0){
+                    angle = -angle;
+                }
+            }else{
+                angle = currentAngle-newAngle;
+                if(sumDirection.getZ() < 0){
+                    angle = -angle;
+                }
             }
+            vector.getTransforms().add(new Rotate(angle, Rotate.X_AXIS));
             vector.setAngle(newAngle);
             double magnitude = sumDirection.magnitude();
             if (start == false) {
@@ -512,7 +522,9 @@ public class SimulatorController {
     }
 
     private void collide(Body a, Body b, double distance) {
-        if (distance > a.getRadius() + b.getRadius()) return;
+        if (distance > a.getRadius() + b.getRadius()) {
+            return;
+        }
 
         // Normal vector
         Point3D p1 = a.getPosition();
@@ -541,7 +553,7 @@ public class SimulatorController {
 
         // Collision impulse
         double res = 0.5;
-        double i = (-(1.0f + res) * vn) / im;
+        double i = (1 + res) * -vn / im;
         Point3D impulse = mtd.normalize().multiply(i);
 
         // Change in momentum

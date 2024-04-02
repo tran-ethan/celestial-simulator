@@ -67,7 +67,6 @@ public class Vector3D extends Group {
         height = h / 5 * 2;
 
         arrow = creatingArrow();
-        System.out.println(getChildren());
     }
     public Point3D getPosition() {
         return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
@@ -127,12 +126,14 @@ public class Vector3D extends Group {
         if(getColor(maxMagnitude, minMagnitude).contains("#")){
         for(Node n: getChildren()){
             if(n instanceof Shape3D){
-                Shape3D temp = (Shape3D) n;
-                temp.setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
+                ((Shape3D) n).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
             }
-            else if(n instanceof MeshView){
-                MeshView temp = (MeshView) n;
-                temp.setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
+            else if(n instanceof Group){
+                for(Node z: ((Group) n).getChildren()){
+                    if(z instanceof MeshView){
+                        ((MeshView) z).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
+                    }
+                }
             }
         }
         }

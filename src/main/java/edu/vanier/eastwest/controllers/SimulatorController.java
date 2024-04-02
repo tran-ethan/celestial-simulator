@@ -492,17 +492,17 @@ public class SimulatorController {
             }
             vector.getTransforms().add(new Rotate(angle, Rotate.X_AXIS));
             vector.setAngle(newAngle);
-            double magnitude = sumDirection.magnitude();
+            vector.setMagnitude(sumDirection.magnitude());
             if (start == false) {
-                maxMagnitude = magnitude;
-                minMagnitude = magnitude;
+                maxMagnitude = vector.getMagnitude();
+                minMagnitude = vector.getMagnitude();
                 start = true;
             } else {
-                if (magnitude > maxMagnitude) {
-                    maxMagnitude = magnitude;
+                if (vector.getMagnitude() > maxMagnitude) {
+                    maxMagnitude = vector.getMagnitude();
                 }
-                if (magnitude < minMagnitude) {
-                    minMagnitude = magnitude;
+                if (vector.getMagnitude() < minMagnitude) {
+                    minMagnitude = vector.getMagnitude();
                 }
             }
             for (Vector3D vectorM : vectors()) {

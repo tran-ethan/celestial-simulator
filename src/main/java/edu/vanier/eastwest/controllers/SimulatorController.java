@@ -148,12 +148,13 @@ public class SimulatorController {
 
     /**
      * Returns a Point3D vector
-     * @param p1
-     * @param p2
-     * @param m2
-     * @param r1
-     * @param r2
-     * @return
+     *
+     * @param p1 Point3D position of the influenced body.
+     * @param p2 Point3D position of the influencing body.
+     * @param m2 Mass of the influencing body.
+     * @param r1 Radius of the influenced body.
+     * @param r2 Radius of the influencing body.
+     * @return Point3D vector representing the vector gravitational force on p1 by p2.
      */
     public Point3D getGravity(Point3D p1, Point3D p2, double m2, double r1, double r2) {
         Point3D r = p2.subtract(p1);
@@ -174,11 +175,12 @@ public class SimulatorController {
         entities.getChildren().addAll(sun, p1, p2, p3);
     }
 
-    private void initVectors(){
+    private void initVectors() {
         for (int i = -5; i <= 5; i++) {
             for (int j = -5; j <= 5; j++) {
                 Vector3D v = new Vector3D(4, 20, new Point3D(i * 100, 0, j * 100));
                 v.getTransforms().add(new Rotate(90, 1, 0, 0));
+                v.getTransforms().add(v.getXRotate());
                 entities.getChildren().add(v);
             }
         }
@@ -300,10 +302,10 @@ public class SimulatorController {
     /**
      * Creates a polygon mesh based on specified width, height, and subdivision parameters.
      *
-     * @param width     The width of the mesh
-     * @param height    The height of the mesh
-     * @param subDivX   The number of subdivisions along the X-axis
-     * @param subDivY   The number of subdivisions along the Y-axis
+     * @param width   The width of the mesh
+     * @param height  The height of the mesh
+     * @param subDivX The number of subdivisions along the X-axis
+     * @param subDivY The number of subdivisions along the Y-axis
      * @return a PolygonMesh object representing the created mesh
      */
     public PolygonMesh createMesh(float width, float height, int subDivX, int subDivY) {
@@ -476,21 +478,22 @@ public class SimulatorController {
             }
 
             Point3D sumDirection = new Point3D(x, y, z);
-            double newAngle = sumDirection.angle(new Point3D(100,0,0));
+            double newAngle = sumDirection.angle(new Point3D(100, 0, 0));
 
             double angle;
-            if(vector.getPosition().getZ() > 0){
-                angle = newAngle-currentAngle;
-                if(sumDirection.getZ() > 0){
+            if (vector.getPosition().getZ() > 0) {
+                angle = newAngle - currentAngle;
+                if (sumDirection.getZ() > 0) {
                     angle = -angle;
                 }
-            }else{
-                angle = currentAngle-newAngle;
-                if(sumDirection.getZ() < 0){
+            } else {
+                angle = currentAngle - newAngle;
+                if (sumDirection.getZ() < 0) {
                     angle = -angle;
                 }
             }
-            vector.getTransforms().add(new Rotate(angle, Rotate.X_AXIS));
+            Rotate rotate = new Rotate(angle, Rotate.X_AXIS);
+            vector.getXRotate().angleProperty().set(vector.getXRotate().getAngle() + angle);
             vector.setAngle(newAngle);
             vector.setMagnitude(sumDirection.magnitude());
             if (start == false) {
@@ -516,7 +519,7 @@ public class SimulatorController {
 
     }
 
-    //TODO
+    //TODO: build 2
     public void updateAnim() {
 
     }

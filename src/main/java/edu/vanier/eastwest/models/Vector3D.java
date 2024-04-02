@@ -52,16 +52,16 @@ public class Vector3D extends Group {
     private double angle;
     @Getter @Setter
     private double magnitude;
-    @Getter
-    private Point3D position;
     int height;
     int radius;
     int rounds = 360;
     Group arrow;
 
+    @Getter @Setter
+    Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
+
     public Vector3D(int r, int h, Point3D p) {
         setPosition(p);
-        position = p;
         radius = r;
         magnitude = 0;
         height = h / 5 * 2;

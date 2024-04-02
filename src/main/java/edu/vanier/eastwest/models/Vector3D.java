@@ -2,12 +2,15 @@ package edu.vanier.eastwest.models;
 
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.MeshView;
-import javafx.scene.shape.TriangleMesh;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
+import lombok.*;
+
+import java.util.List;
+
 public class Vector3D extends Group {
     //Imported Code: https://stackoverflow.com/a/43736085
     //2D Array of the turbo colormap in rgb taken from https://gist.github.com/mikhailov-work/6a308c20e494d9e0ccc29036b28faa7a
@@ -45,25 +48,28 @@ public class Vector3D extends Group {
             {169, 22, 1}, {167, 20, 1}, {164, 19, 1}, {161, 18, 1}, {158, 16, 1}, {155, 15, 1}, {152, 14, 1}, {149, 13, 1},
             {146, 11, 1}, {142, 10, 1}, {139, 9, 2}, {136, 8, 2}, {133, 7, 2}, {129, 6, 2}, {126, 5, 2}, {122, 4, 3}
     };
-    private Point3D direction, start, end;
-    @lombok.Getter
-    @lombok.Setter
+    @Getter @Setter
+    private double angle;
+    @Getter @Setter
     private double magnitude;
     int height;
     int radius;
     int rounds = 360;
-    @lombok.Getter
-    Point3D position;
+    Group arrow;
 
+    @Getter @Setter
+    Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
 
-    //TODO @Yihweh divide it into smaller parts
     public Vector3D(int r, int h, Point3D p) {
-        position = p;
+        setPosition(p);
         radius = r;
         magnitude = 0;
         height = h / 5 * 2;
-        Group cone = creatingArrow();
 
+        arrow = creatingArrow();
+    }
+    public Point3D getPosition() {
+        return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
     }
 
     public void setPosition(Point3D position) {
@@ -113,6 +119,24 @@ public class Vector3D extends Group {
         int g = turbo_srgb_bytes[Math.round(255.0f * (percentage))][1];
         int b = turbo_srgb_bytes[Math.round(255.0f * (percentage))][2];
         return String.format("#%02X%02X%02X", r, g, b);
+    }
+
+    //TODO solve the color problem (comes from magnitude or hex)
+    public void setArrowColor(double maxMagnitude, double minMagnitude){
+        if(getColor(maxMagnitude, minMagnitude).contains("#")){
+        for(Node n: getChildren()){
+            if(n instanceof Shape3D){
+                ((Shape3D) n).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
+            }
+            else if(n instanceof Group){
+                for(Node z: ((Group) n).getChildren()){
+                    if(z instanceof MeshView){
+                        ((MeshView) z).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
+                    }
+                }
+            }
+        }
+        }
     }
 
     //TODO
@@ -184,9 +208,8 @@ public class Vector3D extends Group {
         meshView.setMesh(mesh);
         meshView.setMaterial(material);
         meshView.setTranslateZ(height / 2);
-        cone.getChildren().addAll(meshView);
-        Rotate r1 = new Rotate(90, Rotate.X_AXIS);
-        cone.getTransforms().add(r1);
+        cone.getChildren().addAll(meshView, c1, c2);
+        cone.getTransforms().add(new Rotate(90, Rotate.X_AXIS));
         getChildren().addAll(cone, c1, c2);
         return cone;
     }

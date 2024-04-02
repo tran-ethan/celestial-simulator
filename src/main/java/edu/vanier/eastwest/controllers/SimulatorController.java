@@ -5,6 +5,7 @@ import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.MySplitPaneSkin;
 import edu.vanier.eastwest.models.TreeNode;
 import edu.vanier.eastwest.models.Vector3D;
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -127,6 +128,7 @@ public class SimulatorController {
 
         // Initialize
         initBodies();
+        initVectors();
         initControls();
 
         // Animation timer
@@ -138,39 +140,9 @@ public class SimulatorController {
         timer.play();
     }
 
-    @FXML
-    void onSpeedChange(MouseEvent event) {
-        timer.setRate(sliderSpeed.getValue());
-    }
-
-    private void update(ActionEvent event) {
-        for (Body iBody : bodies()) {
-            Point3D p1 = iBody.getPosition();
-            for (Body jBody : bodies()) {
-                if (iBody != jBody) {
-                    Point3D p2 = jBody.getPosition();
-                    double m2 = jBody.getMass();
-
-                    Point3D a = getGravity(p1, p2, m2, iBody.getRadius(), jBody.getRadius());
-                    iBody.update(0.01, a);
-
-                    collide(iBody, jBody, iBody.getPosition().distance(jBody.getPosition()));
-                }
-            }
-        }
-
-        //TODO @@Yihweh
-        for (Vector3D vector : vectors()) {
-            Point3D vectorPosition = vector.getPosition();
-            for (Body jBody : bodies()) {
-                    Point3D p2 = jBody.getPosition();
-                    double m2 = jBody.getMass();
-
-                    Point3D a = getGravity(vectorPosition, p2, m2, 1, jBody.getRadius());
-
-
-            }
-        }
+    private void update() {
+        updateBodies();
+        updateVectors();
 
         // Move camera around selected planet
         if (selected != null) {
@@ -181,6 +153,16 @@ public class SimulatorController {
 
     }
 
+    /**
+     * Returns a Point3D vector
+     *
+     * @param p1 Point3D position of the influenced body.
+     * @param p2 Point3D position of the influencing body.
+     * @param m2 Mass of the influencing body.
+     * @param r1 Radius of the influenced body.
+     * @param r2 Radius of the influencing body.
+     * @return Point3D vector representing the vector gravitational force on p1 by p2.
+     */
     public Point3D getGravity(Point3D p1, Point3D p2, double m2, double r1, double r2) {
         Point3D r = p2.subtract(p1);
         double rMag = r.magnitude();
@@ -190,18 +172,25 @@ public class SimulatorController {
     }
 
     private void initBodies() {
-        Body sun = new Body(30, 100000, new Point3D(0, 0, 0), Color.YELLOW);
-        Body p1 = new Body(15, 1000, new Point3D(100, 0, 100), Color.BLUE);
-        Body p2 = new Body(15, 1000, new Point3D(0, 0, 100), Color.GREEN);
-        Body p3 = new Body(15, 1000, new Point3D(0, 0, 200), Color.WHITE);
-        Vector3D v1 = new Vector3D (4, 20, new Point3D(50, 0,50));
-        v1.setPosition(v1.getPosition());
-        v1.getTransforms().add(new Rotate(90, 1, 0, 0));
+        Body sun = new Body(30, 100000, new Point3D(0, 0, -50), Color.YELLOW);
+        Body p1 = new Body(10, 20000, new Point3D(150, 0, -100), Color.BLUE);
+        Body p2 = new Body(10, 5000, new Point3D(0, 0, 100), Color.GREEN);
+        Body p3 = new Body(10, 5000, new Point3D(0, 0, 200), Color.WHITE);
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
         p3.setVelocity(new Point3D(10, 0, 10));
-        entities.getChildren().addAll(sun, p1, p2, p3, v1);
-        System.out.println();
+        entities.getChildren().addAll(sun, p1, p2, p3);
+    }
+
+    private void initVectors() {
+        for (int i = -5; i <= 5; i++) {
+            for (int j = -5; j <= 5; j++) {
+                Vector3D v = new Vector3D(4, 20, new Point3D(i * 100, 0, j * 100));
+                v.getTransforms().add(new Rotate(90, 1, 0, 0));
+                v.getTransforms().add(v.getXRotate());
+                entities.getChildren().add(v);
+            }
+        }
     }
 
     private void initControls() {
@@ -250,12 +239,11 @@ public class SimulatorController {
         // Disable camera spin checkbox
         dsblSpin.setOnAction(actionEvent -> {
             if (spinning) {
-                spinning = false;
                 timeline.pause();
             } else {
-                spinning = true;
                 timeline.play();
             }
+            spinning = !spinning;
         });
 
         // Mouse controls
@@ -339,15 +327,15 @@ public class SimulatorController {
     /**
      * Creates a polygon mesh based on specified width, height, and subdivision parameters.
      *
-     * @param width     The width of the mesh
-     * @param height    The height of the mesh
-     * @param subDivX   The number of subdivisions along the X-axis
-     * @param subDivY   The number of subdivisions along the Y-axis
+     * @param width   The width of the mesh
+     * @param height  The height of the mesh
+     * @param subDivX The number of subdivisions along the X-axis
+     * @param subDivY The number of subdivisions along the Y-axis
      * @return a PolygonMesh object representing the created mesh
      */
     public PolygonMesh createMesh(float width, float height, int subDivX, int subDivY) {
-        final float minX = - width / 2f;
-        final float minY = - height / 2f;
+        final float minX = -width / 2f;
+        final float minY = -height / 2f;
         final float maxX = width / 2f;
         final float maxY = height / 2f;
 
@@ -465,7 +453,10 @@ public class SimulatorController {
     }
 
     public List<Body> bodies() {
-        return entities.getChildren().stream().filter(n -> n instanceof Body).map(n -> (Body) n).collect(Collectors.toList());
+        return entities.getChildren().stream()
+                .filter(n -> n instanceof Body)
+                .map(n -> (Body) n)
+                .collect(Collectors.toList());
     }
 
     public List<Vector3D> vectors() {
@@ -474,12 +465,78 @@ public class SimulatorController {
 
     //TODO
     public void updateBodies() {
+        for (Body currentBody : bodies()) {
+            Point3D p1 = currentBody.getPosition();
+            for (Body comparedBody : bodies()) {
+                if (currentBody != comparedBody) {
+                    Point3D p2 = comparedBody.getPosition();
+                    double m2 = comparedBody.getMass();
 
+                    Point3D a = getGravity(p1, p2, m2, currentBody.getRadius(), comparedBody.getRadius());
+                    currentBody.update(0.01, a);
+
+                    collide(currentBody, comparedBody, currentBody.getPosition().distance(comparedBody.getPosition()));
+                }
+            }
+        }
     }
 
-    //TODO
-    public void updateVectors(Vector3D v, Body b) {
+    //TODO Solve rotation problem past 180 degrees and maybe use barnes hut
+    public void updateVectors() {
+        //TODO @Yihweh
+        double minMagnitude = 0, maxMagnitude = 0;
+        boolean start = false;
+        for (Vector3D vector : vectors()) {
+            Point3D vectorPosition = vector.getPosition();
+            double currentAngle = vector.getAngle();
+            double x = 0;
+            double y = 0;
+            double z = 0;
+            for (Body body : bodies()) {
+                Point3D p2 = body.getPosition();
+                double m2 = body.getMass();
+                Point3D a = getGravity(vectorPosition, p2, m2, 1, body.getRadius());
+                //Summing the gravitational field forces
+                x += a.getX();
+                y += a.getY();
+                z += a.getZ();
+            }
 
+            Point3D sumDirection = new Point3D(x, y, z);
+            double newAngle = sumDirection.angle(new Point3D(100, 0, 0));
+
+            double angle;
+            if (vector.getPosition().getZ() > 0) {
+                angle = newAngle - currentAngle;
+                if (sumDirection.getZ() > 0) {
+                    angle = -angle;
+                }
+            } else {
+                angle = currentAngle - newAngle;
+                if (sumDirection.getZ() < 0) {
+                    angle = -angle;
+                }
+            }
+            Rotate rotate = new Rotate(angle, Rotate.X_AXIS);
+            vector.getXRotate().angleProperty().set(vector.getXRotate().getAngle() + angle);
+            vector.setAngle(newAngle);
+            vector.setMagnitude(sumDirection.magnitude());
+            if (start == false) {
+                maxMagnitude = vector.getMagnitude();
+                minMagnitude = vector.getMagnitude();
+                start = true;
+            } else {
+                if (vector.getMagnitude() > maxMagnitude) {
+                    maxMagnitude = vector.getMagnitude();
+                }
+                if (vector.getMagnitude() < minMagnitude) {
+                    minMagnitude = vector.getMagnitude();
+                }
+            }
+            for (Vector3D vectorM : vectors()) {
+                vector.setArrowColor(maxMagnitude, minMagnitude);
+            }
+        }
     }
 
     //TODO: build2 @Author: 
@@ -487,13 +544,15 @@ public class SimulatorController {
 
     }
 
-    //TODO
+    //TODO: build 2
     public void updateAnim() {
 
     }
 
     private void collide(Body a, Body b, double distance) {
-        if (distance > a.getRadius() + b.getRadius()) return;
+        if (distance > a.getRadius() + b.getRadius()) {
+            return;
+        }
 
         // Normal vector
         Point3D p1 = a.getPosition();
@@ -522,7 +581,7 @@ public class SimulatorController {
 
         // Collision impulse
         double res = 0.5;
-        double i = (-(1.0f + res) * vn) / im;
+        double i = (1 + res) * -vn / im;
         Point3D impulse = mtd.normalize().multiply(i);
 
         // Change in momentum

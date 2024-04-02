@@ -11,6 +11,8 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
@@ -18,6 +20,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -29,6 +33,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+import org.controlsfx.control.ToggleSwitch;
 import org.fxyz3d.shapes.polygon.PolygonMesh;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
@@ -79,7 +84,10 @@ public class SimulatorController {
     @FXML
     private CheckBox dsblSpin;
 
-    private AnimationTimer timer;
+    @FXML
+    private ToggleSwitch tgl3D;
+
+    private Timeline timer;
     private TreeNode node;
     private Camera camera;
     private Group entities;
@@ -124,13 +132,12 @@ public class SimulatorController {
         initControls();
 
         // Animation timer
-        timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                update();
-            }
-        };
-        timer.start();
+        EventHandler<ActionEvent> onFinished = this::update;
+        timer = new Timeline(
+                new KeyFrame(Duration.millis(10), onFinished)
+        );
+        timer.setCycleCount(Timeline.INDEFINITE);
+        timer.play();
     }
 
     private void update() {
@@ -243,8 +250,8 @@ public class SimulatorController {
         MainApp.scene.setOnMousePressed(event -> {
             anchorX = event.getSceneX();
             anchorY = event.getSceneY();
-            anchorAngleX = angleX.get();
-            anchorAngleY = angleY.get();
+            anchorAngleX = -angleX.get();
+            anchorAngleY = -angleY.get();
             if (spinning) {
                 timeline.pause();
             }
@@ -267,6 +274,24 @@ public class SimulatorController {
             double delta = e.getDeltaY();
             zoom.setZ(zoom.getZ() + delta);
         });
+
+        // Play,pause, reset buttons
+        btnPlay.setOnAction(event -> {
+            timer.play();
+        });
+        btnPause.setOnAction(event -> {
+            timer.stop();
+        });
+        btnReset.setOnAction(event -> {
+            entities.getChildren().removeIf(object -> object instanceof Body);
+            timer.play();
+        });
+
+        tgl3D.setOnMouseClicked(event -> {
+            angleX.set(90);
+            angleY.set(90);
+        });
+
     }
 
     /**

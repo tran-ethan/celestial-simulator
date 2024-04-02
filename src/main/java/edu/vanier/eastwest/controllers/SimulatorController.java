@@ -32,6 +32,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+import org.controlsfx.control.ToggleSwitch;
 import org.fxyz3d.shapes.polygon.PolygonMesh;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
@@ -81,6 +82,9 @@ public class SimulatorController {
 
     @FXML
     private CheckBox dsblSpin;
+
+    @FXML
+    private ToggleSwitch tgl3D;
 
     private Timeline timer;
     private TreeNode node;
@@ -293,6 +297,11 @@ public class SimulatorController {
         btnReset.setOnAction(event -> {
             entities.getChildren().removeIf(object -> object instanceof Body);
             timer.play();
+        });
+
+        tgl3D.setOnMouseClicked(event -> {
+            angleX.set(90);
+            angleY.set(90);
         });
 
     }

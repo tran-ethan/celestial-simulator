@@ -123,12 +123,13 @@ public class Vector3D extends Group {
         int r = turbo_srgb_bytes[Math.round(255.0f * (percentage))][0];
         int g = turbo_srgb_bytes[Math.round(255.0f * (percentage))][1];
         int b = turbo_srgb_bytes[Math.round(255.0f * (percentage))][2];
-        return String.format("#%02X%02X%02X", r, g, b);
+        return "rgb("+ r + "," + g + "," + b + ")";
     }
 
     //TODO solve the color problem (comes from magnitude or hex)
     public void setArrowColor(double maxMagnitude, double minMagnitude){
-        if(getColor(maxMagnitude, minMagnitude).contains("#")){
+        String color = getColor(maxMagnitude, minMagnitude);
+        if(color.contains("rgb")){
 //        for(Node n: getChildren()){
 //            if(n instanceof Shape3D){
 //                //((Shape3D) n).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
@@ -141,9 +142,9 @@ public class Vector3D extends Group {
 //                }
 //            }
 //        }
-            this.getC1().setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
-            this.getC2().setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
-            this.getMeshView().setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
+            this.getC1().setMaterial(new PhongMaterial(Color.web(color)));
+            this.getC2().setMaterial(new PhongMaterial(Color.web(color)));
+            this.getMeshView().setMaterial(new PhongMaterial(Color.web(color)));
         }
     }
 

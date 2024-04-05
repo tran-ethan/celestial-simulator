@@ -8,6 +8,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import lombok.*;
+import org.fxyz3d.shapes.Cone;
 
 import java.util.List;
 
@@ -52,10 +53,14 @@ public class Vector3D extends Group {
     private double angle;
     @Getter @Setter
     private double magnitude;
-    int height;
-    int radius;
-    int rounds = 360;
-    Group arrow;
+    private int height;
+    private int radius;
+    private int rounds = 360;
+    private Group arrow;
+    @Getter @Setter
+    private Cylinder c1 = new Cylinder(), c2 = new Cylinder();
+    @Getter @Setter
+    private MeshView meshView = new MeshView();
 
     @Getter @Setter
     Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
@@ -124,18 +129,21 @@ public class Vector3D extends Group {
     //TODO solve the color problem (comes from magnitude or hex)
     public void setArrowColor(double maxMagnitude, double minMagnitude){
         if(getColor(maxMagnitude, minMagnitude).contains("#")){
-        for(Node n: getChildren()){
-            if(n instanceof Shape3D){
-                ((Shape3D) n).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
-            }
-            else if(n instanceof Group){
-                for(Node z: ((Group) n).getChildren()){
-                    if(z instanceof MeshView){
-                        ((MeshView) z).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
-                    }
-                }
-            }
-        }
+//        for(Node n: getChildren()){
+//            if(n instanceof Shape3D){
+//                //((Shape3D) n).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
+//            }
+//            else if(n instanceof Group){
+//                for(Node z: ((Group) n).getChildren()){
+//                    if(z instanceof MeshView){
+//                       // ((MeshView) z).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
+//                    }
+//                }
+//            }
+//        }
+            this.getC1().setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
+            this.getC2().setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
+            this.getMeshView().setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
         }
     }
 
@@ -199,10 +207,12 @@ public class Vector3D extends Group {
 
         Cylinder c1 = new Cylinder(radius, 0.01);
         c1.setMaterial(material);
+        this.setC1(c1);
 
         Cylinder c2 = new Cylinder(radius / 2, height / 2 * 3);
         c2.setTranslateY(height / 4 * 3);
         c2.setMaterial(material);
+        this.setC2(c2);
 
         MeshView meshView = new MeshView();
         meshView.setMesh(mesh);
@@ -211,6 +221,7 @@ public class Vector3D extends Group {
         cone.getChildren().addAll(meshView, c1, c2);
         cone.getTransforms().add(new Rotate(90, Rotate.X_AXIS));
         getChildren().addAll(cone, c1, c2);
+        this.setMeshView(meshView);
         return cone;
     }
 

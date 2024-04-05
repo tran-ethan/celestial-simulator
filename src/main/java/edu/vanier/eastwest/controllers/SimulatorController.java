@@ -142,7 +142,7 @@ public class SimulatorController {
 
     private void update(ActionEvent event) {
         updateBodies();
-        // updateVectors();
+        updateVectors();
 
         // Move camera around selected planet
         if (selected != null) {
@@ -492,6 +492,7 @@ public class SimulatorController {
         //TODO @Yihweh
         double minMagnitude = 0, maxMagnitude = 0;
         boolean start = false;
+        //Updating angle
         for (Vector3D vector : vectors()) {
             Point3D vectorPosition = vector.getPosition();
             double currentAngle = vector.getAngle();
@@ -527,7 +528,9 @@ public class SimulatorController {
             vector.getXRotate().angleProperty().set(vector.getXRotate().getAngle() + angle);
             vector.setAngle(newAngle);
             vector.setMagnitude(sumDirection.magnitude());
-            if (start == false) {
+
+            //Updating colors
+            if (!start) {
                 maxMagnitude = vector.getMagnitude();
                 minMagnitude = vector.getMagnitude();
                 start = true;

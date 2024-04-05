@@ -142,7 +142,7 @@ public class SimulatorController {
 
     private void update(ActionEvent event) {
         updateBodies();
-        updateVectors();
+        // updateVectors();
 
         // Move camera around selected planet
         if (selected != null) {
@@ -250,8 +250,8 @@ public class SimulatorController {
         MainApp.scene.setOnMousePressed(event -> {
             anchorX = event.getSceneX();
             anchorY = event.getSceneY();
-            anchorAngleX = -angleX.get();
-            anchorAngleY = -angleY.get();
+            anchorAngleX = angleX.get();
+            anchorAngleY = angleY.get();
             if (spinning) {
                 timeline.pause();
             }

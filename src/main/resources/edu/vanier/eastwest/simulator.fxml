@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.ToggleSwitch?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1280.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.SimulatorController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1280.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.SimulatorController">
    <children>
       <BorderPane prefHeight="920.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -86,7 +86,7 @@
                                           </Button>
                                           <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Clear" />
                                           <Label text="Simulation Speed" />
-                                          <Slider fx:id="sliderSpeed" max="25.0" onMouseReleased="#onSpeedChange">
+                                          <Slider fx:id="sliderSpeed" max="25.0" value="1.0">
                                              <VBox.margin>
                                                 <Insets />
                                              </VBox.margin>

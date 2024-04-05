@@ -140,7 +140,7 @@ public class SimulatorController {
         timer.play();
     }
 
-    private void update() {
+    private void update(ActionEvent event) {
         updateBodies();
         updateVectors();
 
@@ -279,12 +279,18 @@ public class SimulatorController {
         btnPlay.setOnAction(event -> {
             timer.play();
         });
+
         btnPause.setOnAction(event -> {
             timer.stop();
         });
+
         btnReset.setOnAction(event -> {
             entities.getChildren().removeIf(object -> object instanceof Body);
             timer.play();
+        });
+
+        sliderSpeed.setOnMouseReleased(event -> {
+            timer.setRate(sliderSpeed.getValue());
         });
 
         tgl3D.setOnMouseClicked(event -> {

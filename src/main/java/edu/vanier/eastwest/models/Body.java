@@ -70,4 +70,14 @@ public class Body extends Sphere {
     public double getMass() {
         return mass;
     }
+
+    @Override
+    public String toString() {
+        return "Body{" +
+                "mass=" + mass +
+                ", radius=" + radius +
+                ", position=" + position +
+                ", velocity=" + velocity +
+                '}';
+    }
 }

@@ -2,15 +2,13 @@ package edu.vanier.eastwest.models;
 
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 
 public class Body extends Sphere {
 
-    private double mass, radius;
-    private Point3D position, velocity, acceleration;
-    private ImagePattern sprite;
+    private double mass;
+    private Point3D velocity;
 
     /**
      * Constructor for a Body object using 4 parameters.
@@ -24,7 +22,6 @@ public class Body extends Sphere {
         this.mass = mass;
         setPosition(position);
         velocity = new Point3D(0, 0 , 0);
-        acceleration = new Point3D(0, 0, 0);
         setMaterial(new PhongMaterial(color));
     }
 
@@ -51,17 +48,14 @@ public class Body extends Sphere {
         setTranslateZ(position.getZ());
     }
 
-    //TODO lombok
     public Point3D getPosition() {
         return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
     }
 
-    //TODO lombok
     public void setVelocity(Point3D velocity) {
         this.velocity = velocity;
     }
 
-    //TODO lombok
     public Point3D getVelocity() {
         return velocity;
     }
@@ -73,11 +67,14 @@ public class Body extends Sphere {
 
     @Override
     public String toString() {
-        return "Body{" +
-                "mass=" + mass +
-                ", radius=" + radius +
-                ", position=" + position +
-                ", velocity=" + velocity +
-                '}';
+        return String.format("Body x\nMass: %.2f\nPosition: [%.2f, %.2f, %.2f]\nVelocity: [%.2f, %.2f, %.2f]",
+                getMass(),
+                getTranslateX(),
+                getTranslateY(),
+                getTranslateZ(),
+                getVelocity().getX(),
+                getVelocity().getY(),
+                getVelocity().getZ()
+        );
     }
 }

@@ -127,7 +127,10 @@
                                           <Insets />
                                        </opaqueInsets>
                                     </VBox>
-                                    <VBox prefHeight="709.0" prefWidth="154.0" />
+                                    <VBox alignment="CENTER" prefHeight="709.0" prefWidth="154.0">
+                                       <children>
+                                          <Label fx:id="properties" text="-" />
+                                       </children></VBox>
                                  </items>
                               </SplitPane>
                            </children>

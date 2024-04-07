@@ -16,10 +16,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Slider;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -29,6 +26,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -86,6 +84,9 @@ public class SimulatorController {
 
     @FXML
     private ToggleSwitch tgl3D;
+
+    @FXML
+    private Label properties;
 
     private Timeline timer;
     private TreeNode node;
@@ -149,6 +150,7 @@ public class SimulatorController {
             camera.setTranslateX(selected.getTranslateX());
             camera.setTranslateY(selected.getTranslateY());
             camera.setTranslateZ(selected.getTranslateZ());
+            properties.setText(selected.toString());
         }
 
     }

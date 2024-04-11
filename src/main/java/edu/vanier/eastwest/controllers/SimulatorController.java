@@ -40,10 +40,6 @@ import java.util.stream.Collectors;
 
 public class SimulatorController {
 
-    private ArrayList<Vector3D> vectors;
-    //The highest and lowest magnitude found in the
-    private double highestMagnitude, lowestMagnitude;
-
     @FXML
     private ToggleButton btnAdd;
 
@@ -98,7 +94,7 @@ public class SimulatorController {
     private Group entities;
     private SubScene subScene;
     Body selectedBody;
-
+    private boolean vectorFieldOn = true;
 
     private double anchorX, anchorY;
 
@@ -327,6 +323,22 @@ public class SimulatorController {
                 selectedTool = "selection";
             }else{
                 selectedTool = "";
+            }
+        });
+
+        // Vector Field visual toggle button
+        btnVector.setOnAction(event -> {
+            if(vectorFieldOn == true){
+                //Remove vector field
+                vectorFieldOn = false;
+                entities.getChildren().removeAll(vectors());
+                System.out.println(1);
+            }
+            else if(vectorFieldOn == false){
+                //Add vector field
+                vectorFieldOn = true;
+                initVectors();
+                System.out.println(2);
             }
         });
 

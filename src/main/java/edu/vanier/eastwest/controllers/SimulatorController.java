@@ -264,6 +264,8 @@ public class SimulatorController {
         };
         MainApp.scene.setOnMouseReleased(mouseReleasedHandler);
 
+
+
         // Mouse dragging controls
         EventHandler<MouseEvent> mouseDraggedHandler = event -> {
             //Rotation of camera due to pan tool not selected
@@ -277,8 +279,11 @@ public class SimulatorController {
             }
             //Panning of camera due to pan tool selected
             else{
-                camera.setTranslateX(anchorX - event.getSceneX());
-                camera.setTranslateZ(-(anchorY - event.getSceneY()));
+                camera.setTranslateX(camera.getTranslateX() + (anchorX - event.getSceneX()));
+                camera.setTranslateZ(camera.getTranslateZ() - (anchorY - event.getSceneY()));
+
+                anchorX = event.getSceneX();
+                anchorY = event.getSceneY();
             }
         };
         MainApp.scene.setOnMouseDragged(mouseDraggedHandler);

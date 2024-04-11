@@ -44,10 +44,10 @@ public class SimulatorController {
     private double highestMagnitude, lowestMagnitude;
 
     @FXML
-    private Button btnAdd;
+    private ToggleButton btnAdd;
 
     @FXML
-    private Button btnPan;
+    private ToggleButton btnPan;
 
     @FXML
     private Button btnPause;
@@ -56,16 +56,16 @@ public class SimulatorController {
     private Button btnPlay;
 
     @FXML
-    private Button btnRemove;
+    private ToggleButton btnRemove;
 
     @FXML
     private Button btnReset;
 
     @FXML
-    private Button btnSelection;
+    private ToggleButton btnSelection;
 
     @FXML
-    private Button btnVector;
+    private ToggleButton btnVector;
 
     @FXML
     private Pane pane;
@@ -77,7 +77,7 @@ public class SimulatorController {
     private Slider sliderSpeed;
 
     @FXML
-    private CheckBox dsblSpin;
+    private CheckBox enableSpin;
 
     @FXML
     private ToggleSwitch tgl2D;
@@ -102,8 +102,8 @@ public class SimulatorController {
 
     private static final float WIDTH = 890;
     private static final float HEIGHT = 890;
-    private static Boolean spinning = true;
-    private String selectedTool = null;
+    private static Boolean spinning = false;
+    private String selectedTool = "";
 
     @FXML
     public void initialize() {
@@ -231,22 +231,21 @@ public class SimulatorController {
                 )
         );
         rotateTimer.setCycleCount(Timeline.INDEFINITE);
-        rotateTimer.play(); // Comment this line to disable
 
         xRotate.angleProperty().bind(angleX);
         yRotate.angleProperty().bind(angleY);
 
         // Disable camera spin checkbox
-        dsblSpin.setOnAction(actionEvent -> {
-            if (spinning) {
-                rotateTimer.pause();
-            } else {
+        enableSpin.setOnAction(actionEvent -> {
+            if (!spinning) {
                 rotateTimer.play();
+            } else {
+                rotateTimer.pause();
             }
             spinning = !spinning;
         });
 
-        // Mouse controls in 3D view
+        // Mouse controls
         EventHandler<MouseEvent> mousePressedHandler = event -> {
             anchorX = event.getSceneX();
             anchorY = event.getSceneY();
@@ -267,12 +266,24 @@ public class SimulatorController {
 
         // Mouse dragging controls
         EventHandler<MouseEvent> mouseDraggedHandler = event -> {
-            angleX.set(anchorAngleX - (anchorY - event.getSceneY()));
-            angleY.set(anchorAngleY + anchorX - event.getSceneX());
+            //Rotation of camera due to pan tool not selected
+            if(!selectedTool.equals("pan")) {
+                if (!tgl2D.isSelected()) {
+                    angleX.set(anchorAngleX - (anchorY - event.getSceneY()));
+                    angleY.set(anchorAngleY + anchorX - event.getSceneX());
+                } else {
+                    angleY.set(anchorAngleY + anchorX - event.getSceneX());
+                }
+            }
+            //Panning of camera due to pan tool selected
+            else{
+                camera.setTranslateX(anchorX - event.getSceneX());
+                camera.setTranslateZ(anchorY - event.getSceneY());
+            }
         };
         MainApp.scene.setOnMouseDragged(mouseDraggedHandler);
 
-        // Zoom controls
+        // Zoom controls using mouse wheel scroll
         MainApp.scene.addEventHandler(ScrollEvent.SCROLL, e -> {
             double delta = e.getDeltaY();
             zoom.setZ(zoom.getZ() + delta);
@@ -281,10 +292,11 @@ public class SimulatorController {
         // Pan button
         btnPan.setOnAction(event -> {
             if(!selectedTool.equals("pan")) {
+
                 selectedTool = "pan";
                 System.out.println("Entered panning mode...");
             }else{
-                selectedTool = null;
+                selectedTool = "";
                 System.out.println("Exiting panning mode");
             }
         });
@@ -309,16 +321,11 @@ public class SimulatorController {
 
         tgl2D.setOnMouseClicked(event -> {
             if (tgl2D.isSelected()) {
-                initX.setAngle(90);
                 angleX.set(0);
                 angleY.set(0);
-                MainApp.scene.setOnMousePressed(null);
-                MainApp.scene.setOnMouseReleased(null);
-                MainApp.scene.setOnMouseDragged(null);
-            } else {
-                MainApp.scene.setOnMousePressed(mousePressedHandler);
-                MainApp.scene.setOnMouseReleased(mouseReleasedHandler);
-                MainApp.scene.setOnMouseDragged(mouseDraggedHandler);
+                initX.setAngle(90);
+            }else{
+                initX.setAngle(-30);
             }
         });
 

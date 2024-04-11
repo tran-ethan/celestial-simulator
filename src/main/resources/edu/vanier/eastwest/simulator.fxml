@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.ToggleSwitch?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1280.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.SimulatorController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1280.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.SimulatorController">
    <children>
       <BorderPane prefHeight="920.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -71,7 +71,6 @@
                                     <ToggleButton fx:id="btnSelection" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Selection Tool" textAlignment="CENTER" />
                                     <ToggleButton fx:id="btnRemove" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Add Body" textAlignment="CENTER" />
                                     <ToggleButton fx:id="btnAdd" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Remove Body" textAlignment="CENTER" />
-                                    <ToggleButton fx:id="btnVector" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Vector Field" textAlignment="CENTER" />
                                     <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="etc" textAlignment="CENTER" />
                                     <VBox alignment="TOP_CENTER" prefHeight="341.0" prefWidth="185.0" spacing="10.0" style="-fx-border-color: black; -fx-border-style: solid none none none;">
                                        <children>
@@ -94,6 +93,7 @@
                                           </Slider>
                                           <CheckBox fx:id="enableSpin" mnemonicParsing="false" text="Auto Camera Spin" />
                                           <ToggleSwitch fx:id="tgl2D" prefHeight="18.0" prefWidth="123.0" text="Toggle 2D View" />
+                                          <ToggleSwitch fx:id="tglVector" prefHeight="18.0" prefWidth="123.0" text="Toggle Vector Field" />
                                        </children>
                                        <VBox.margin>
                                           <Insets top="20.0" />

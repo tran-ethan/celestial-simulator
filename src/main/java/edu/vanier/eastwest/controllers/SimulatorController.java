@@ -62,7 +62,7 @@ public class SimulatorController {
     private ToggleButton btnSelection;
 
     @FXML
-    private ToggleButton btnVector;
+    private ToggleSwitch tglVector;
 
     @FXML
     private Pane pane;
@@ -94,7 +94,6 @@ public class SimulatorController {
     private Group entities;
     private SubScene subScene;
     Body selectedBody;
-    private boolean vectorFieldOn = true;
 
     private double anchorX, anchorY;
 
@@ -127,7 +126,6 @@ public class SimulatorController {
 
         // Initialize
         initBodies();
-        initVectors();
         initControls();
 
         // Animation timer
@@ -190,6 +188,10 @@ public class SimulatorController {
         entities.getChildren().addAll(sun, p1, p2, p3);
     }
 
+    /***
+     * TODO: Make vectors appear only near bodies
+     * Creates Vector3D arrows around Body objects.
+     */
     private void initVectors() {
         for (int i = -5; i <= 5; i++) {
             Vector3D v = new Vector3D(4, 20, new Point3D(i * 100, 0, 0));
@@ -327,16 +329,14 @@ public class SimulatorController {
         });
 
         // Vector Field visual toggle button
-        btnVector.setOnAction(event -> {
-            if(vectorFieldOn == true){
+        tglVector.setOnMouseClicked(event -> {
+            if(!tglVector.isSelected()){
                 //Remove vector field
-                vectorFieldOn = false;
                 entities.getChildren().removeAll(vectors());
                 System.out.println(1);
             }
-            else if(vectorFieldOn == false){
+            else{
                 //Add vector field
-                vectorFieldOn = true;
                 initVectors();
                 System.out.println(2);
             }

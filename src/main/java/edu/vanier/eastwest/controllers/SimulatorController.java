@@ -333,12 +333,10 @@ public class SimulatorController {
             if(!tglVector.isSelected()){
                 //Remove vector field
                 entities.getChildren().removeAll(vectors());
-                System.out.println(1);
             }
             else{
                 //Add vector field
                 initVectors();
-                System.out.println(2);
             }
         });
 

@@ -5,7 +5,6 @@ import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.MySplitPaneSkin;
 import edu.vanier.eastwest.models.TreeNode;
 import edu.vanier.eastwest.models.Vector3D;
-import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -17,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
@@ -26,7 +24,6 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
-import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -83,7 +80,7 @@ public class SimulatorController {
     private CheckBox dsblSpin;
 
     @FXML
-    private ToggleSwitch tgl3D;
+    private ToggleSwitch tgl2D;
 
     @FXML
     private Label properties;
@@ -211,18 +208,19 @@ public class SimulatorController {
         // Bind rotation angle to camera with mouse movement
         Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
         Rotate yRotate = new Rotate(0, Rotate.Y_AXIS);
+        Rotate initX = new Rotate(-30, Rotate.X_AXIS);
         Rotate autoRotateY = new Rotate(0, Rotate.Y_AXIS);
         Translate zoom = new Translate(0, 0, -500);
         camera.getTransforms().addAll(
                 xRotate,
                 yRotate,
                 autoRotateY,
-                new Rotate(-30, Rotate.X_AXIS),
+                initX,
                 zoom
         );
 
         // Camera auto spin
-        Timeline timeline = new Timeline(
+        Timeline rotateTimer = new Timeline(
                 new KeyFrame(
                         Duration.seconds(0),
                         new KeyValue(autoRotateY.angleProperty(), 0)
@@ -232,8 +230,8 @@ public class SimulatorController {
                         new KeyValue(autoRotateY.angleProperty(), 360)
                 )
         );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play(); // Comment this line to disable
+        rotateTimer.setCycleCount(Timeline.INDEFINITE);
+        rotateTimer.play(); // Comment this line to disable
 
         xRotate.angleProperty().bind(angleX);
         yRotate.angleProperty().bind(angleY);
@@ -241,40 +239,48 @@ public class SimulatorController {
         // Disable camera spin checkbox
         dsblSpin.setOnAction(actionEvent -> {
             if (spinning) {
-                timeline.pause();
+                rotateTimer.pause();
             } else {
-                timeline.play();
+                rotateTimer.play();
             }
             spinning = !spinning;
         });
 
         // Mouse controls
-        MainApp.scene.setOnMousePressed(event -> {
+        EventHandler<MouseEvent> mousePressedHandler = event -> {
             anchorX = event.getSceneX();
             anchorY = event.getSceneY();
             anchorAngleX = angleX.get();
             anchorAngleY = angleY.get();
             if (spinning) {
-                timeline.pause();
+                rotateTimer.pause();
             }
-        });
+        };
+        MainApp.scene.setOnMousePressed(mousePressedHandler);
 
-        MainApp.scene.setOnMouseReleased(mouseEvent -> {
+        EventHandler<MouseEvent> mouseReleasedHandler = event -> {
             if (spinning) {
-                timeline.play();
+                rotateTimer.play();
             }
-        });
+        };
+        MainApp.scene.setOnMouseReleased(mouseReleasedHandler);
 
         // Mouse dragging controls
-        MainApp.scene.setOnMouseDragged(event -> {
+        EventHandler<MouseEvent> mouseDraggedHandler = event -> {
             angleX.set(anchorAngleX - (anchorY - event.getSceneY()));
             angleY.set(anchorAngleY + anchorX - event.getSceneX());
-        });
+        };
+        MainApp.scene.setOnMouseDragged(mouseDraggedHandler);
 
         // Zoom controls
         MainApp.scene.addEventHandler(ScrollEvent.SCROLL, e -> {
             double delta = e.getDeltaY();
             zoom.setZ(zoom.getZ() + delta);
+        });
+
+        // Pan button
+        btnPan.setOnAction(event -> {
+            System.out.println("Entered panning mode...");
         });
 
         // Play,pause, reset buttons
@@ -295,9 +301,19 @@ public class SimulatorController {
             timer.setRate(sliderSpeed.getValue());
         });
 
-        tgl3D.setOnMouseClicked(event -> {
-            angleX.set(90);
-            angleY.set(90);
+        tgl2D.setOnMouseClicked(event -> {
+            if (tgl2D.isSelected()) {
+                initX.setAngle(90);
+                angleX.set(0);
+                angleY.set(0);
+                MainApp.scene.setOnMousePressed(null);
+                MainApp.scene.setOnMouseReleased(null);
+                MainApp.scene.setOnMouseDragged(null);
+            } else {
+                MainApp.scene.setOnMousePressed(mousePressedHandler);
+                MainApp.scene.setOnMouseReleased(mouseReleasedHandler);
+                MainApp.scene.setOnMouseDragged(mouseDraggedHandler);
+            }
         });
 
     }
@@ -569,10 +585,10 @@ public class SimulatorController {
         Point3D p1 = a.getPosition();
         Point3D p2 = b.getPosition();
         Point3D n = p1.subtract(p2);
-        double n_mag = n.magnitude();
+        double nMag = n.magnitude();
 
         // Minimum translation distance to push balls after intersecting
-        Point3D mtd = n.multiply(((a.getRadius() + b.getRadius()) - n_mag) / n_mag);
+        Point3D mtd = n.multiply(((a.getRadius() + b.getRadius()) - nMag) / nMag);
 
         // Inverse mass quantities
         double im1 = 1 / a.getMass();

@@ -92,7 +92,7 @@
                                              </VBox.margin>
                                           </Slider>
                                           <CheckBox fx:id="dsblSpin" mnemonicParsing="false" text="Disable Camera Spin" />
-                                          <ToggleSwitch fx:id="tgl3D" prefHeight="18.0" prefWidth="123.0" text="Toggle 2D View" />
+                                          <ToggleSwitch fx:id="tgl2D" prefHeight="18.0" prefWidth="123.0" text="Toggle 2D View" />
                                        </children>
                                        <VBox.margin>
                                           <Insets top="20.0" />

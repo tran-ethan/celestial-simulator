@@ -90,7 +90,7 @@ public class SimulatorController {
     private Camera camera;
     private Group entities;
     private SubScene subScene;
-    Body selected;
+    Body selectedBody;
 
 
     private double anchorX, anchorY;
@@ -103,7 +103,7 @@ public class SimulatorController {
     private static final float WIDTH = 890;
     private static final float HEIGHT = 890;
     private static Boolean spinning = true;
-    private String currentTool = "";
+    private String selectedTool = null;
 
     @FXML
     public void initialize() {
@@ -143,11 +143,11 @@ public class SimulatorController {
         updateVectors();
 
         // Move camera around selected planet
-        if (selected != null) {
-            camera.setTranslateX(selected.getTranslateX());
-            camera.setTranslateY(selected.getTranslateY());
-            camera.setTranslateZ(selected.getTranslateZ());
-            properties.setText(selected.toString());
+        if (selectedBody != null) {
+            camera.setTranslateX(selectedBody.getTranslateX());
+            camera.setTranslateY(selectedBody.getTranslateY());
+            camera.setTranslateZ(selectedBody.getTranslateZ());
+            properties.setText(selectedBody.toString());
         }
 
     }
@@ -203,7 +203,7 @@ public class SimulatorController {
         });
 
         // Select planet by clicking it with LMB
-        bodies().forEach(n -> n.setOnMouseClicked(e -> selected = n));
+        bodies().forEach(n -> n.setOnMouseClicked(e -> selectedBody = n));
 
         // Bind rotation angle to camera with mouse movement
         Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
@@ -246,7 +246,7 @@ public class SimulatorController {
             spinning = !spinning;
         });
 
-        // Mouse controls
+        // Mouse controls in 3D view
         EventHandler<MouseEvent> mousePressedHandler = event -> {
             anchorX = event.getSceneX();
             anchorY = event.getSceneY();
@@ -280,7 +280,13 @@ public class SimulatorController {
 
         // Pan button
         btnPan.setOnAction(event -> {
-            System.out.println("Entered panning mode...");
+            if(!selectedTool.equals("pan")) {
+                selectedTool = "pan";
+                System.out.println("Entered panning mode...");
+            }else{
+                selectedTool = null;
+                System.out.println("Exiting panning mode");
+            }
         });
 
         // Play,pause, reset buttons

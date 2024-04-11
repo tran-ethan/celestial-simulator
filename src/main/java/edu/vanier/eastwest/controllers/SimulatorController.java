@@ -109,7 +109,7 @@ public class SimulatorController {
     public void initialize() {
         System.out.println("Starting application...");
         entities = new Group();
-        entities.getChildren().addAll(getAxes(1), getGrid(500, 10));
+        entities.getChildren().addAll(getAxes(1), getGrid(5000, 100));
 
         // To make the mouse events on the pane work, we need to prevent the splitpane from consuming mouse events. https://stackoverflow.com/questions/54736344/javafx-splitpane-does-not-bubble-up-mouse-event
         splitPane.setSkin(new MySplitPaneSkin(splitPane));
@@ -152,7 +152,7 @@ public class SimulatorController {
             camera.setTranslateZ(selectedBody.getTranslateZ());
             lblSelected.setText(selectedBody.getName());
             lblProperties.setText(selectedBody.toString());
-        }else{
+        } else {
             lblSelected.setText("<No Body Selected>");
             lblProperties.setText("");
         }
@@ -496,48 +496,19 @@ public class SimulatorController {
      * @param delta The spacing between grid lines
      * @return a Group object containing grid lines in the XZ plane and its subgrid
      */
-    public Group getGrid(float size, float delta) {
+    public PolygonMeshView getGrid(float size, float delta) {
         if (delta < 1) {
             delta = 1;
         }
         final PolygonMesh plane = createMesh(size, size, (int) (size / delta), (int) (size / delta));
-
-        final PolygonMesh plane2 = createMesh(size, size, (int) (size / delta / 5), (int) (size / delta / 5));
-
-        PolygonMeshView meshViewXY = new PolygonMeshView(plane);
-        meshViewXY.setDrawMode(DrawMode.LINE);
-        meshViewXY.setCullFace(CullFace.NONE);
 
         PolygonMeshView meshViewXZ = new PolygonMeshView(plane);
         meshViewXZ.setDrawMode(DrawMode.LINE);
         meshViewXZ.setCullFace(CullFace.NONE);
         meshViewXZ.getTransforms().add(new Rotate(90, Rotate.X_AXIS));
 
-        PolygonMeshView meshViewYZ = new PolygonMeshView(plane);
-        meshViewYZ.setDrawMode(DrawMode.LINE);
-        meshViewYZ.setCullFace(CullFace.NONE);
-        meshViewYZ.getTransforms().add(new Rotate(90, Rotate.Y_AXIS));
-
-        PolygonMeshView meshViewXY2 = new PolygonMeshView(plane2);
-        meshViewXY2.setDrawMode(DrawMode.LINE);
-        meshViewXY2.setCullFace(CullFace.NONE);
-        meshViewXY2.getTransforms().add(new Translate(size / 1000f, size / 1000f, 0));
-
-        PolygonMeshView meshViewXZ2 = new PolygonMeshView(plane2);
-        meshViewXZ2.setDrawMode(DrawMode.LINE);
-        meshViewXZ2.setCullFace(CullFace.NONE);
-        meshViewXZ2.getTransforms().add(new Translate(size / 1000f, size / 1000f, 0));
-        meshViewXZ2.getTransforms().add(new Rotate(90, Rotate.X_AXIS));
-
-        PolygonMeshView meshViewYZ2 = new PolygonMeshView(plane2);
-        meshViewYZ2.setDrawMode(DrawMode.LINE);
-        meshViewYZ2.setCullFace(CullFace.NONE);
-        meshViewYZ2.getTransforms().add(new Translate(size / 1000f, size / 1000f, 0));
-        meshViewYZ2.getTransforms().add(new Rotate(90, Rotate.Y_AXIS));
-
-        // return new Group(meshViewXY, meshViewXZ, meshViewYZ, meshViewXY2, meshViewXZ2, meshViewYZ2 );
-        // For now, only render the XZ plane
-        return new Group(meshViewXZ, meshViewXZ2);
+        // Only render the XZ plane
+        return meshViewXZ;
     }
 
     public List<Body> bodies() {

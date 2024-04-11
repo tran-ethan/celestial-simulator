@@ -278,7 +278,7 @@ public class SimulatorController {
             //Panning of camera due to pan tool selected
             else{
                 camera.setTranslateX(anchorX - event.getSceneX());
-                camera.setTranslateZ(anchorY - event.getSceneY());
+                camera.setTranslateZ(-(anchorY - event.getSceneY()));
             }
         };
         MainApp.scene.setOnMouseDragged(mouseDraggedHandler);
@@ -323,7 +323,7 @@ public class SimulatorController {
             if (tgl2D.isSelected()) {
                 angleX.set(0);
                 angleY.set(0);
-                initX.setAngle(90);
+                initX.setAngle(-90);
             }else{
                 initX.setAngle(-30);
             }

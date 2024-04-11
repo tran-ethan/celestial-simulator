@@ -278,8 +278,9 @@ public class SimulatorController {
 
         // Mouse dragging controls
         EventHandler<MouseEvent> mouseDraggedHandler = event -> {
+
             //Rotation of camera due to pan tool not selected
-            if(selectedTool.isEmpty()) {
+            if(event.isSecondaryButtonDown()) {
                 if (!tgl2D.isSelected()) {
                     angleX.set(anchorAngleX - (anchorY - event.getSceneY()));
                     angleY.set(anchorAngleY + anchorX - event.getSceneX());
@@ -393,21 +394,18 @@ public class SimulatorController {
      * @return a Group object containing the X, Y, and Z axes with specified scaling
      */
     public Group getAxes(double scale) {
-        Cylinder axisX = new Cylinder(1, 1000);
+        Cylinder axisX = new Cylinder(1, 9999);
         axisX.getTransforms().addAll(new Rotate(90, Rotate.Z_AXIS));
-        axisX.getTransforms().addAll(new Translate(0, -500, 0));
         PhongMaterial redMat = new PhongMaterial();
         redMat.setDiffuseColor(Color.RED);
         axisX.setMaterial(redMat);
 
-        Cylinder axisY = new Cylinder(1, 1000);
+        Cylinder axisY = new Cylinder(1, 9999);
         axisY.setMaterial(new PhongMaterial(Color.GREEN));
-        axisY.getTransforms().addAll(new Translate(0, 500, 0));
 
-        Cylinder axisZ = new Cylinder(1, 1000);
+        Cylinder axisZ = new Cylinder(1, 9999);
         axisZ.setMaterial(new PhongMaterial(Color.BLUE));
         axisZ.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS));
-        axisZ.getTransforms().addAll(new Translate(0, 500, 0));
 
         Group group = new Group(axisX, axisY, axisZ);
         group.getTransforms().add(new Scale(scale, scale, scale));

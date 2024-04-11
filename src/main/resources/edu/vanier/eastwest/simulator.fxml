@@ -49,7 +49,7 @@
          <center>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <SplitPane fx:id="splitPane" dividerPositions="0.15, 0.85" prefHeight="891.0" prefWidth="1176.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane fx:id="splitPane" dividerPositions="0.16989987484355443, 0.7972465581977471" prefHeight="891.0" prefWidth="1176.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="116.0" style="-fx-background-color: #D3D3D3;">
                            <children>
@@ -87,7 +87,7 @@
                                           </Button>
                                           <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Clear" />
                                           <Label text="Simulation Speed" />
-                                          <Slider fx:id="sliderSpeed" max="25.0" value="1.0">
+                                          <Slider fx:id="sldrSpeed" majorTickUnit="1.0" max="10.0" min="0.01" minorTickCount="0" showTickLabels="true" showTickMarks="true" value="1.0">
                                              <VBox.margin>
                                                 <Insets />
                                              </VBox.margin>
@@ -109,7 +109,7 @@
                         <Pane fx:id="pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <SplitPane fx:id="spProperties" dividerPositions="0.24067796610169492" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="887.0" prefWidth="144.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c; -fx-background-color: #D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <SplitPane fx:id="spProperties" dividerPositions="0.1000453720508167" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="887.0" prefWidth="144.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c; -fx-background-color: #D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <items>
                                     <VBox alignment="CENTER" prefHeight="440.0" prefWidth="154.0">
                                        <children>
@@ -118,9 +118,9 @@
                                                 <Font size="20.0" />
                                              </font>
                                           </Label>
-                                          <Label text="&lt;No Object Selected&gt;">
+                                          <Label fx:id="lblSelected" text="&lt;No Body Selected&gt;">
                                              <font>
-                                                <Font size="15.0" />
+                                                <Font size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -128,9 +128,12 @@
                                           <Insets />
                                        </opaqueInsets>
                                     </VBox>
-                                    <VBox alignment="CENTER" prefHeight="709.0" prefWidth="154.0">
+                                    <VBox prefHeight="709.0" prefWidth="154.0">
                                        <children>
-                                          <Label fx:id="properties" text="-" />
+                                          <Label fx:id="lblProperties" alignment="TOP_LEFT" text="Properties">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font></Label>
                                        </children></VBox>
                                  </items>
                               </SplitPane>

@@ -4,10 +4,16 @@ import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Body extends Sphere {
-
+    @Getter
+    private String name;
+    @Getter
     private double mass;
+    @Setter
+    @Getter
     private Point3D velocity;
 
     /**
@@ -17,8 +23,9 @@ public class Body extends Sphere {
      * @param position The position of the body in the space
      * @param color The color of the object
      */
-    public Body(double radius, double mass, Point3D position, Color color) {
+    public Body(String name, double radius, double mass, Point3D position, Color color) {
         super(radius);
+        this.name = name;
         this.mass = mass;
         setPosition(position);
         velocity = new Point3D(0, 0 , 0);
@@ -52,22 +59,10 @@ public class Body extends Sphere {
         return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
     }
 
-    public void setVelocity(Point3D velocity) {
-        this.velocity = velocity;
-    }
-
-    public Point3D getVelocity() {
-        return velocity;
-    }
-
-    //TODO lombok
-    public double getMass() {
-        return mass;
-    }
-
     @Override
     public String toString() {
-        return String.format("Body x\nMass: %.2f\nPosition: [%.2f, %.2f, %.2f]\nVelocity: [%.2f, %.2f, %.2f]",
+        return String.format("Name: %s\nMass: %.2f\nPosition: [%.2f, %.2f, %.2f]\nVelocity: [%.2f, %.2f, %.2f]",
+                getName(),
                 getMass(),
                 getTranslateX(),
                 getTranslateY(),

@@ -19,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.CullFace;
@@ -74,7 +75,7 @@ public class SimulatorController {
     private SplitPane splitPane;
 
     @FXML
-    private Slider sliderSpeed;
+    private Slider sldrSpeed;
 
     @FXML
     private CheckBox enableSpin;
@@ -83,7 +84,13 @@ public class SimulatorController {
     private ToggleSwitch tgl2D;
 
     @FXML
-    private Label properties;
+    private Label lblSelected;
+
+    @FXML
+    private Label lblProperties;
+
+    @FXML
+    private VBox vbTools;
 
     private Timeline timer;
     private TreeNode node;
@@ -100,8 +107,6 @@ public class SimulatorController {
     private final DoubleProperty angleX = new SimpleDoubleProperty(0);
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
-    private static final float WIDTH = 890;
-    private static final float HEIGHT = 890;
     private static Boolean spinning = false;
     private String selectedTool = "";
 
@@ -120,7 +125,7 @@ public class SimulatorController {
         camera.setFarClip(10000);
 
         // Sub scene
-        subScene = new SubScene(entities, WIDTH, HEIGHT, true, SceneAntialiasing.BALANCED);
+        subScene = new SubScene(entities, 850, 850, true, SceneAntialiasing.BALANCED);
         subScene.setCamera(camera);
         pane.getChildren().add(subScene);
 
@@ -139,6 +144,10 @@ public class SimulatorController {
     }
 
     private void update(ActionEvent event) {
+        //Update size of subScene
+        subScene.setHeight(pane.getHeight());
+        subScene.setWidth(pane.getWidth());
+
         updateBodies();
         updateVectors();
 
@@ -147,7 +156,11 @@ public class SimulatorController {
             camera.setTranslateX(selectedBody.getTranslateX());
             camera.setTranslateY(selectedBody.getTranslateY());
             camera.setTranslateZ(selectedBody.getTranslateZ());
-            properties.setText(selectedBody.toString());
+            lblSelected.setText(selectedBody.getName());
+            lblProperties.setText(selectedBody.toString());
+        }else{
+            lblSelected.setText("<No Body Selected>");
+            lblProperties.setText("");
         }
 
     }
@@ -171,10 +184,10 @@ public class SimulatorController {
     }
 
     private void initBodies() {
-        Body sun = new Body(30, 100000, new Point3D(0, 0, -50), Color.YELLOW);
-        Body p1 = new Body(10, 20000, new Point3D(150, 0, -100), Color.BLUE);
-        Body p2 = new Body(10, 5000, new Point3D(0, 0, 100), Color.GREEN);
-        Body p3 = new Body(10, 5000, new Point3D(0, 0, 200), Color.WHITE);
+        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, -50), Color.YELLOW);
+        Body p1 = new Body("Earth", 10, 20000, new Point3D(150, 0, -100), Color.BLUE);
+        Body p2 = new Body("A", 10, 5000, new Point3D(0, 0, 100), Color.GREEN);
+        Body p3 = new Body("B", 10, 5000, new Point3D(0, 0, 200), Color.WHITE);
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
         p3.setVelocity(new Point3D(10, 0, 10));
@@ -183,12 +196,10 @@ public class SimulatorController {
 
     private void initVectors() {
         for (int i = -5; i <= 5; i++) {
-            for (int j = -5; j <= 5; j++) {
-                Vector3D v = new Vector3D(4, 20, new Point3D(i * 100, 0, j * 100));
-                v.getTransforms().add(new Rotate(90, 1, 0, 0));
-                v.getTransforms().add(v.getXRotate());
-                entities.getChildren().add(v);
-            }
+            Vector3D v = new Vector3D(4, 20, new Point3D(i * 100, 0, 0));
+            v.getTransforms().add(new Rotate(90, 1, 0, 0));
+            v.getTransforms().add(v.getXRotate());
+            entities.getChildren().add(v);
         }
     }
 
@@ -201,9 +212,6 @@ public class SimulatorController {
                 case D -> camera.setTranslateX(camera.getTranslateX() + 10);
             }
         });
-
-        // Select planet by clicking it with LMB
-        bodies().forEach(n -> n.setOnMouseClicked(e -> selectedBody = n));
 
         // Bind rotation angle to camera with mouse movement
         Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
@@ -247,6 +255,10 @@ public class SimulatorController {
 
         // Mouse controls
         EventHandler<MouseEvent> mousePressedHandler = event -> {
+            // Select planet by clicking it with LMB when not panning
+            if(selectedTool.equals("selection")){
+                bodies().forEach(n -> n.setOnMouseClicked(e -> selectedBody = n));
+            }
             anchorX = event.getSceneX();
             anchorY = event.getSceneY();
             anchorAngleX = angleX.get();
@@ -269,7 +281,7 @@ public class SimulatorController {
         // Mouse dragging controls
         EventHandler<MouseEvent> mouseDraggedHandler = event -> {
             //Rotation of camera due to pan tool not selected
-            if(!selectedTool.equals("pan")) {
+            if(selectedTool.isEmpty()) {
                 if (!tgl2D.isSelected()) {
                     angleX.set(anchorAngleX - (anchorY - event.getSceneY()));
                     angleY.set(anchorAngleY + anchorX - event.getSceneX());
@@ -278,7 +290,7 @@ public class SimulatorController {
                 }
             }
             //Panning of camera due to pan tool selected
-            else{
+            else if(selectedTool.equals("pan")){
                 camera.setTranslateX(camera.getTranslateX() + (anchorX - event.getSceneX()));
                 camera.setTranslateZ(camera.getTranslateZ() - (anchorY - event.getSceneY()));
 
@@ -294,15 +306,27 @@ public class SimulatorController {
             zoom.setZ(zoom.getZ() + delta);
         });
 
-        // Pan button
+        // Pan toggle button
         btnPan.setOnAction(event -> {
             if(!selectedTool.equals("pan")) {
-
+                toggleToolButtons(btnPan);
+                bodies().forEach(n -> n.setOnMouseClicked(e -> {}));
+                selectedBody = null;
                 selectedTool = "pan";
                 System.out.println("Entered panning mode...");
             }else{
                 selectedTool = "";
                 System.out.println("Exiting panning mode");
+            }
+        });
+
+        // Selection toggle button
+        btnSelection.setOnAction(event -> {
+            if(!selectedTool.equals("selection")) {
+                toggleToolButtons(btnSelection);
+                selectedTool = "selection";
+            }else{
+                selectedTool = "";
             }
         });
 
@@ -320,8 +344,8 @@ public class SimulatorController {
             timer.play();
         });
 
-        sliderSpeed.setOnMouseReleased(event -> {
-            timer.setRate(sliderSpeed.getValue());
+        sldrSpeed.setOnMouseReleased(event -> {
+            timer.setRate(sldrSpeed.getValue());
         });
 
         tgl2D.setOnMouseClicked(event -> {
@@ -334,6 +358,20 @@ public class SimulatorController {
             }
         });
 
+    }
+
+    /**
+     * Unselects all ToggleButtons within the vbox that were not clicked.
+     * @param selected ToggleButton that was clicked. This ToggleButton will remain selected.
+     */
+    private void toggleToolButtons(ToggleButton selected){
+        for (Node node : vbTools.getChildren()){
+            if(node instanceof ToggleButton){
+                if(!node.equals(selected)){
+                    ((ToggleButton) node).setSelected(false);
+                }
+            }
+        }
     }
 
     /**
@@ -505,7 +543,10 @@ public class SimulatorController {
         return entities.getChildren().stream().filter(n -> n instanceof Vector3D).map(n -> (Vector3D) n).collect(Collectors.toList());
     }
 
-    //TODO
+    /***
+     * TODO Documentation, Use Barnes Hut
+     *
+     */
     public void updateBodies() {
         for (Body currentBody : bodies()) {
             Point3D p1 = currentBody.getPosition();
@@ -523,7 +564,10 @@ public class SimulatorController {
         }
     }
 
-    //TODO Solve rotation problem past 180 degrees and maybe use barnes hut
+    /***
+     * TODO Documentation, Use Barnes Hut
+     *
+     */
     public void updateVectors() {
         //TODO @Yihweh
         double minMagnitude = 0, maxMagnitude = 0;

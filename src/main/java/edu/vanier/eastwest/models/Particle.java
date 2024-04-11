@@ -2,11 +2,14 @@ package edu.vanier.eastwest.models;
 
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
+import lombok.Getter;
+import lombok.Setter;
 
 //TODO
 public class Particle extends Body{
 
     private Color color;
+    @Getter @Setter
     private Point3D position;
 
     /**
@@ -22,7 +25,6 @@ public class Particle extends Body{
      * @param position
      */
     public Particle(Color color, Point3D position) {
-        super(2, 0, position, color);
-
+        super("", 2, 0, position, color);
     }
 }

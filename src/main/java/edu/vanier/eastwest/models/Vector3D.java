@@ -148,7 +148,10 @@ public class Vector3D extends Group {
         }
     }
 
-    //TODO
+    /***
+     * TODO Documentation
+     * @return
+     */
     private TriangleMesh creatingTriangleMesh() {
         float[] points = new float[rounds * 12];
         float[] textCoords = {
@@ -198,7 +201,10 @@ public class Vector3D extends Group {
         return mesh;
     }
 
-    //TODO
+    /***
+     * TODO Documentation
+     * @return
+     */
     private Group creatingArrow(){
         Group cone = new Group();
         PhongMaterial material = new PhongMaterial(Color.BLUE);

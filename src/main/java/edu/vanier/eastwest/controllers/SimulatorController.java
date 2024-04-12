@@ -289,8 +289,10 @@ public class SimulatorController {
 
             // Panning tool for camera
             else if(selectedTool.equals("pan")){
-                camera.setTranslateX(camera.getTranslateX() + (anchorX - event.getSceneX()));
-                camera.setTranslateZ(camera.getTranslateZ() - (anchorY - event.getSceneY()));
+                camera.setTranslateX(camera.getTranslateX() - Math.sin(Math.toRadians(angleY.get()))*(anchorY - event.getSceneY()));
+                camera.setTranslateZ(camera.getTranslateZ() - Math.cos(Math.toRadians(angleY.get()))*(anchorY - event.getSceneY()));
+                camera.setTranslateX(camera.getTranslateX() + Math.cos(Math.toRadians(angleY.get()))*(anchorX - event.getSceneX()));
+                camera.setTranslateZ(camera.getTranslateZ() - Math.sin(Math.toRadians(angleY.get()))*(anchorX - event.getSceneX()));
 
                 anchorX = event.getSceneX();
                 anchorY = event.getSceneY();

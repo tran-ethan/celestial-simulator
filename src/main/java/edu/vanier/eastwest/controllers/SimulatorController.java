@@ -215,9 +215,9 @@ public class SimulatorController {
         // Bind rotation angle to camera with mouse movement
         Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
         Rotate yRotate = new Rotate(0, Rotate.Y_AXIS);
-        Rotate initX = new Rotate(-30, Rotate.X_AXIS);
+        Rotate initX = new Rotate(100, Rotate.X_AXIS);
         Rotate autoRotateY = new Rotate(0, Rotate.Y_AXIS);
-        Translate zoom = new Translate(0, 0, -500);
+        Translate zoom = new Translate(0, 400, 0);
         entities.getTransforms().addAll(
                 xRotate,
                 yRotate,
@@ -301,7 +301,7 @@ public class SimulatorController {
         // Zoom controls using mouse wheel scroll
         MainApp.scene.addEventHandler(ScrollEvent.SCROLL, e -> {
             double delta = e.getDeltaY();
-            zoom.setZ(zoom.getZ() + delta);
+            zoom.setY(zoom.getY() + delta);
         });
 
         // Pan toggle button
@@ -362,9 +362,7 @@ public class SimulatorController {
             if (tgl2D.isSelected()) {
                 angleX.set(0);
                 angleY.set(0);
-                initX.setAngle(-90);
-            }else{
-                initX.setAngle(-30);
+                initX.setAngle(90);
             }
         });
 

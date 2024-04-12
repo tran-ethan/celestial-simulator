@@ -218,13 +218,11 @@ public class SimulatorController {
         Rotate autoRotateY = new Rotate(0, Rotate.Z_AXIS);
         Translate zoom = new Translate(0, 1000, 0);
         entities.getTransforms().addAll(
-                initX,
-                zoom
-        );
-        camera.getTransforms().addAll(
                 xRotate,
                 yRotate,
-                autoRotateY
+                autoRotateY,
+                initX,
+                zoom
         );
 
         // Camera auto spin

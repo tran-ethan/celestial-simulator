@@ -14,11 +14,13 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -34,6 +36,7 @@ import org.controlsfx.control.ToggleSwitch;
 import org.fxyz3d.shapes.polygon.PolygonMesh;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,6 +88,9 @@ public class SimulatorController {
 
     @FXML
     private Label lblProperties;
+
+    @FXML
+    private VBox propertiesPanel;
 
     @FXML
     private VBox vbTools;
@@ -339,6 +345,19 @@ public class SimulatorController {
             else{
                 //Add vector field
                 initVectors();
+            }
+        });
+
+        // Adding bodies
+        btnAdd.setOnAction(event -> {
+            System.out.println("adding body");
+            try {
+                // TODO Fix this shit
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/customBodyCreator.fxml"));
+                AnchorPane pane = new AnchorPane(loader.load());
+                // propertiesPanel.getChildren().add(properties);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 

@@ -350,12 +350,10 @@ public class SimulatorController {
 
         // Adding bodies
         btnAdd.setOnAction(event -> {
-            System.out.println("adding body");
             try {
-                // TODO Fix this shit
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/customBodyCreator.fxml"));
-                AnchorPane pane = new AnchorPane(loader.load());
-                // propertiesPanel.getChildren().add(properties);
+                FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("bodyMaker.fxml"));
+                AnchorPane pane = loader.load();
+                propertiesPanel.getChildren().add(pane);
             } catch (Exception e) {
                 e.printStackTrace();
             }

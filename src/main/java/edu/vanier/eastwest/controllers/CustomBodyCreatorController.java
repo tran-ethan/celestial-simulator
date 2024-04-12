@@ -9,6 +9,6 @@ import java.io.IOException;
 public class CustomBodyCreatorController {
     @FXML
     void start(ActionEvent e) throws IOException {
-        MainApp.setRoot("customBodyCreator.fxml");
+        MainApp.setRoot("bodyMaker.fxml");
     }
 }

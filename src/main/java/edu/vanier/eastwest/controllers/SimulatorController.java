@@ -205,10 +205,10 @@ public class SimulatorController {
     private void initControls() {
         MainApp.scene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
-                case W -> entities.setTranslateZ(entities.getTranslateZ() + 10);
-                case A -> entities.setTranslateX(entities.getTranslateX() - 10);
-                case S -> entities.setTranslateZ(entities.getTranslateZ() - 10);
-                case D -> entities.setTranslateX(entities.getTranslateX() + 10);
+                case W -> entities.setTranslateZ(entities.getTranslateZ() - 10);
+                case A -> entities.setTranslateX(entities.getTranslateX() + 10);
+                case S -> entities.setTranslateZ(entities.getTranslateZ() + 10);
+                case D -> entities.setTranslateX(entities.getTranslateX() - 10);
             }
         });
 
@@ -289,8 +289,8 @@ public class SimulatorController {
 
             // Panning tool for camera
             else if(selectedTool.equals("pan")){
-                entities.setTranslateX(entities.getTranslateX() + (anchorX - event.getSceneX()));
-                entities.setTranslateZ(entities.getTranslateZ() - (anchorY - event.getSceneY()));
+                entities.setTranslateX(entities.getTranslateX() - (anchorX - event.getSceneX()));
+                entities.setTranslateY(entities.getTranslateY() - (anchorY - event.getSceneY()));
 
                 anchorX = event.getSceneX();
                 anchorY = event.getSceneY();

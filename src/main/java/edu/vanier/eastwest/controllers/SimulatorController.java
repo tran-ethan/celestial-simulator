@@ -214,9 +214,9 @@ public class SimulatorController {
         // Bind rotation angle to camera with mouse movement
         Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
         Rotate yRotate = new Rotate(0, Rotate.Z_AXIS);
-        Rotate initX = new Rotate(100, Rotate.X_AXIS);
+        Rotate initX = new Rotate(90, Rotate.X_AXIS);
         Rotate autoRotateY = new Rotate(0, Rotate.Z_AXIS);
-        Translate zoom = new Translate(0, 400, 0);
+        Translate zoom = new Translate(0, 1000, 0);
         entities.getTransforms().addAll(
                 initX,
                 zoom
@@ -361,7 +361,7 @@ public class SimulatorController {
         tgl2D.setOnMouseClicked(event -> {
             if (tgl2D.isSelected()) {
                 angleX.set(0);
-                angleY.set(0);
+                //angleY.set(0);
                 initX.setAngle(90);
             }
         });

@@ -148,9 +148,9 @@ public class SimulatorController {
 
         // Move camera around selected planet
         if (selectedBody != null) {
-            camera.setTranslateX(selectedBody.getTranslateX());
-            camera.setTranslateY(selectedBody.getTranslateY());
-            camera.setTranslateZ(selectedBody.getTranslateZ());
+            entities.setTranslateX(selectedBody.getTranslateX());
+            entities.setTranslateY(selectedBody.getTranslateY());
+            entities.setTranslateZ(selectedBody.getTranslateZ());
             lblSelected.setText(selectedBody.getName());
             lblProperties.setText(selectedBody.toString());
         } else {
@@ -205,10 +205,10 @@ public class SimulatorController {
     private void initControls() {
         MainApp.scene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
-                case W -> camera.setTranslateZ(camera.getTranslateZ() + 10);
-                case A -> camera.setTranslateX(camera.getTranslateX() - 10);
-                case S -> camera.setTranslateZ(camera.getTranslateZ() - 10);
-                case D -> camera.setTranslateX(camera.getTranslateX() + 10);
+                case W -> entities.setTranslateZ(entities.getTranslateZ() + 10);
+                case A -> entities.setTranslateX(entities.getTranslateX() - 10);
+                case S -> entities.setTranslateZ(entities.getTranslateZ() - 10);
+                case D -> entities.setTranslateX(entities.getTranslateX() + 10);
             }
         });
 
@@ -218,7 +218,7 @@ public class SimulatorController {
         Rotate initX = new Rotate(-30, Rotate.X_AXIS);
         Rotate autoRotateY = new Rotate(0, Rotate.Y_AXIS);
         Translate zoom = new Translate(0, 0, -500);
-        camera.getTransforms().addAll(
+        entities.getTransforms().addAll(
                 xRotate,
                 yRotate,
                 autoRotateY,
@@ -289,8 +289,8 @@ public class SimulatorController {
 
             // Panning tool for camera
             else if(selectedTool.equals("pan")){
-                camera.setTranslateX(camera.getTranslateX() + (anchorX - event.getSceneX()));
-                camera.setTranslateZ(camera.getTranslateZ() - (anchorY - event.getSceneY()));
+                entities.setTranslateX(entities.getTranslateX() + (anchorX - event.getSceneX()));
+                entities.setTranslateZ(entities.getTranslateZ() - (anchorY - event.getSceneY()));
 
                 anchorX = event.getSceneX();
                 anchorY = event.getSceneY();

@@ -148,9 +148,8 @@ public class SimulatorController {
 
         // Move camera around selected planet
         if (selectedBody != null) {
-            entities.setTranslateX(selectedBody.getTranslateX());
-            entities.setTranslateY(selectedBody.getTranslateY());
-            entities.setTranslateZ(selectedBody.getTranslateZ());
+            entities.setTranslateX(-selectedBody.getTranslateX());
+            entities.setTranslateY(selectedBody.getTranslateZ());
             lblSelected.setText(selectedBody.getName());
             lblProperties.setText(selectedBody.toString());
         } else {
@@ -214,16 +213,18 @@ public class SimulatorController {
 
         // Bind rotation angle to camera with mouse movement
         Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
-        Rotate yRotate = new Rotate(0, Rotate.Y_AXIS);
+        Rotate yRotate = new Rotate(0, Rotate.Z_AXIS);
         Rotate initX = new Rotate(100, Rotate.X_AXIS);
-        Rotate autoRotateY = new Rotate(0, Rotate.Y_AXIS);
+        Rotate autoRotateY = new Rotate(0, Rotate.Z_AXIS);
         Translate zoom = new Translate(0, 400, 0);
         entities.getTransforms().addAll(
-                xRotate,
-                yRotate,
-                autoRotateY,
                 initX,
                 zoom
+        );
+        camera.getTransforms().addAll(
+                xRotate,
+                yRotate,
+                autoRotateY
         );
 
         // Camera auto spin
@@ -286,7 +287,6 @@ public class SimulatorController {
                     angleY.set(anchorAngleY + anchorX - event.getSceneX());
                 }
             }
-
             // Panning tool for camera
             else if(selectedTool.equals("pan")){
                 entities.setTranslateX(entities.getTranslateX() - (anchorX - event.getSceneX()));
@@ -301,7 +301,7 @@ public class SimulatorController {
         // Zoom controls using mouse wheel scroll
         MainApp.scene.addEventHandler(ScrollEvent.SCROLL, e -> {
             double delta = e.getDeltaY();
-            zoom.setY(zoom.getY() + delta);
+            zoom.setY(zoom.getY() - delta);
         });
 
         // Pan toggle button

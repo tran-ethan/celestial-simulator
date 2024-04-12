@@ -179,7 +179,7 @@ public class SimulatorController {
     }
 
     private void initBodies() {
-        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, -50), Color.YELLOW);
+        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, -50), Color.rgb(255,255,0,1));
         Body p1 = new Body("Earth", 10, 20000, new Point3D(150, 0, -100), Color.BLUE);
         Body p2 = new Body("A", 10, 5000, new Point3D(0, 0, 100), Color.GREEN);
         Body p3 = new Body("B", 10, 5000, new Point3D(0, 0, 200), Color.WHITE);

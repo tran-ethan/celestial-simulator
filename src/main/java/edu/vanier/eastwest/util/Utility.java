@@ -11,6 +11,11 @@ import javafx.scene.transform.Scale;
 import org.fxyz3d.shapes.polygon.PolygonMesh;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
+/**
+ * This class contains utility functions that will be used in the simulator.
+ * The code for creating the grids and axes can be found
+ * <a href="https://stackoverflow.com/questions/51895469/what-is-the-most-practical-way-to-create-coordinate-grid-with-javafx-3d">here</a>
+ */
 public class Utility {
 
     /**
@@ -136,7 +141,6 @@ public class Utility {
         meshViewXZ.setCullFace(CullFace.NONE);
         meshViewXZ.getTransforms().add(new Rotate(90, Rotate.X_AXIS));
 
-        // Only render the XZ plane
         return meshViewXZ;
     }
 }

@@ -255,7 +255,7 @@ public class SimulatorController {
         // Mouse controls
         EventHandler<MouseEvent> mousePressedHandler = event -> {
             // Select planet by clicking it with LMB when not panning
-            if(selectedTool.equals("selection")){
+            if (selectedTool.equals("selection")) {
                 bodies().forEach(n -> n.setOnMouseClicked(e -> selectedBody = n));
             }
             anchorX = event.getSceneX();
@@ -277,9 +277,8 @@ public class SimulatorController {
 
         // Mouse dragging controls
         EventHandler<MouseEvent> mouseDraggedHandler = event -> {
-
-            //Rotation of camera due to pan tool not selected
-            if(event.isSecondaryButtonDown()) {
+            // Camera rotation with RMB
+            if (event.isSecondaryButtonDown()) {
                 if (!tgl2D.isSelected()) {
                     angleX.set(anchorAngleX - (anchorY - event.getSceneY()));
                     angleY.set(anchorAngleY + anchorX - event.getSceneX());
@@ -287,7 +286,8 @@ public class SimulatorController {
                     angleY.set(anchorAngleY + anchorX - event.getSceneX());
                 }
             }
-            //Panning of camera due to pan tool selected
+
+            // Panning tool for camera
             else if(selectedTool.equals("pan")){
                 camera.setTranslateX(camera.getTranslateX() + (anchorX - event.getSceneX()));
                 camera.setTranslateZ(camera.getTranslateZ() - (anchorY - event.getSceneY()));

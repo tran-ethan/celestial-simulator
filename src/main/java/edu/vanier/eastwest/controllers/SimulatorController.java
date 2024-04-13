@@ -106,10 +106,10 @@ public class SimulatorController {
     private String selectedTool = "";
 
     BodyCreatorController controller;
+    AnchorPane bodyCreator;
 
     @FXML
     public void initialize() {
-        System.out.println("Starting application...");
         entities = new Group();
         entities.getChildren().addAll(getAxes(1), getGrid(5000, 100));
 
@@ -126,7 +126,7 @@ public class SimulatorController {
         subScene.setCamera(camera);
         pane.getChildren().add(subScene);
 
-        // Initialize
+        // Initialize entities
         initBodies();
         initControls();
 
@@ -137,6 +137,18 @@ public class SimulatorController {
         );
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
+
+        // Add body properties panel
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("bodyCreator.fxml"));
+            bodyCreator = loader.load();
+            bodyCreator.setVisible(false);
+            controller = loader.getController();
+            controller.initController(this);
+            propertiesPanel.getChildren().add(bodyCreator);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void update(ActionEvent event) {
@@ -348,39 +360,23 @@ public class SimulatorController {
         });
 
         // Adding bodies
-        btnAdd.setOnAction(event -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("bodyCreator.fxml"));
-                AnchorPane pane = loader.load();
-                controller = loader.getController();
-                controller.initController(this);
-                propertiesPanel.getChildren().add(pane);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        btnAdd.setOnAction(event -> bodyCreator.setVisible(!bodyCreator.isVisible()));
 
         btnRemove.setOnAction(event -> {
             System.out.println("removing body");
         });
 
-        // Play,pause, reset buttons
-        btnPlay.setOnAction(event -> {
-            timer.play();
-        });
+        // Play, pause, reset buttons
+        btnPlay.setOnAction(event -> timer.play());
 
-        btnPause.setOnAction(event -> {
-            timer.stop();
-        });
+        btnPause.setOnAction(event -> timer.stop());
 
         btnReset.setOnAction(event -> {
             entities.getChildren().removeIf(object -> object instanceof Body);
             timer.play();
         });
 
-        sldrSpeed.setOnMouseReleased(event -> {
-            timer.setRate(sldrSpeed.getValue());
-        });
+        sldrSpeed.setOnMouseReleased(event -> timer.setRate(sldrSpeed.getValue()));
 
         tgl2D.setOnMouseClicked(event -> {
             if (tgl2D.isSelected()) {

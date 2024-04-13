@@ -5,7 +5,6 @@ import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.MySplitPaneSkin;
 import edu.vanier.eastwest.models.TreeNode;
 import edu.vanier.eastwest.models.Vector3D;
-import static edu.vanier.eastwest.util.Utility.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -24,22 +23,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.CullFace;
-import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.DrawMode;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import org.controlsfx.control.ToggleSwitch;
-import org.fxyz3d.shapes.polygon.PolygonMesh;
-import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static edu.vanier.eastwest.util.Utility.getAxes;
+import static edu.vanier.eastwest.util.Utility.getGrid;
 
 
 public class SimulatorController {
@@ -112,6 +105,8 @@ public class SimulatorController {
     private static Boolean spinning = false;
     private String selectedTool = "";
 
+    BodyCreatorController controller;
+
     @FXML
     public void initialize() {
         System.out.println("Starting application...");
@@ -145,18 +140,20 @@ public class SimulatorController {
     }
 
     private void update(ActionEvent event) {
-        //Update size of subScene
+        // Update size of subScene
         subScene.setHeight(pane.getHeight());
         subScene.setWidth(pane.getWidth());
 
         updateBodies();
         updateVectors();
 
-        // Move camera around selected planet
         if (selectedBody != null) {
+            // Move camera around selected planet
             camera.setTranslateX(selectedBody.getTranslateX());
             camera.setTranslateY(selectedBody.getTranslateY());
             camera.setTranslateZ(selectedBody.getTranslateZ());
+
+            // Update properties panel
             lblSelected.setText(selectedBody.getName());
             lblProperties.setText(selectedBody.toString());
         } else {
@@ -264,10 +261,12 @@ public class SimulatorController {
             if (selectedTool.equals("selection")) {
                 bodies().forEach(n -> n.setOnMouseClicked(e -> selectedBody = n));
             }
+
             anchorX = event.getSceneX();
             anchorY = event.getSceneY();
             anchorAngleX = angleX.get();
             anchorAngleY = angleY.get();
+
             if (spinning) {
                 rotateTimer.pause();
             }
@@ -314,13 +313,13 @@ public class SimulatorController {
 
         // Pan toggle button
         btnPan.setOnAction(event -> {
-            if(!selectedTool.equals("pan")) {
+            if (!selectedTool.equals("pan")) {
                 toggleToolButtons(btnPan);
                 bodies().forEach(n -> n.setOnMouseClicked(e -> {}));
                 selectedBody = null;
                 selectedTool = "pan";
                 System.out.println("Entered panning mode...");
-            }else{
+            } else {
                 selectedTool = "";
                 System.out.println("Exiting panning mode");
             }
@@ -328,22 +327,22 @@ public class SimulatorController {
 
         // Selection toggle button
         btnSelection.setOnAction(event -> {
-            if(!selectedTool.equals("selection")) {
+            if (!selectedTool.equals("selection")) {
                 toggleToolButtons(btnSelection);
                 selectedTool = "selection";
-            }else{
+            } else {
                 selectedTool = "";
             }
         });
 
         // Vector Field visual toggle button
         tglVector.setOnMouseClicked(event -> {
-            if(!tglVector.isSelected()){
-                //Remove vector field
+            if (!tglVector.isSelected()){
+                // Remove vector field
                 entities.getChildren().removeAll(vectors());
             }
-            else{
-                //Add vector field
+            else {
+                // Add vector field
                 initVectors();
             }
         });
@@ -351,12 +350,18 @@ public class SimulatorController {
         // Adding bodies
         btnAdd.setOnAction(event -> {
             try {
-                FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("bodyMaker.fxml"));
+                FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("bodyCreator.fxml"));
                 AnchorPane pane = loader.load();
+                controller = loader.getController();
+                controller.initController(this);
                 propertiesPanel.getChildren().add(pane);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        });
+
+        btnRemove.setOnAction(event -> {
+            System.out.println("removing body");
         });
 
         // Play,pause, reset buttons
@@ -382,11 +387,19 @@ public class SimulatorController {
                 angleX.set(0);
                 angleY.set(0);
                 initX.setAngle(-90);
-            }else{
+            } else {
                 initX.setAngle(-30);
             }
         });
 
+    }
+
+    // TODO Spawn body
+    public void spawnBody(String name, double mass, double radius, Color color) {
+        System.out.printf("Name: %s\n", name);
+        System.out.printf("Mass: %.2f\n", mass);
+        System.out.printf("Radius: %.2f\n", radius);
+        System.out.printf("Color: %s", color);
     }
 
     /**
@@ -395,8 +408,8 @@ public class SimulatorController {
      */
     private void toggleToolButtons(ToggleButton selected) {
         for (Node node : vbTools.getChildren()){
-            if(node instanceof ToggleButton){
-                if(!node.equals(selected)){
+            if (node instanceof ToggleButton) {
+                if (!node.equals(selected)) {
                     ((ToggleButton) node).setSelected(false);
                 }
             }

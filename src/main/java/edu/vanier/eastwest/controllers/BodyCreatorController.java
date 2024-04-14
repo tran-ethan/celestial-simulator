@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.scene.control.Button;
 
 public class BodyCreatorController {
 
@@ -19,6 +20,13 @@ public class BodyCreatorController {
 
     @FXML
     private TextField radiusField;
+
+    @FXML
+    private Button spawnBtn;
+
+    @FXML
+    private Button confirmBtn;
+
 
     public SimulatorController simulatorController;
 
@@ -37,6 +45,8 @@ public class BodyCreatorController {
             double mass = Double.parseDouble(massField.getText());
             Color color = colorField.getValue();
             simulatorController.spawnBody(name, radius, mass, color);
+            confirmBtn.setDisable(false);
+            spawnBtn.setDisable(true);
         } catch (Exception e) {
             e.printStackTrace();
         }

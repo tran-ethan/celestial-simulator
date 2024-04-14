@@ -134,7 +134,10 @@
                                              <font>
                                                 <Font size="18.0" />
                                              </font></Label>
-                                       </children></VBox>
+                                       </children>
+                                       <padding>
+                                          <Insets left="20.0" right="20.0" top="20.0" />
+                                       </padding></VBox>
                                  </items>
                               </SplitPane>
                            </children>

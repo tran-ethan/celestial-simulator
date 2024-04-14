@@ -17,15 +17,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
@@ -107,7 +104,6 @@ public class SimulatorController {
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
     private static Boolean spinning = false;
-    private String selectedTool = "";
 
     BodyCreatorController controller;
     AnchorPane bodyCreator;
@@ -116,7 +112,12 @@ public class SimulatorController {
      * This rectangle represents the XZ plane and is used to get cursor positions for dragging objects
      */
     Rectangle plane;
+
+    /**
+     * This object represents the new body that is created when user clicks on Add Body
+     */
     Body newBody;
+    ToggleButton selectedTool;
 
     @FXML
     public void initialize() {
@@ -292,7 +293,7 @@ public class SimulatorController {
         // Mouse controls
         EventHandler<MouseEvent> mousePressedHandler = event -> {
             // Select planet by clicking it with LMB when not panning
-            if (selectedTool.equals("selection")) {
+            if (selectedTool == btnSelection) {
                 bodies().forEach(n -> n.setOnMouseClicked(e -> selectedBody = n));
             }
 
@@ -327,11 +328,11 @@ public class SimulatorController {
             }
 
             // Panning tool for camera
-            else if (selectedTool.equals("pan")) {
-                camera.setTranslateX(camera.getTranslateX() - Math.sin(Math.toRadians(angleY.get()))*(anchorY - event.getSceneY()));
-                camera.setTranslateZ(camera.getTranslateZ() - Math.cos(Math.toRadians(angleY.get()))*(anchorY - event.getSceneY()));
-                camera.setTranslateX(camera.getTranslateX() + Math.cos(Math.toRadians(angleY.get()))*(anchorX - event.getSceneX()));
-                camera.setTranslateZ(camera.getTranslateZ() - Math.sin(Math.toRadians(angleY.get()))*(anchorX - event.getSceneX()));
+            else if (selectedTool == btnPan) {
+                camera.setTranslateX(camera.getTranslateX() - Math.sin(Math.toRadians(angleY.get())) * (anchorY - event.getSceneY()));
+                camera.setTranslateZ(camera.getTranslateZ() - Math.cos(Math.toRadians(angleY.get())) * (anchorY - event.getSceneY()));
+                camera.setTranslateX(camera.getTranslateX() + Math.cos(Math.toRadians(angleY.get())) * (anchorX - event.getSceneX()));
+                camera.setTranslateZ(camera.getTranslateZ() - Math.sin(Math.toRadians(angleY.get())) * (anchorX - event.getSceneX()));
 
                 anchorX = event.getSceneX();
                 anchorY = event.getSceneY();
@@ -347,25 +348,12 @@ public class SimulatorController {
 
         // Pan toggle button
         btnPan.setOnAction(event -> {
-            if (!selectedTool.equals("pan")) {
-                toggleToolButtons(btnPan);
-                selectedBody = null;
-                selectedTool = "pan";
-                System.out.println("Entered panning mode...");
-            } else {
-                selectedTool = "";
-                System.out.println("Exiting panning mode");
-            }
+            toggleToolButtons(btnPan);
         });
 
         // Selection toggle button
         btnSelection.setOnAction(event -> {
-            if (!selectedTool.equals("selection")) {
-                toggleToolButtons(btnSelection);
-                selectedTool = "selection";
-            } else {
-                selectedTool = "";
-            }
+            toggleToolButtons(btnSelection);
         });
 
         // Vector Field visual toggle button
@@ -382,14 +370,9 @@ public class SimulatorController {
 
         // Adding bodies
         btnAdd.setOnAction(event -> {
-            if (!selectedTool.equals("add")) {
-                timer.pause();
-                toggleToolButtons(btnAdd);
-                selectedTool = "add";
-                bodyCreator.setVisible(true);
-            } else {
-                selectedTool = "";
-            }
+            toggleToolButtons(btnAdd);
+            timer.pause();
+            bodyCreator.setVisible(true);
         });
 
         btnRemove.setOnAction(event -> {
@@ -417,7 +400,6 @@ public class SimulatorController {
                 initX.setAngle(-30);
             }
         });
-
     }
 
     public void spawnBody(String name, double radius, double mass, Color color) {
@@ -426,6 +408,7 @@ public class SimulatorController {
         System.out.printf("Radius: %.2f\n", radius);
         System.out.printf("Color: %s", color);
 
+        // Slight transparency indicates body has not been spawned in yet
         color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 0.4);
         newBody = new Body(name, radius, mass, new Point3D(0, 0, 0), color);
         entities.getChildren().add(newBody);
@@ -458,15 +441,18 @@ public class SimulatorController {
     }
 
     public void confirmBody() {
+        // Reset mouse events
         newBody.setOnDragDetected(null);
         newBody.setOnMouseReleased(null);
+
+        // Full opacity indicates body has been spawned in successfully
         Color color = newBody.getColor();
         color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
         newBody.setColor(color);
         plane.setOnMouseDragOver(null);
         newBody = null;
 
-        timer.play();
+        toggleToolButtons(null);
     }
 
     /**
@@ -475,10 +461,20 @@ public class SimulatorController {
      */
     private void toggleToolButtons(ToggleButton selected) {
         // Disable selection and add body tools when other tools are selected
-        bodies().forEach(n -> n.setOnMouseClicked(e -> {}));
+        selectedBody = null;
+        bodies().forEach(n -> n.setOnMouseClicked(null));
         bodyCreator.setVisible(false);
+        timer.play();
 
-        // Select correct toggle
+        if (selected == selectedTool) {
+            // User clicks on same button twice to deselect the tool
+            selectedTool = null;
+        } else {
+            // Tool selection
+            selectedTool = selected;
+        }
+
+        // Deselect all other tools
         for (Node node : vbTools.getChildren()){
             if (node instanceof ToggleButton) {
                 if (!node.equals(selected)) {

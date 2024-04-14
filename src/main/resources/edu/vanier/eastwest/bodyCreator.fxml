@@ -72,7 +72,8 @@
                   <Button mnemonicParsing="false" text="Choose File" />
                </children>
             </HBox>
-            <Button mnemonicParsing="false" onAction="#confirm" text="Confirm" />
+            <Button mnemonicParsing="false" onAction="#spawn" prefHeight="25.0" prefWidth="70.0" text="Spawn" />
+            <Button mnemonicParsing="false" onAction="#confirm" prefHeight="25.0" prefWidth="70.0" text="Confirm" />
          </children>
       </VBox>
    </children>

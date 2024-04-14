@@ -17,12 +17,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Box;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
@@ -108,10 +112,28 @@ public class SimulatorController {
     BodyCreatorController controller;
     AnchorPane bodyCreator;
 
+    /**
+     * This rectangle represents the XZ plane and is used to get cursor positions for dragging objects
+     */
+    Rectangle plane;
+    Body newBody;
+
     @FXML
     public void initialize() {
+        float size = 5000; // Size of plane
         entities = new Group();
-        entities.getChildren().addAll(getAxes(1), getGrid(5000, 100));
+
+        // Create XZ plane for dragging
+        plane = new Rectangle(size, size, Color.TRANSPARENT);
+        plane.getTransforms().addAll(
+                new Rotate(90, Rotate.X_AXIS),
+                new Translate(-size / 2, -size / 2, 0)
+        );
+        plane.setMouseTransparent(true);
+        plane.setDepthTest(DepthTest.DISABLE);
+
+        // Add axes, grid, and plane
+        entities.getChildren().addAll(getAxes(1), getGrid(size, 100), plane);
 
         // To make the mouse events on the pane work, we need to prevent the splitpane from consuming mouse events. https://stackoverflow.com/questions/54736344/javafx-splitpane-does-not-bubble-up-mouse-event
         splitPane.setSkin(new MySplitPaneSkin(splitPane));
@@ -176,7 +198,7 @@ public class SimulatorController {
     }
 
     /**
-     * Returns a Point3D vector
+     * Returns a Point3D vector representing gravity between 2 bodies
      *
      * @param p1 Point3D position of the influenced body.
      * @param p2 Point3D position of the influencing body.
@@ -305,7 +327,7 @@ public class SimulatorController {
             }
 
             // Panning tool for camera
-            else if(selectedTool.equals("pan")){
+            else if (selectedTool.equals("pan")) {
                 camera.setTranslateX(camera.getTranslateX() - Math.sin(Math.toRadians(angleY.get()))*(anchorY - event.getSceneY()));
                 camera.setTranslateZ(camera.getTranslateZ() - Math.cos(Math.toRadians(angleY.get()))*(anchorY - event.getSceneY()));
                 camera.setTranslateX(camera.getTranslateX() + Math.cos(Math.toRadians(angleY.get()))*(anchorX - event.getSceneX()));
@@ -327,7 +349,6 @@ public class SimulatorController {
         btnPan.setOnAction(event -> {
             if (!selectedTool.equals("pan")) {
                 toggleToolButtons(btnPan);
-                bodies().forEach(n -> n.setOnMouseClicked(e -> {}));
                 selectedBody = null;
                 selectedTool = "pan";
                 System.out.println("Entered panning mode...");
@@ -360,7 +381,16 @@ public class SimulatorController {
         });
 
         // Adding bodies
-        btnAdd.setOnAction(event -> bodyCreator.setVisible(!bodyCreator.isVisible()));
+        btnAdd.setOnAction(event -> {
+            if (!selectedTool.equals("add")) {
+                timer.pause();
+                toggleToolButtons(btnAdd);
+                selectedTool = "add";
+                bodyCreator.setVisible(true);
+            } else {
+                selectedTool = "";
+            }
+        });
 
         btnRemove.setOnAction(event -> {
             System.out.println("removing body");
@@ -390,12 +420,53 @@ public class SimulatorController {
 
     }
 
-    // TODO Spawn body
-    public void spawnBody(String name, double mass, double radius, Color color) {
+    public void spawnBody(String name, double radius, double mass, Color color) {
         System.out.printf("Name: %s\n", name);
         System.out.printf("Mass: %.2f\n", mass);
         System.out.printf("Radius: %.2f\n", radius);
         System.out.printf("Color: %s", color);
+
+        color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 0.4);
+        newBody = new Body(name, radius, mass, new Point3D(0, 0, 0), color);
+        entities.getChildren().add(newBody);
+
+        newBody.setOnDragDetected(event -> {
+            // Capture mouse events only for plane (which acts as drag surface)
+            plane.setMouseTransparent(false);
+            newBody.setMouseTransparent(true);
+            newBody.startFullDrag();
+            newBody.setCursor(Cursor.MOVE);
+        });
+
+        newBody.setOnMouseReleased(event -> {
+            // Reset mouse events
+            plane.setMouseTransparent(true);
+            newBody.setMouseTransparent(false);
+            newBody.setCursor(Cursor.DEFAULT);
+        });
+
+        plane.setOnMouseDragOver(event -> {
+            // Localize mouse position intersect with plane
+            Point3D position = event.getPickResult().getIntersectedPoint();
+            position = plane.localToParent(position);
+
+            // Move body
+            newBody.setTranslateX(position.getX());
+            newBody.setTranslateY(position.getY());
+            newBody.setTranslateZ(position.getZ());
+        });
+    }
+
+    public void confirmBody() {
+        newBody.setOnDragDetected(null);
+        newBody.setOnMouseReleased(null);
+        Color color = newBody.getColor();
+        color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
+        newBody.setColor(color);
+        plane.setOnMouseDragOver(null);
+        newBody = null;
+
+        timer.play();
     }
 
     /**
@@ -403,6 +474,11 @@ public class SimulatorController {
      * @param selected ToggleButton that was clicked. This ToggleButton will remain selected.
      */
     private void toggleToolButtons(ToggleButton selected) {
+        // Disable selection and add body tools when other tools are selected
+        bodies().forEach(n -> n.setOnMouseClicked(e -> {}));
+        bodyCreator.setVisible(false);
+
+        // Select correct toggle
         for (Node node : vbTools.getChildren()){
             if (node instanceof ToggleButton) {
                 if (!node.equals(selected)) {

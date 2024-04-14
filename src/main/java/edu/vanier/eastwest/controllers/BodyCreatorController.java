@@ -27,11 +27,23 @@ public class BodyCreatorController {
     }
 
     @FXML
+    void spawn(ActionEvent event) {
+        try {
+            String name = nameField.getText();
+            if (name.isEmpty()) {
+                throw new IllegalArgumentException("Name cannot be empty");
+            }
+            double radius = Double.parseDouble(radiusField.getText());
+            double mass = Double.parseDouble(massField.getText());
+            Color color = colorField.getValue();
+            simulatorController.spawnBody(name, radius, mass, color);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     void confirm(ActionEvent event) {
-        String name = nameField.getText();
-        double mass = Double.parseDouble(massField.getText());
-        double radius = Double.parseDouble(radiusField.getText());
-        Color color = colorField.getValue();
-        simulatorController.spawnBody(name, mass, radius, color);
+        simulatorController.confirmBody();
     }
 }

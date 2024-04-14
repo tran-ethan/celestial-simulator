@@ -15,6 +15,7 @@ public class Body extends Sphere {
     @Setter
     @Getter
     private Point3D velocity;
+    private Color color;
 
     /**
      * Constructor for a Body object using 4 parameters.
@@ -29,7 +30,7 @@ public class Body extends Sphere {
         this.mass = mass;
         setPosition(position);
         velocity = new Point3D(0, 0 , 0);
-        setMaterial(new PhongMaterial(color));
+        setColor(color);
     }
 
     /**
@@ -57,6 +58,15 @@ public class Body extends Sphere {
 
     public Point3D getPosition() {
         return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+        setMaterial(new PhongMaterial(color));
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     @Override

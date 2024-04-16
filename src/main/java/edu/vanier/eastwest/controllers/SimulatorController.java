@@ -529,7 +529,6 @@ public class SimulatorController {
             Point3D vectorPosition = vector.getPosition();
             double currentAngle = vector.getAngle();
             double x = 0;
-            double y = 0;
             double z = 0;
             for (Body body : bodies()) {
                 Point3D p2 = body.getPosition();
@@ -537,11 +536,10 @@ public class SimulatorController {
                 Point3D a = getGravity(vectorPosition, p2, m2, 1, body.getRadius());
                 //Summing the gravitational field forces
                 x += a.getX();
-                y += a.getY();
                 z += a.getZ();
             }
 
-            Point3D sumDirection = new Point3D(x, y, z);
+            Point3D sumDirection = new Point3D(x, 0, z);
             double newAngle = sumDirection.angle(new Point3D(100, 0, 0));
 
             double angle;

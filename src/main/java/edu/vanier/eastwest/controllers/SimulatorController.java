@@ -233,10 +233,12 @@ public class SimulatorController {
      */
     private void initVectors() {
         for (int i = -5; i <= 5; i++) {
-            Vector3D v = new Vector3D(4, 20, new Point3D(i * 100, 0, 0));
-            v.getTransforms().add(new Rotate(90, 1, 0, 0));
-            v.getTransforms().add(v.getXRotate());
-            entities.getChildren().add(v);
+            for(int j = -5; j <= 5; j++) {
+                Vector3D v = new Vector3D(7, 25, new Point3D(i * 100, 0, 100*j));
+                v.getTransforms().add(new Rotate(90, 1, 0, 0));
+                v.getTransforms().add(v.getXRotate());
+                entities.getChildren().add(v);
+            }
         }
     }
 

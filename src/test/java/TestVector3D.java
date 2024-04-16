@@ -61,10 +61,10 @@ public class TestVector3D {
     public void VerifyDifferentColor(){
         var vector = new Vector3D(1,1,new Point3D(1.0,1.0,1.0));
         vector.setMagnitude(100);
-        assertEquals("#7A0403", vector.getColor(100, 1));
+        assertEquals("rgb(122,4,3)", vector.getColor(100, 1));
         vector.setMagnitude(1);
-        assertEquals("#30123B", vector.getColor(100, 1));
+        assertEquals("rgb(48,18,59)", vector.getColor(100, 1));
         vector.setMagnitude(21);
-        assertEquals("#3E9BFE", vector.getColor(101, 1));
+        assertEquals("rgb(62,155,254)", vector.getColor(101, 1));
     }
 }

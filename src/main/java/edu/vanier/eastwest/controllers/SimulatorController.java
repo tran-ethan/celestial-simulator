@@ -572,9 +572,9 @@ public class SimulatorController {
                     minMagnitude = vector.getMagnitude();
                 }
             }
-            for (Vector3D vectorM : vectors()) {
-                vector.setArrowColor(maxMagnitude, minMagnitude);
-            }
+        }
+        for (Vector3D vectorM : vectors()) {
+            vectorM.setArrowColor(maxMagnitude, minMagnitude);
         }
     }
 

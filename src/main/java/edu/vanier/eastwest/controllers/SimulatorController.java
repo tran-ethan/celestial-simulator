@@ -98,10 +98,12 @@ public class SimulatorController {
 
     private double anchorX, anchorY;
 
-    private double anchorAngleX, anchorAngleY = 0;
+    private double anchorAngleX1, anchorAngleX2, anchorAngleY = 0;
 
-    private final DoubleProperty angleX = new SimpleDoubleProperty(0);
+    private final DoubleProperty angleX1 = new SimpleDoubleProperty(0);
+    private final DoubleProperty angleX2 = new SimpleDoubleProperty(0);
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
+
 
     private static Boolean spinning = false;
 
@@ -121,7 +123,7 @@ public class SimulatorController {
 
     @FXML
     public void initialize() {
-        float size = 5000; // Size of plane
+        float size = 10000; // Size of plane
         entities = new Group();
 
         // Create XZ plane for dragging
@@ -142,7 +144,7 @@ public class SimulatorController {
         // Camera
         camera = new PerspectiveCamera(true);
         camera.setNearClip(1);
-        camera.setFarClip(10000);
+        camera.setFarClip(20000);
 
         // Sub scene
         subScene = new SubScene(entities, 850, 850, true, SceneAntialiasing.BALANCED);
@@ -251,13 +253,15 @@ public class SimulatorController {
         });
 
         // Bind rotation angle to camera with mouse movement
-        Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
+        Rotate x1Rotate = new Rotate(0, Rotate.X_AXIS);
+        Rotate x2Rotate = new Rotate(0, Rotate.X_AXIS);
         Rotate yRotate = new Rotate(0, Rotate.Y_AXIS);
         Rotate initX = new Rotate(-30, Rotate.X_AXIS);
         Rotate autoRotateY = new Rotate(0, Rotate.Y_AXIS);
         Translate zoom = new Translate(0, 0, -500);
         camera.getTransforms().addAll(
-                xRotate,
+                x1Rotate,
+                x2Rotate,
                 yRotate,
                 autoRotateY,
                 initX,
@@ -277,7 +281,8 @@ public class SimulatorController {
         );
         rotateTimer.setCycleCount(Timeline.INDEFINITE);
 
-        xRotate.angleProperty().bind(angleX);
+        x1Rotate.angleProperty().bind(angleX1);
+        x2Rotate.angleProperty().bind(angleX2);
         yRotate.angleProperty().bind(angleY);
 
         // Disable camera spin checkbox
@@ -299,7 +304,8 @@ public class SimulatorController {
 
             anchorX = event.getSceneX();
             anchorY = event.getSceneY();
-            anchorAngleX = angleX.get();
+            anchorAngleX1 = angleX1.get();
+            anchorAngleX2 = angleX2.get();
             anchorAngleY = angleY.get();
 
             if (spinning) {
@@ -320,7 +326,8 @@ public class SimulatorController {
             // Camera rotation with RMB
             if (event.isSecondaryButtonDown()) {
                 if (!tgl2D.isSelected()) {
-                    angleX.set(anchorAngleX - (anchorY - event.getSceneY()));
+                    angleX1.set(Math.abs(Math.cos(Math.toRadians(angleY.get()))) * (anchorAngleX1 - (anchorY - event.getSceneY())));
+                    angleX2.set(Math.abs(Math.sin(Math.toRadians(angleY.get()))) * (anchorAngleX2 - (anchorY - event.getSceneY())));
                     angleY.set(anchorAngleY + anchorX - event.getSceneX());
                 } else {
                     angleY.set(anchorAngleY + anchorX - event.getSceneX());
@@ -393,7 +400,8 @@ public class SimulatorController {
 
         tgl2D.setOnMouseClicked(event -> {
             if (tgl2D.isSelected()) {
-                angleX.set(0);
+                angleX1.set(0);
+                angleX2.set(0);
                 angleY.set(0);
                 initX.setAngle(-90);
             } else {

@@ -84,22 +84,6 @@ public class Vector3D extends Group {
     }
 
     /**
-     * TODO @Yihweh
-     * Update the magnitude and direction of vector
-     */
-    public void update() {
-
-    }
-
-    /**
-     * TODO @Yihweh Draw the updated version of the vector with it's new direction and color.
-     */
-    public void draw() {
-
-    }
-
-    /**
-     * TODO @Yihweh TestCase
      * Compare the magnitude of the vector to the highest and lowest found in
      * the list of vectors and assign him a hexadecimal color code based on that
      *
@@ -126,22 +110,10 @@ public class Vector3D extends Group {
         return "rgb("+ r + "," + g + "," + b + ")";
     }
 
-    //TODO solve the color problem (comes from magnitude or hex)
+    //TODO
     public void setArrowColor(double maxMagnitude, double minMagnitude){
         String color = getColor(maxMagnitude, minMagnitude);
         if(color.contains("rgb")){
-//        for(Node n: getChildren()){
-//            if(n instanceof Shape3D){
-//                //((Shape3D) n).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
-//            }
-//            else if(n instanceof Group){
-//                for(Node z: ((Group) n).getChildren()){
-//                    if(z instanceof MeshView){
-//                       // ((MeshView) z).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
-//                    }
-//                }
-//            }
-//        }
             this.getC1().setMaterial(new PhongMaterial(Color.web(color)));
             this.getC2().setMaterial(new PhongMaterial(Color.web(color)));
             this.getMeshView().setMaterial(new PhongMaterial(Color.web(color)));
@@ -149,8 +121,10 @@ public class Vector3D extends Group {
     }
 
     /***
-     * TODO Documentation
-     * @return
+     * Create vertices point and triangles that are then added to the
+     * triangle mesh such that they create a cone.
+     *
+     * @return TriangleMesh the cone of the arrow
      */
     private TriangleMesh creatingTriangleMesh() {
         float[] points = new float[rounds * 12];
@@ -202,8 +176,11 @@ public class Vector3D extends Group {
     }
 
     /***
-     * TODO Documentation
-     * @return
+     * Construct the 3D arrow representing the vector by moving a triangle mesh
+     * and two cylinders into specific position and then adding them as the children
+     * of the arrow group.
+     *
+     * @return Group the 3D arrow
      */
     private Group creatingArrow(){
         Group cone = new Group();

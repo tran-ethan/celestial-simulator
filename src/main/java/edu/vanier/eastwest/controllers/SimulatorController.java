@@ -211,9 +211,6 @@ public class SimulatorController {
      * @return Point3D vector representing the vector gravitational force on p1 by p2.
      */
     public Point3D getGravity(Point3D p1, Point3D p2, double m2, double r1, double r2) {
-        if(p1 == null || p2 == null){
-            return new Point3D (0, 0, 0);
-        }
         Point3D r = p2.subtract(p1);
         double rMag = r.magnitude();
 
@@ -238,12 +235,10 @@ public class SimulatorController {
      */
     private void initVectors() {
         for (int i = -5; i <= 5; i++) {
-            for(int j = -5; j <= 5; j++) {
-                Vector3D v = new Vector3D(7, 25, new Point3D(i * 100, 0, 100*j));
-                v.getTransforms().add(new Rotate(90, 1, 0, 0));
-                v.getTransforms().add(v.getXRotate());
-                entities.getChildren().add(v);
-            }
+            Vector3D v = new Vector3D(4, 20, new Point3D(i * 100, 0, 0));
+            v.getTransforms().add(new Rotate(90, 1, 0, 0));
+            v.getTransforms().add(v.getXRotate());
+            entities.getChildren().add(v);
         }
     }
 
@@ -585,9 +580,9 @@ public class SimulatorController {
                     minMagnitude = vector.getMagnitude();
                 }
             }
-        }
-        for (Vector3D vectorM : vectors()) {
-            vectorM.setArrowColor(maxMagnitude, minMagnitude);
+            for (Vector3D vectorM : vectors()) {
+                vector.setArrowColor(maxMagnitude, minMagnitude);
+            }
         }
     }
 

@@ -84,21 +84,6 @@ public class Vector3D extends Group {
     }
 
     /**
-     * TODO @Yihweh
-     * Update the magnitude and direction of vector
-     */
-    public void update() {
-
-    }
-
-    /**
-     * TODO @Yihweh Draw the updated version of the vector with it's new direction and color.
-     */
-    public void draw() {
-
-    }
-
-    /**
      * TODO @Yihweh TestCase
      * Compare the magnitude of the vector to the highest and lowest found in
      * the list of vectors and assign him a hexadecimal color code based on that

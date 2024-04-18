@@ -98,10 +98,10 @@ public class SimulatorController {
 
     private double anchorX, anchorY;
 
-    private double anchorAngleX1, anchorAngleX2, anchorAngleY = 0;
+    private double anchorAngleX, anchorAngleZ, anchorAngleY = 0;
 
-    private final DoubleProperty angleX1 = new SimpleDoubleProperty(0);
-    private final DoubleProperty angleX2 = new SimpleDoubleProperty(0);
+    private final DoubleProperty angleX = new SimpleDoubleProperty(0);
+    private final DoubleProperty angleZ = new SimpleDoubleProperty(0);
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
 
@@ -254,7 +254,7 @@ public class SimulatorController {
 
         // Bind rotation angle to camera with mouse movement
         Rotate x1Rotate = new Rotate(0, Rotate.X_AXIS);
-        Rotate x2Rotate = new Rotate(0, Rotate.X_AXIS);
+        Rotate x2Rotate = new Rotate(0, Rotate.Z_AXIS);
         Rotate yRotate = new Rotate(0, Rotate.Y_AXIS);
         Rotate initX = new Rotate(-30, Rotate.X_AXIS);
         Rotate autoRotateY = new Rotate(0, Rotate.Y_AXIS);
@@ -281,8 +281,8 @@ public class SimulatorController {
         );
         rotateTimer.setCycleCount(Timeline.INDEFINITE);
 
-        x1Rotate.angleProperty().bind(angleX1);
-        x2Rotate.angleProperty().bind(angleX2);
+        x1Rotate.angleProperty().bind(angleX);
+        x2Rotate.angleProperty().bind(angleZ);
         yRotate.angleProperty().bind(angleY);
 
         // Disable camera spin checkbox
@@ -304,8 +304,8 @@ public class SimulatorController {
 
             anchorX = event.getSceneX();
             anchorY = event.getSceneY();
-            anchorAngleX1 = angleX1.get();
-            anchorAngleX2 = angleX2.get();
+            anchorAngleX = angleX.get();
+            anchorAngleZ = angleZ.get();
             anchorAngleY = angleY.get();
 
             if (spinning) {
@@ -326,11 +326,11 @@ public class SimulatorController {
             // Camera rotation with RMB
             if (event.isSecondaryButtonDown()) {
                 if (!tgl2D.isSelected()) {
-                    angleX1.set(Math.abs(Math.cos(Math.toRadians(angleY.get()))) * (anchorAngleX1 - (anchorY - event.getSceneY())));
-                    angleX2.set(Math.abs(Math.sin(Math.toRadians(angleY.get()))) * (anchorAngleX2 - (anchorY - event.getSceneY())));
-                    angleY.set(anchorAngleY + anchorX - event.getSceneX());
+                    angleX.set(anchorAngleX + (-Math.cos(Math.toRadians(angleY.get()))) * (anchorY - event.getSceneY())/5);
+                    angleZ.set(anchorAngleZ + Math.sin(Math.toRadians(angleY.get())) * (anchorY - event.getSceneY())/5);
+                    angleY.set(anchorAngleY + (anchorX - event.getSceneX())/5);
                 } else {
-                    angleY.set(anchorAngleY + anchorX - event.getSceneX());
+                    angleY.set(anchorAngleY + (anchorX - event.getSceneX())/5);
                 }
             }
 
@@ -400,8 +400,8 @@ public class SimulatorController {
 
         tgl2D.setOnMouseClicked(event -> {
             if (tgl2D.isSelected()) {
-                angleX1.set(0);
-                angleX2.set(0);
+                angleX.set(0);
+                angleZ.set(0);
                 angleY.set(0);
                 initX.setAngle(-90);
             } else {
@@ -529,7 +529,6 @@ public class SimulatorController {
      *
      */
     public void updateVectors() {
-        //TODO @Yihweh
         double minMagnitude = 0, maxMagnitude = 0;
         boolean start = false;
         //Updating angle
@@ -580,9 +579,9 @@ public class SimulatorController {
                     minMagnitude = vector.getMagnitude();
                 }
             }
-            for (Vector3D vectorM : vectors()) {
-                vector.setArrowColor(maxMagnitude, minMagnitude);
-            }
+        }
+        for (Vector3D vectorM : vectors()) {
+            vectorM.setArrowColor(maxMagnitude, minMagnitude);
         }
     }
 

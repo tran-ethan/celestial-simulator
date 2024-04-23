@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -128,12 +129,11 @@ public class SimulatorController {
     Body newBody;
     ToggleButton selectedTool;
 
-    float size = 10000; // Size of plane
+    float size = 8000; // Size of plane
 
     @FXML
     public void initialize() {
         entities = new Group();
-
         // Create XZ plane for dragging
         plane = new Rectangle(size, size, Color.TRANSPARENT);
         plane.getTransforms().addAll(
@@ -227,10 +227,10 @@ public class SimulatorController {
     }
 
     private void initBodies() {
-        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, -50), Color.rgb(255,255,0,1));
-        Body p1 = new Body("Earth", 10, 20000, new Point3D(150, 0, -100), Color.BLUE);
-        Body p2 = new Body("A", 10, 5000, new Point3D(0, 0, 100), Color.GREEN);
-        Body p3 = new Body("B", 10, 5000, new Point3D(0, 0, 200), Color.WHITE);
+        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, -50), Color.rgb(255,255,0,1), null);
+        Body p1 = new Body("Earth", 10, 20000, new Point3D(150, 0, -100), Color.BLUE, null);
+        Body p2 = new Body("A", 10, 5000, new Point3D(0, 0, 100), Color.GREEN, null);
+        Body p3 = new Body("B", 10, 5000, new Point3D(0, 0, 200), Color.WHITE, null);
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
         p3.setVelocity(new Point3D(10, 0, 10));
@@ -243,10 +243,12 @@ public class SimulatorController {
      */
     private void initVectors() {
         for (int i = -5; i <= 5; i++) {
-            Vector3D v = new Vector3D(4, 20, new Point3D(i * 100, 0, 0));
-            v.getTransforms().add(new Rotate(90, 1, 0, 0));
-            v.getTransforms().add(v.getXRotate());
-            entities.getChildren().add(v);
+            for(int j = -5; j <= 5; j++) {
+                Vector3D v = new Vector3D(7, 25, new Point3D(i * 100, 0, 100*j));
+                v.getTransforms().add(new Rotate(90, 1, 0, 0));
+                v.getTransforms().add(v.getXRotate());
+                entities.getChildren().add(v);
+            }
         }
     }
 
@@ -435,7 +437,7 @@ public class SimulatorController {
         });
     }
 
-    public void spawnBody(String name, double radius, double mass, Color color) {
+    public void spawnBody(String name, double radius, double mass, Color color, Image texture) {
         System.out.printf("Name: %s\n", name);
         System.out.printf("Mass: %.2f\n", mass);
         System.out.printf("Radius: %.2f\n", radius);
@@ -443,7 +445,7 @@ public class SimulatorController {
 
         // Slight transparency indicates body has not been spawned in yet
         color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 0.4);
-        newBody = new Body(name, radius, mass, new Point3D(0, 0, 0), color);
+        newBody = new Body(name, radius, mass, new Point3D(0, 0, 0), color, texture);
         entities.getChildren().add(newBody);
 
         newBody.setOnDragDetected(event -> {

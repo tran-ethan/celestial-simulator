@@ -4,8 +4,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
+import javafx.stage.FileChooser;
+
+import java.io.File;
 
 public class BodyCreatorController {
 
@@ -27,9 +31,12 @@ public class BodyCreatorController {
     @FXML
     private Button confirmBtn;
 
+    @FXML
+    private Button textureBtn;
+
 
     public SimulatorController simulatorController;
-
+    private Image texture = null;
     public void initController(SimulatorController simulatorController) {
         this.simulatorController = simulatorController;
     }
@@ -44,7 +51,7 @@ public class BodyCreatorController {
             double radius = Double.parseDouble(radiusField.getText());
             double mass = Double.parseDouble(massField.getText());
             Color color = colorField.getValue();
-            simulatorController.spawnBody(name, radius, mass, color);
+            simulatorController.spawnBody(name, radius, mass, color, texture);
             confirmBtn.setDisable(false);
             spawnBtn.setDisable(true);
         } catch (Exception e) {
@@ -56,4 +63,17 @@ public class BodyCreatorController {
     void confirm(ActionEvent event) {
         simulatorController.confirmBody();
     }
+
+    @FXML
+    void selectFile(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        File selectedImage = fileChooser.showOpenDialog(null);
+        if(selectedImage == null){
+            return;
+        }
+        if(selectedImage.getName().endsWith(".png")){
+            texture = new Image(selectedImage.toURI().toString());
+        }
+    }
 }
+

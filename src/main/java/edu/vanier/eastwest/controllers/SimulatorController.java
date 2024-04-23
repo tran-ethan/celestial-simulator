@@ -23,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
@@ -190,6 +191,7 @@ public class SimulatorController {
         subScene.setWidth(pane.getWidth());
 
         updateBodies();
+        updateBodiesBarnes();
         updateVectors();
 
         if (selectedBody != null) {
@@ -547,6 +549,67 @@ public class SimulatorController {
                 }
             }
         }
+    }
+
+    public void updateBodiesBarnes() {
+        // Find bounding square
+        double minX = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = Double.MIN_VALUE;
+        double minZ = Double.MAX_VALUE;
+        double maxZ = Double.MIN_VALUE;
+
+        for (Body body: bodies()) {
+            minX = Math.min(minX, body.getTranslateX());
+            maxX = Math.max(maxX, body.getTranslateX());
+            minY = Math.min(minY, body.getTranslateY());
+            maxY = Math.max(maxY, body.getTranslateY());
+            minZ = Math.min(minZ, body.getTranslateZ());
+            maxZ = Math.max(maxZ, body.getTranslateZ());
+        }
+
+        System.out.printf("Max: %.2f\n", maxX);
+        System.out.printf("Min: %.2f\n", minX);
+
+        double width = Math.max(maxX - minX, maxZ - minZ);
+
+        createSquare(minX, minY, minZ, width);
+    }
+
+    private void createSquare(double x, double y, double z, double w) {
+        // Remove all previous
+        entities.getChildren().removeIf(n -> n instanceof Cylinder);
+
+        Cylinder x1 = new Cylinder(1, w);
+        Cylinder x2 = new Cylinder(1, w);
+
+        x1.getTransforms().addAll(new Rotate(90, Rotate.Z_AXIS), new Translate(0, -w / 2, 0));
+        x2.getTransforms().addAll(new Rotate(90, Rotate.Z_AXIS), new Translate(0, -w / 2, w));
+
+        x1.setTranslateX(x);
+        x1.setTranslateY(y);
+        x1.setTranslateZ(z);
+
+        x2.setTranslateX(x);
+        x2.setTranslateY(y);
+        x2.setTranslateZ(z);
+
+        Cylinder z1 = new Cylinder(1, w);
+        Cylinder z2 = new Cylinder(1, w);
+
+        z1.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS), new Translate(0, w / 2, 0));
+        z2.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS), new Translate(w, w / 2, 0));
+
+        z1.setTranslateX(x);
+        z1.setTranslateY(y);
+        z1.setTranslateZ(z);
+
+        z2.setTranslateX(x);
+        z2.setTranslateY(y);
+        z2.setTranslateZ(z);
+
+        entities.getChildren().addAll(x1, x2, z1, z2);
     }
 
     /***

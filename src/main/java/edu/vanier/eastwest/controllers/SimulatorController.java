@@ -28,6 +28,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import org.controlsfx.control.ToggleSwitch;
+import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,9 +61,6 @@ public class SimulatorController {
     private ToggleButton btnSelection;
 
     @FXML
-    private ToggleSwitch tglVector;
-
-    @FXML
     private Pane pane;
 
     @FXML
@@ -76,6 +74,15 @@ public class SimulatorController {
 
     @FXML
     private ToggleSwitch tgl2D;
+
+    @FXML
+    private ToggleSwitch tglVector;
+
+    @FXML
+    private ToggleSwitch tglAxes;
+
+    @FXML
+    private ToggleSwitch tglGrid;
 
     @FXML
     private Label lblSelected;
@@ -121,9 +128,10 @@ public class SimulatorController {
     Body newBody;
     ToggleButton selectedTool;
 
+    float size = 10000; // Size of plane
+
     @FXML
     public void initialize() {
-        float size = 10000; // Size of plane
         entities = new Group();
 
         // Create XZ plane for dragging
@@ -394,6 +402,23 @@ public class SimulatorController {
         btnReset.setOnAction(event -> {
             entities.getChildren().removeIf(object -> object instanceof Body);
             timer.play();
+        });
+
+        tglAxes.setOnMouseClicked(event -> {
+            if (tglAxes.isSelected()) {
+                entities.getChildren().add(getAxes(1));
+            } else {
+                // Only group in entities is the group containing cylinders
+                entities.getChildren().removeIf(object -> object instanceof Group);
+            }
+        });
+
+        tglGrid.setOnMouseClicked(event -> {
+            if (tglGrid.isSelected()) {
+                entities.getChildren().add(getGrid(size, 100));
+            } else {
+                entities.getChildren().removeIf(object -> object instanceof PolygonMeshView);
+            }
         });
 
         sldrSpeed.setOnMouseReleased(event -> timer.setRate(sldrSpeed.getValue()));

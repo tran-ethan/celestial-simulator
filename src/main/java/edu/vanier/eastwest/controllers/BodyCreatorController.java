@@ -45,6 +45,8 @@ public class BodyCreatorController {
 
     @FXML
     public void initialize(){
+
+        //Code taken from https://stackoverflow.com/a/45981297
         Pattern validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
 
         UnaryOperator<TextFormatter.Change> filter = c -> {

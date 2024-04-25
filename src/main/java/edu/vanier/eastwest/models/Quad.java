@@ -73,7 +73,6 @@ public class Quad {
     }
 
     public void insert(Body body) {
-        double mass = body.getMass();
         if (this.leaf) {
             // Case: Leaf already contains another body
             if (this.body != null) {
@@ -81,7 +80,7 @@ public class Quad {
                 Body b = body;
 
                 this.centerMass = this.centerMass.add(b.getPosition());
-                this.totalMass += mass;
+                this.totalMass += b.getMass();
                 this.count++;
 
                 Quad cur = this;
@@ -96,7 +95,7 @@ public class Quad {
                     // Update total center and mass
                     cur.centerMass = cur.centerMass.add(a.getPosition());
                     cur.centerMass = cur.centerMass.add(b.getPosition());
-                    cur.totalMass += mass * 2;
+                    cur.totalMass += a.getMass() + b.getMass();
                     cur.count += 2;
                 }
 
@@ -107,8 +106,8 @@ public class Quad {
                 // Update center of mass and total for lowest-level child
                 cur.children[qA].centerMass = cur.children[qA].centerMass.add(a.getPosition());
                 cur.children[qB].centerMass = cur.children[qA].centerMass.add(b.getPosition());
-                cur.children[qA].totalMass += mass;
-                cur.children[qB].totalMass += mass;
+                cur.children[qA].totalMass += a.getMass();
+                cur.children[qB].totalMass += b.getMass();
                 cur.children[qA].count++;
                 cur.children[qB].count++;
 
@@ -119,15 +118,25 @@ public class Quad {
             // Case: Node does not contain a body
             this.body = body;
             this.centerMass = this.centerMass.add(body.getPosition());
-            this.totalMass += mass;
+            this.totalMass += body.getMass();
             this.count++;
             return;
         }
 
         // Not a leaf
         this.centerMass = this.centerMass.add(body.getPosition());
-        this.totalMass += mass;
+        this.totalMass += body.getMass();
         this.count++;
         this.children[this.which(body.getPosition())].insert(body);
+    }
+
+    @Override
+    public String toString() {
+        return "Quad{" +
+                "centerMass=" + centerMass +
+                "\n, center=" + center +
+                "\n, totalMass=" + totalMass +
+                "\n, count=" + count +
+                '}';
     }
 }

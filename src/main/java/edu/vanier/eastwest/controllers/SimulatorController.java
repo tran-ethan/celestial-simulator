@@ -593,16 +593,17 @@ public class SimulatorController {
     void gravitate(Body p, Quad tn) {
         System.out.println("Examining body: " + p.getName());
         if (tn.leaf) {
-            System.out.println("Tn is leaf");
-            System.out.println("end");
             if (tn.body == null || p == tn.body) return;
-            p.update(0.01, getGravity(p.getPosition(), tn.body.getPosition(), tn.body.getMass(), tn.body.getRadius(), p.getRadius()));
+            // If leaf node and contains a body, calculate force directly with that body
+            System.out.printf("Compared body: %s\n", tn.body);
+            Point3D a = getGravity(p.getPosition(), tn.body.getPosition(), tn.body.getMass(), tn.body.getRadius(), p.getRadius());
+            p.update(0.01, a);
 
             return;
         }
 
         if (tn.center == null) {
-            tn.center = tn.centerMass.multiply( (double) (1 / tn.count));
+            tn.center = tn.centerMass.multiply(1.0 / tn.count);
         }
 
         if ((tn.width / p.getPosition().distance(tn.center)) < theta) {

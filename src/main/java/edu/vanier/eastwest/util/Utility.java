@@ -6,6 +6,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.DrawMode;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import org.fxyz3d.shapes.polygon.PolygonMesh;
@@ -142,5 +143,51 @@ public class Utility {
         meshViewXZ.getTransforms().add(new Rotate(90, Rotate.X_AXIS));
 
         return meshViewXZ;
+    }
+
+
+    public static Rectangle createSquare(double x, double y, double z, double w) {
+        // Remove all previous
+//        entities.getChildren().removeIf(n -> n instanceof Cylinder);
+//
+//        Cylinder x1 = new Cylinder(1, w);
+//        Cylinder x2 = new Cylinder(1, w);
+//
+//        x1.getTransforms().addAll(new Rotate(90, Rotate.Z_AXIS), new Translate(0, -w / 2, 0));
+//        x2.getTransforms().addAll(new Rotate(90, Rotate.Z_AXIS), new Translate(0, -w / 2, w));
+//
+//        x1.setTranslateX(x);
+//        x1.setTranslateY(y);
+//        x1.setTranslateZ(z);
+//
+//        x2.setTranslateX(x);
+//        x2.setTranslateY(y);
+//        x2.setTranslateZ(z);
+//
+//        Cylinder z1 = new Cylinder(1, w);
+//        Cylinder z2 = new Cylinder(1, w);
+//
+//        z1.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS), new Translate(0, w / 2, 0));
+//        z2.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS), new Translate(w, w / 2, 0));
+//
+//        z1.setTranslateX(x);
+//        z1.setTranslateY(y);
+//        z1.setTranslateZ(z);
+//
+//        z2.setTranslateX(x);
+//        z2.setTranslateY(y);
+//        z2.setTranslateZ(z);
+//
+//        entities.getChildren().addAll(x1, x2, z1, z2);
+
+        Rectangle p = new Rectangle(w, w, Color.TRANSPARENT);
+        p.setStroke(Color.GREEN);
+        p.setStrokeWidth(1);
+        p.getTransforms().addAll(
+                new Rotate(90, Rotate.X_AXIS)
+        );
+        p.setTranslateX(x);
+        p.setTranslateZ(z);
+        return p;
     }
 }

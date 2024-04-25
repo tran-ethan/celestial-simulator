@@ -3,7 +3,7 @@ package edu.vanier.eastwest.controllers;
 import edu.vanier.eastwest.MainApp;
 import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.MySplitPaneSkin;
-import edu.vanier.eastwest.models.TreeNode;
+import edu.vanier.eastwest.models.Quad;
 import edu.vanier.eastwest.models.Vector3D;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -23,7 +23,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
@@ -34,8 +33,7 @@ import org.fxyz3d.shapes.polygon.PolygonMeshView;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static edu.vanier.eastwest.util.Utility.getAxes;
-import static edu.vanier.eastwest.util.Utility.getGrid;
+import static edu.vanier.eastwest.util.Utility.*;
 
 
 public class SimulatorController {
@@ -98,7 +96,7 @@ public class SimulatorController {
     private VBox vbTools;
 
     private Timeline timer;
-    private TreeNode node;
+    private Quad root;
     private Camera camera;
     private Group entities;
     private SubScene subScene;
@@ -114,6 +112,7 @@ public class SimulatorController {
 
 
     private static Boolean spinning = false;
+    private static double theta = 0.7;
 
     BodyCreatorController controller;
     AnchorPane bodyCreator;
@@ -190,9 +189,9 @@ public class SimulatorController {
         subScene.setHeight(pane.getHeight());
         subScene.setWidth(pane.getWidth());
 
-        updateBodies();
+        // updateBodies();
         updateBodiesBarnes();
-        updateVectors();
+        // updateVectors();
 
         if (selectedBody != null) {
             // Move camera around selected planet
@@ -229,14 +228,17 @@ public class SimulatorController {
     }
 
     private void initBodies() {
-        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, -50), Color.rgb(255,255,0,1));
-        Body p1 = new Body("Earth", 10, 20000, new Point3D(150, 0, -100), Color.BLUE);
-        Body p2 = new Body("A", 10, 5000, new Point3D(0, 0, 100), Color.GREEN);
-        Body p3 = new Body("B", 10, 5000, new Point3D(0, 0, 200), Color.WHITE);
+        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, -50), Color.YELLOW);
+        Body p1 = new Body("Blue", 10, 20000, new Point3D(150, 0, -100), Color.BLUE);
+        Body p2 = new Body("Green", 10, 5000, new Point3D(200, 0, 100), Color.GREEN);
+        Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), Color.WHITE);
+        Body p4 = new Body("Red", 10, 5000, new Point3D(160, 0, 175), Color.RED);
         p1.setVelocity(new Point3D(0, 0, 10));
         p2.setVelocity(new Point3D(-20, 0, 0));
         p3.setVelocity(new Point3D(10, 0, 10));
-        entities.getChildren().addAll(sun, p1, p2, p3);
+        p4.setVelocity(new Point3D(0, 0, 100));
+        entities.getChildren().addAll(sun, p1, p2, p3, p4);
+        // entities.getChildren().addAll(sun, p1);
     }
 
     /***
@@ -553,12 +555,12 @@ public class SimulatorController {
 
     public void updateBodiesBarnes() {
         // Find bounding square x,y locations
-        double minX = Double.MAX_VALUE;
-        double maxX = Double.MIN_VALUE;
-        double minY = Double.MAX_VALUE;
-        double maxY = Double.MIN_VALUE;
-        double minZ = Double.MAX_VALUE;
-        double maxZ = Double.MIN_VALUE;
+        double minX = Float.MAX_VALUE;
+        double maxX = Float.MIN_VALUE;
+        double minY = Float.MAX_VALUE;
+        double maxY = Float.MIN_VALUE;
+        double minZ = Float.MAX_VALUE;
+        double maxZ = Float.MIN_VALUE;
 
         for (Body body: bodies()) {
             minX = Math.min(minX, body.getTranslateX());
@@ -569,58 +571,48 @@ public class SimulatorController {
             maxZ = Math.max(maxZ, body.getTranslateZ());
         }
 
-        System.out.printf("Max: %.2f\n", maxX);
-        System.out.printf("Min: %.2f\n", minX);
+//        System.out.printf("Max: %.2f\n", maxX);
+//        System.out.printf("Min: %.2f\n", minX);
 
         double width = Math.max(maxX - minX, maxZ - minZ);
 
-        createSquare(minX, minY, minZ, width);
-    }
-
-    private void createSquare(double x, double y, double z, double w) {
-        // Remove all previous
-//        entities.getChildren().removeIf(n -> n instanceof Cylinder);
-//
-//        Cylinder x1 = new Cylinder(1, w);
-//        Cylinder x2 = new Cylinder(1, w);
-//
-//        x1.getTransforms().addAll(new Rotate(90, Rotate.Z_AXIS), new Translate(0, -w / 2, 0));
-//        x2.getTransforms().addAll(new Rotate(90, Rotate.Z_AXIS), new Translate(0, -w / 2, w));
-//
-//        x1.setTranslateX(x);
-//        x1.setTranslateY(y);
-//        x1.setTranslateZ(z);
-//
-//        x2.setTranslateX(x);
-//        x2.setTranslateY(y);
-//        x2.setTranslateZ(z);
-//
-//        Cylinder z1 = new Cylinder(1, w);
-//        Cylinder z2 = new Cylinder(1, w);
-//
-//        z1.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS), new Translate(0, w / 2, 0));
-//        z2.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS), new Translate(w, w / 2, 0));
-//
-//        z1.setTranslateX(x);
-//        z1.setTranslateY(y);
-//        z1.setTranslateZ(z);
-//
-//        z2.setTranslateX(x);
-//        z2.setTranslateY(y);
-//        z2.setTranslateZ(z);
-//
-//        entities.getChildren().addAll(x1, x2, z1, z2);
         entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);
 
-        Rectangle p = new Rectangle(w, w, Color.TRANSPARENT);
-        p.setStroke(Color.GREEN);
-        p.setStrokeWidth(1);
-        p.getTransforms().addAll(
-                new Rotate(90, Rotate.X_AXIS)
-        );
-        p.setTranslateX(x);
-        p.setTranslateZ(z);
-        entities.getChildren().add(p);
+        // Construct Tree
+        root = new Quad(minX, minZ, width, entities);
+        for (Body body: bodies()) {
+            root.insert(body);
+        }
+
+        // Insert planets into tree one by one
+        for (Body body: bodies()) {
+            gravitate(body, root);
+        }
+    }
+
+    void gravitate(Body p, Quad tn) {
+        System.out.println("Examining body: " + p.getName());
+        if (tn.leaf) {
+            System.out.println("Tn is leaf");
+            System.out.println("end");
+            if (tn.body == null || p == tn.body) return;
+            p.update(0.01, getGravity(p.getPosition(), tn.body.getPosition(), tn.body.getMass(), tn.body.getRadius(), p.getRadius()));
+
+            return;
+        }
+
+        if (tn.center == null) {
+            tn.center = tn.centerMass.multiply( (double) (1 / tn.count));
+        }
+
+        if ((tn.width / p.getPosition().distance(tn.center)) < theta) {
+
+            // ???
+            p.update(0.01, getGravity(p.getPosition(), tn.center, tn.totalMass, tn.body.getRadius(), p.getRadius()));
+            return;
+        }
+
+        for (Quad child : tn.children) gravitate(p, child);
     }
 
     /***
@@ -665,7 +657,7 @@ public class SimulatorController {
             vector.setAngle(newAngle);
             vector.setMagnitude(sumDirection.magnitude());
 
-            //Updating colors
+            // Updating colors
             if (!start) {
                 maxMagnitude = vector.getMagnitude();
                 minMagnitude = vector.getMagnitude();
@@ -679,6 +671,7 @@ public class SimulatorController {
                 }
             }
         }
+
         for (Vector3D vectorM : vectors()) {
             vectorM.setArrowColor(maxMagnitude, minMagnitude);
         }
@@ -695,6 +688,7 @@ public class SimulatorController {
     }
 
     private void collide(Body a, Body b, double distance) {
+        // Code adapted from https://stackoverflow.com/questions/345838/ball-to-ball-collision-detection-and-handling
         if (distance > a.getRadius() + b.getRadius()) {
             return;
         }

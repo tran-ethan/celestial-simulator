@@ -24,6 +24,7 @@ public class Body extends Sphere {
      * @param mass The mass of the body
      * @param position The position of the body in the space
      * @param color The color of the object
+     * @parem texture The image on the body
      */
     public Body(String name, double radius, double mass, Point3D position, Color color, Image texture) {
         super(radius);
@@ -40,10 +41,11 @@ public class Body extends Sphere {
         }
         if(texture == null){
             System.out.println("no exist");
+            setColor(color);
         }
         System.out.println(1);
         //else if(texture == null){
-            setColor(color);
+           // setColor(color);
       //  }
     }
 

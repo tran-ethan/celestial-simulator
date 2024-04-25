@@ -442,6 +442,7 @@ public class SimulatorController {
         System.out.printf("Mass: %.2f\n", mass);
         System.out.printf("Radius: %.2f\n", radius);
         System.out.printf("Color: %s", color);
+        System.out.println("Texture: "+ texture);
 
         // Slight transparency indicates body has not been spawned in yet
         color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 0.4);
@@ -481,9 +482,11 @@ public class SimulatorController {
         newBody.setOnMouseReleased(null);
 
         // Full opacity indicates body has been spawned in successfully
-        Color color = newBody.getColor();
-        color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
-        newBody.setColor(color);
+        if(newBody.getMaterial() == null) {
+            Color color = newBody.getColor();
+            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
+            newBody.setColor(color);
+        }
         plane.setOnMouseDragOver(null);
         newBody = null;
 

@@ -71,7 +71,8 @@ public class BodyCreatorController {
         if(selectedImage == null){
             return;
         }
-        if(selectedImage.getName().endsWith(".png")){
+        if(selectedImage.getName().endsWith(".png") || selectedImage.getName().endsWith(".jpg")){
+            System.out.println("picture selected");
             texture = new Image(selectedImage.toURI().toString());
         }
     }

@@ -105,6 +105,8 @@ public class SimulatorController {
     Body selectedBody;
 
     private double anchorX, anchorY;
+    private int xVariableForVectorSpawning = 5, zVariableForVectorSpawning = 5, xDistanceForVectorSpawning = 100,
+            zDistanceForVectorSpawning = 100;
 
     private double anchorAngleX, anchorAngleZ, anchorAngleY = 0;
 
@@ -242,9 +244,9 @@ public class SimulatorController {
      * Creates Vector3D arrows around Body objects.
      */
     private void initVectors() {
-        for (int i = -5; i <= 5; i++) {
-            for(int j = -5; j <= 5; j++) {
-                Vector3D v = new Vector3D(7, 25, new Point3D(i * 100, 0, 100*j));
+        for (int i = -xVariableForVectorSpawning; i <= xVariableForVectorSpawning; i++) {
+            for(int j = -zVariableForVectorSpawning; j <= zVariableForVectorSpawning; j++) {
+                Vector3D v = new Vector3D(7, 25, new Point3D(i * xDistanceForVectorSpawning, 0, zDistanceForVectorSpawning*j));
                 v.getTransforms().add(new Rotate(90, 1, 0, 0));
                 v.getTransforms().add(v.getXRotate());
                 entities.getChildren().add(v);
@@ -482,7 +484,7 @@ public class SimulatorController {
         newBody.setOnMouseReleased(null);
 
         // Full opacity indicates body has been spawned in successfully
-        if(newBody.getMaterial() == null) {
+        if(newBody.getMaterial() != null) {
             Color color = newBody.getColor();
             color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
             newBody.setColor(color);

@@ -112,7 +112,7 @@ public class SimulatorController {
 
 
     private static Boolean spinning = false;
-    private static double theta = 0.1;
+    private static double theta = 0.5;
 
     BodyCreatorController controller;
     AnchorPane bodyCreator;
@@ -189,7 +189,7 @@ public class SimulatorController {
         subScene.setHeight(pane.getHeight());
         subScene.setWidth(pane.getWidth());
 
-        //updateBodies();
+        // updateBodies();
         updateBodiesBarnes();
         // updateVectors();
 
@@ -220,9 +220,12 @@ public class SimulatorController {
      * @return Point3D vector representing the vector gravitational force on p1 by p2.
      */
     public Point3D getGravity(Point3D p1, Point3D p2, double m2, double r1, double r2) {
+        // Gravity formula from https://en.wikipedia.org/wiki/Newton%27s_law_of_universal_gravitation
         Point3D r = p2.subtract(p1);
         double rMag = r.magnitude();
 
+        // Distance between two bodies cannot be less than radius of 2 bodies because that would mean bodies are inside of each other
+        // TODO Add G Constant (for now it is always 1)
         double rMin = r1 + r2;
         return r.multiply((m2 / Math.pow(Math.max(rMag, rMin), 3)));
     }
@@ -578,16 +581,16 @@ public class SimulatorController {
 
         entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);
 
-        // Insert planets into tree one by one
+        // Create root node via bounding square
         root = new Quad(minX, minZ, width, entities);
+
+        // Insert planets into tree one by one
         for (Body body: bodies()) {
             root.insert(body);
         }
 
-        // TODO Fix, for now no gravity for testing
+        // Compute gravity for all bodies
         for (Body body: bodies()) {
-//            Point3D a = new Point3D(0, 0, 0);
-//            body.update(0.01, a);
              gravitate(body, root);
         }
     }
@@ -602,18 +605,16 @@ public class SimulatorController {
             return;
         }
 
-        if (tn.center == null) {
-            tn.center = tn.centerMass.multiply(1.0 / tn.count);
+        if (tn.centerMass == null) {
+            tn.centerMass = tn.weightedPositions.multiply(1.0 / tn.totalMass);
         }
 
         // Base case estimation
-        if ((tn.width / p.getPosition().distance(tn.center)) < theta) {
-            // TODO Fix very small acceleration
-            Point3D a = getGravity(p.getPosition(), tn.center, tn.totalMass, p.getRadius(), p.getRadius());
-            System.out.println(a);
-            p.update(0.01, a.multiply(1e8));
+        if ((tn.width / p.getPosition().distance(tn.centerMass)) < theta) {
+            Point3D a = getGravity(p.getPosition(), tn.centerMass, tn.totalMass, p.getRadius(), 0);
+            p.update(0.01, a);
         } else {
-            // Resursive step
+            // Recursive step
             for (Quad child : tn.children) gravitate(p, child);
         }
 

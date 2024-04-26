@@ -16,10 +16,9 @@ public class Quad {
 
     public Body body;
     public Quad[] children; // Reference to children
+    public Point3D weightedPositions; // Sum of positions of bodies weighted by mass
     public Point3D centerMass; // Center of mass
-    public Point3D center; // Center
     public double totalMass;
-    public int count; // Number of bodies
     public Group entities; // Spawn rectangles
 
     public Quad(double x, double z, double width) {
@@ -30,10 +29,9 @@ public class Quad {
 
         this.body = null;
         this.children = new Quad[4];
-        this.centerMass = new Point3D(0, 0, 0); // Center of mass times total mass
-        this.center = null;
+        this.weightedPositions = new Point3D(0, 0, 0); // Sum of mass times position for all bodies
+        this.centerMass = null;
         this.totalMass = 0;
-        this.count = 0;
     }
 
     public Quad(double x, double z, double width, Group entities) {
@@ -45,10 +43,9 @@ public class Quad {
         this.body = null;
         this.children = new Quad[4];
 
-        this.centerMass = new Point3D(0, 0, 0); // Center of mass
-        this.center = null; // Calculated after
+        this.weightedPositions = new Point3D(0, 0, 0); // Mass times position for all bodies
+        this.centerMass = null; // Center of mass
         this.totalMass = 0;
-        this.count = 0;
     }
 
     public void subDivide() {
@@ -69,23 +66,27 @@ public class Quad {
 
     // Returns index of child at location p, ignore bodies not fully fitting inside square
     int which(Point3D p) {
-        double half = width / 2.0;
+        double half = width / 2;
         if (p.getZ() < z + half) {
             return p.getX() < x + half ? 0 : 1;
         }
         return p.getX() < x + half ? 2 : 3;
     }
 
-    public void insert(Body newP) {
+    public void insert(Body body) {
         if (this.leaf) {
-            // Case: Leaf already contains another body
-            if (this.body != null) {
+            if (this.body == null) {
+                // Case 1: Node does not contain a body
+                this.body = body;
+                this.weightedPositions = this.weightedPositions.add(body.getPosition().multiply(body.getMass()));
+                this.totalMass += body.getMass();
+            } else {
+                // Case: Leaf already contains another body
                 Body a = this.body;
-                Body b = newP;
+                Body b = body;
 
-                this.centerMass = this.centerMass.add(b.getPosition().multiply(b.getMass()));
+                this.weightedPositions = this.weightedPositions.add(b.getPosition().multiply(b.getMass()));
                 this.totalMass += b.getMass();
-                this.count++;
 
                 Quad cur = this;
                 int qA = cur.which(a.getPosition());
@@ -97,10 +98,9 @@ public class Quad {
                     qB = cur.which(b.getPosition());
 
                     // Update total center and mass
-                    cur.centerMass = cur.centerMass.add(a.getPosition().multiply(a.getMass()));
-                    cur.centerMass = cur.centerMass.add(b.getPosition().multiply(b.getMass()));
+                    cur.weightedPositions = cur.weightedPositions.add(a.getPosition().multiply(a.getMass()));
+                    cur.weightedPositions = cur.weightedPositions.add(b.getPosition().multiply(b.getMass()));
                     cur.totalMass += a.getMass() + b.getMass();
-                    cur.count += 2;
                 }
 
                 cur.subDivide();
@@ -108,39 +108,27 @@ public class Quad {
                 cur.children[qB].body = b;
 
                 // Update center of mass and total for lowest-level child
-                cur.children[qA].centerMass = cur.children[qA].centerMass.add(a.getPosition().multiply(a.getMass()));
-                cur.children[qB].centerMass = cur.children[qA].centerMass.add(b.getPosition().multiply(b.getMass()));
+                cur.children[qA].weightedPositions = cur.children[qA].weightedPositions.add(a.getPosition().multiply(a.getMass()));
+                cur.children[qB].weightedPositions = cur.children[qA].weightedPositions.add(b.getPosition().multiply(b.getMass()));
                 cur.children[qA].totalMass += a.getMass();
                 cur.children[qB].totalMass += b.getMass();
-                cur.children[qA].count++;
-                cur.children[qB].count++;
 
                 this.body = null;
-                return;
             }
-
-            // Case: Node does not contain a body
-            this.body = newP;
-            this.centerMass = this.centerMass.add(newP.getPosition().multiply(newP.getMass()));
-            this.totalMass += newP.getMass();
-            this.count++;
-            return;
+        } else {
+            // Case 2: Node is an
+            this.weightedPositions = this.weightedPositions.add(body.getPosition().multiply(body.getMass()));
+            this.totalMass += body.getMass();
+            this.children[this.which(body.getPosition())].insert(body);
         }
-
-        // Not a leaf
-        this.centerMass = this.centerMass.add(newP.getPosition().multiply(newP.getMass()));
-        this.totalMass += newP.getMass();
-        this.count++;
-        this.children[this.which(newP.getPosition())].insert(newP);
     }
 
     @Override
     public String toString() {
         return "Quad{" +
-                "centerMass=" + centerMass +
-                "\n, center=" + center +
+                "centerMass=" + weightedPositions +
+                "\n, center=" + centerMass +
                 "\n, totalMass=" + totalMass +
-                "\n, count=" + count +
                 '}';
     }
 }

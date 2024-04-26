@@ -228,17 +228,17 @@ public class SimulatorController {
     }
 
     private void initBodies() {
-        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, -50), Color.YELLOW);
-        Body p1 = new Body("Blue", 10, 20000, new Point3D(150, 0, -100), Color.BLUE);
+        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, 0), Color.YELLOW);
+        Body p1 = new Body("Blue", 10, 20000, new Point3D(125, 0, 120), Color.BLUE);
         Body p2 = new Body("Green", 10, 5000, new Point3D(200, 0, 100), Color.GREEN);
         Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), Color.WHITE);
-        Body p4 = new Body("Red", 10, 5000, new Point3D(160, 0, 175), Color.RED);
+        Body p4 = new Body("Red", 10, 5000, new Point3D(200, 0, 200), Color.RED);
         p1.setVelocity(new Point3D(0, 0, 10));
-        p2.setVelocity(new Point3D(-20, 0, 0));
-        p3.setVelocity(new Point3D(10, 0, 10));
-        p4.setVelocity(new Point3D(0, 0, 100));
+//        p2.setVelocity(new Point3D(-20, 0, 0));
+//        p3.setVelocity(new Point3D(10, 0, 10));
+//        p4.setVelocity(new Point3D(0, 0, -5));
         entities.getChildren().addAll(sun, p1, p2, p3, p4);
-        // entities.getChildren().addAll(sun, p1);
+        // entities.getChildren().addAll(sun, p1, p4);
     }
 
     /***
@@ -578,15 +578,17 @@ public class SimulatorController {
 
         entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);
 
-        // Construct Tree
+        // Insert planets into tree one by one
         root = new Quad(minX, minZ, width, entities);
         for (Body body: bodies()) {
             root.insert(body);
         }
 
-        // Insert planets into tree one by one
+        // TODO Fix, for now no gravity for testing
         for (Body body: bodies()) {
-            gravitate(body, root);
+            Point3D a = new Point3D(0, 0, 0);
+            body.update(0.01, a);
+//             gravitate(body, root);
         }
     }
 

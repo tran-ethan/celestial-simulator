@@ -112,7 +112,7 @@ public class SimulatorController {
 
 
     private static Boolean spinning = false;
-    private static double theta = 0.7;
+    private static double theta = 0.5;
 
     BodyCreatorController controller;
     AnchorPane bodyCreator;
@@ -234,9 +234,9 @@ public class SimulatorController {
         Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), Color.WHITE);
         Body p4 = new Body("Red", 10, 5000, new Point3D(200, 0, 200), Color.RED);
         p1.setVelocity(new Point3D(0, 0, 10));
-//        p2.setVelocity(new Point3D(-20, 0, 0));
-//        p3.setVelocity(new Point3D(10, 0, 10));
-//        p4.setVelocity(new Point3D(0, 0, -5));
+        p2.setVelocity(new Point3D(-20, 0, 0));
+        p3.setVelocity(new Point3D(10, 0, 10));
+        p4.setVelocity(new Point3D(0, 0, -5));
         entities.getChildren().addAll(sun, p1, p2, p3, p4);
         // entities.getChildren().addAll(sun, p1, p4);
     }
@@ -586,20 +586,17 @@ public class SimulatorController {
 
         // TODO Fix, for now no gravity for testing
         for (Body body: bodies()) {
-            Point3D a = new Point3D(0, 0, 0);
-            body.update(0.01, a);
-//             gravitate(body, root);
+//            Point3D a = new Point3D(0, 0, 0);
+//            body.update(0.01, a);
+             gravitate(body, root);
         }
     }
 
     void gravitate(Body p, Quad tn) {
-        System.out.println("Examining body: " + p.getName());
         if (tn.leaf) {
             if (tn.body == null || p == tn.body) return;
-            // If leaf node and contains a body, calculate force directly with that body
-            System.out.printf("Compared body: %s\n", tn.body);
             Point3D a = getGravity(p.getPosition(), tn.body.getPosition(), tn.body.getMass(), tn.body.getRadius(), p.getRadius());
-            p.update(0.01, a);
+            p.update(0.1, a);
 
             return;
         }
@@ -609,13 +606,12 @@ public class SimulatorController {
         }
 
         if ((tn.width / p.getPosition().distance(tn.center)) < theta) {
-
-            // ???
-            p.update(0.01, getGravity(p.getPosition(), tn.center, tn.totalMass, tn.body.getRadius(), p.getRadius()));
-            return;
+            Point3D a = getGravity(p.getPosition(), tn.center, tn.totalMass, p.getRadius(), p.getRadius());
+            p.update(0.1, a);
+        } else {
+            for (Quad child : tn.children) gravitate(p, child);
         }
 
-        for (Quad child : tn.children) gravitate(p, child);
     }
 
     /***

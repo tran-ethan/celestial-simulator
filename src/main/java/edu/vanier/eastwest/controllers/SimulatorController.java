@@ -112,7 +112,7 @@ public class SimulatorController {
 
 
     private static Boolean spinning = false;
-    private static double theta = 0.5;
+    private static double theta = 0.1;
 
     BodyCreatorController controller;
     AnchorPane bodyCreator;
@@ -189,7 +189,7 @@ public class SimulatorController {
         subScene.setHeight(pane.getHeight());
         subScene.setWidth(pane.getWidth());
 
-        // updateBodies();
+        //updateBodies();
         updateBodiesBarnes();
         // updateVectors();
 
@@ -234,7 +234,7 @@ public class SimulatorController {
         Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), Color.WHITE);
         Body p4 = new Body("Red", 10, 5000, new Point3D(200, 0, 200), Color.RED);
         p1.setVelocity(new Point3D(0, 0, 10));
-        p2.setVelocity(new Point3D(-20, 0, 0));
+        p2.setVelocity(new Point3D(-4, 0, 0));
         p3.setVelocity(new Point3D(10, 0, 10));
         p4.setVelocity(new Point3D(0, 0, -5));
         entities.getChildren().addAll(sun, p1, p2, p3, p4);
@@ -593,10 +593,11 @@ public class SimulatorController {
     }
 
     void gravitate(Body p, Quad tn) {
+        // Base case leaf
         if (tn.leaf) {
             if (tn.body == null || p == tn.body) return;
             Point3D a = getGravity(p.getPosition(), tn.body.getPosition(), tn.body.getMass(), tn.body.getRadius(), p.getRadius());
-            p.update(0.1, a);
+            p.update(0.01, a);
 
             return;
         }
@@ -605,10 +606,14 @@ public class SimulatorController {
             tn.center = tn.centerMass.multiply(1.0 / tn.count);
         }
 
+        // Base case estimation
         if ((tn.width / p.getPosition().distance(tn.center)) < theta) {
+            // TODO Fix very small acceleration
             Point3D a = getGravity(p.getPosition(), tn.center, tn.totalMass, p.getRadius(), p.getRadius());
-            p.update(0.1, a);
+            System.out.println(a);
+            p.update(0.01, a.multiply(1e8));
         } else {
+            // Resursive step
             for (Quad child : tn.children) gravitate(p, child);
         }
 

@@ -112,7 +112,8 @@ public class SimulatorController {
 
 
     private static Boolean spinning = false;
-    private static double theta = 0.5;
+    private static final double theta = 0.5;
+    private static final double dt = 0.015; // Time between frames in seconds
 
     BodyCreatorController controller;
     AnchorPane bodyCreator;
@@ -166,7 +167,7 @@ public class SimulatorController {
         // Animation timer
         EventHandler<ActionEvent> onFinished = this::update;
         timer = new Timeline(
-                new KeyFrame(Duration.millis(10), onFinished)
+                new KeyFrame(Duration.seconds(dt), onFinished)
         );
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
@@ -548,7 +549,7 @@ public class SimulatorController {
                     double m2 = comparedBody.getMass();
 
                     Point3D a = getGravity(p1, p2, m2, currentBody.getRadius(), comparedBody.getRadius());
-                    currentBody.update(0.01, a);
+                    currentBody.update(dt, a);
 
                     collide(currentBody, comparedBody, currentBody.getPosition().distance(comparedBody.getPosition()));
                 }
@@ -560,25 +561,20 @@ public class SimulatorController {
         // Find bounding square x,y locations
         double minX = Float.MAX_VALUE;
         double maxX = Float.MIN_VALUE;
-        double minY = Float.MAX_VALUE;
-        double maxY = Float.MIN_VALUE;
         double minZ = Float.MAX_VALUE;
         double maxZ = Float.MIN_VALUE;
 
+        // Find min X and Z locations
         for (Body body: bodies()) {
             minX = Math.min(minX, body.getTranslateX());
             maxX = Math.max(maxX, body.getTranslateX());
-            minY = Math.min(minY, body.getTranslateY());
-            maxY = Math.max(maxY, body.getTranslateY());
             minZ = Math.min(minZ, body.getTranslateZ());
             maxZ = Math.max(maxZ, body.getTranslateZ());
         }
 
-//        System.out.printf("Max: %.2f\n", maxX);
-//        System.out.printf("Min: %.2f\n", minX);
-
         double width = Math.max(maxX - minX, maxZ - minZ);
 
+        // Remove all previous rectangles
         entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);
 
         // Create root node via bounding square
@@ -596,28 +592,29 @@ public class SimulatorController {
     }
 
     void gravitate(Body p, Quad tn) {
-        // Base case leaf
-        if (tn.leaf) {
+        // Base case - External nodes
+        if (tn.external) {
             if (tn.body == null || p == tn.body) return;
             Point3D a = getGravity(p.getPosition(), tn.body.getPosition(), tn.body.getMass(), tn.body.getRadius(), p.getRadius());
-            p.update(0.01, a);
+            p.update(dt, a);
 
             return;
         }
 
+        // Compute center of mass distribution
         if (tn.centerMass == null) {
             tn.centerMass = tn.weightedPositions.multiply(1.0 / tn.totalMass);
         }
 
-        // Base case estimation
-        if ((tn.width / p.getPosition().distance(tn.centerMass)) < theta) {
+        // Ratio s/d < theta
+        if ((tn.length / p.getPosition().distance(tn.centerMass)) < theta) {
+            // Base case - estimation of internal nodes
             Point3D a = getGravity(p.getPosition(), tn.centerMass, tn.totalMass, p.getRadius(), 0);
-            p.update(0.01, a);
+            p.update(dt, a);
         } else {
-            // Recursive step
+            // Recursive case
             for (Quad child : tn.children) gravitate(p, child);
         }
-
     }
 
     /***

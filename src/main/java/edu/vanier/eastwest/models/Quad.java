@@ -11,8 +11,8 @@ public class Quad {
 
     public double x;
     public double z;
-    public double width;
-    public boolean leaf; // Whether this node is a leaf / branch node
+    public double length;
+    public boolean external; // Whether this node is a leaf / branch node
 
     public Body body;
     public Quad[] children; // Reference to children
@@ -21,11 +21,11 @@ public class Quad {
     public double totalMass;
     public Group entities; // Spawn rectangles
 
-    public Quad(double x, double z, double width) {
+    public Quad(double x, double z, double length) {
         this.x = x;
         this.z = z;
-        this.width = width;
-        this.leaf = true;
+        this.length = length;
+        this.external = true;
 
         this.body = null;
         this.children = new Quad[4];
@@ -34,12 +34,12 @@ public class Quad {
         this.totalMass = 0;
     }
 
-    public Quad(double x, double z, double width, Group entities) {
+    public Quad(double x, double z, double length, Group entities) {
         this.entities = entities;
         this.x = x;
         this.z = z;
-        this.width = width;
-        this.leaf = true;
+        this.length = length;
+        this.external = true;
         this.body = null;
         this.children = new Quad[4];
 
@@ -49,13 +49,13 @@ public class Quad {
     }
 
     public void subDivide() {
-        double newWidth = width / 2;
+        double newWidth = length / 2;
         children[0] = new Quad(x, z, newWidth, entities); // NW
         children[1] = new Quad(x + newWidth, z, newWidth, entities); // NE
         children[2] = new Quad(x, z + newWidth, newWidth, entities); // SW
         children[3] = new Quad(x + newWidth, z + newWidth, newWidth, entities); // SE
 
-        this.leaf = false;
+        this.external = false;
 
         Rectangle r0 = createSquare(x,0, z, newWidth);
         Rectangle r1 = createSquare(x + newWidth, 0, z, newWidth);
@@ -66,7 +66,7 @@ public class Quad {
 
     // Returns index of child at location p, ignore bodies not fully fitting inside square
     int which(Point3D p) {
-        double half = width / 2;
+        double half = length / 2;
         if (p.getZ() < z + half) {
             return p.getX() < x + half ? 0 : 1;
         }
@@ -74,52 +74,57 @@ public class Quad {
     }
 
     public void insert(Body body) {
-        if (this.leaf) {
-            if (this.body == null) {
-                // Case 1: Node does not contain a body
+        if (this.body == null) {
+            // Update center of mass and total mass
+            Point3D posMass = body.getPosition().multiply(body.getMass());
+            weightedPositions = weightedPositions.add(posMass);
+            totalMass += body.getMass();
+
+            if (this.external) {
+                // Case 1 - External node does not contain a body
                 this.body = body;
-                this.weightedPositions = this.weightedPositions.add(body.getPosition().multiply(body.getMass()));
-                this.totalMass += body.getMass();
             } else {
-                // Case: Leaf already contains another body
-                Body a = this.body;
-                Body b = body;
-
-                this.weightedPositions = this.weightedPositions.add(b.getPosition().multiply(b.getMass()));
-                this.totalMass += b.getMass();
-
-                Quad cur = this;
-                int qA = cur.which(a.getPosition());
-                int qB = cur.which(b.getPosition());
-                while (qA == qB) {
-                    cur.subDivide();
-                    cur = cur.children[qA];
-                    qA = cur.which(a.getPosition());
-                    qB = cur.which(b.getPosition());
-
-                    // Update total center and mass
-                    cur.weightedPositions = cur.weightedPositions.add(a.getPosition().multiply(a.getMass()));
-                    cur.weightedPositions = cur.weightedPositions.add(b.getPosition().multiply(b.getMass()));
-                    cur.totalMass += a.getMass() + b.getMass();
-                }
-
-                cur.subDivide();
-                cur.children[qA].body = a;
-                cur.children[qB].body = b;
-
-                // Update center of mass and total for lowest-level child
-                cur.children[qA].weightedPositions = cur.children[qA].weightedPositions.add(a.getPosition().multiply(a.getMass()));
-                cur.children[qB].weightedPositions = cur.children[qA].weightedPositions.add(b.getPosition().multiply(b.getMass()));
-                cur.children[qA].totalMass += a.getMass();
-                cur.children[qB].totalMass += b.getMass();
-
-                this.body = null;
+                // Case 2 - Internal node is an internal node
+                this.children[this.which(body.getPosition())].insert(body);
             }
         } else {
-            // Case 2: Node is an
-            this.weightedPositions = this.weightedPositions.add(body.getPosition().multiply(body.getMass()));
-            this.totalMass += body.getMass();
-            this.children[this.which(body.getPosition())].insert(body);
+            // Case 3 - External node already contains another body
+            Body a = this.body;
+
+            weightedPositions = weightedPositions.add(body.getPosition().multiply(body.getMass()));
+            totalMass += body.getMass();
+
+            Quad current = this;
+            int qA = current.which(a.getPosition());
+            int qB = current.which(body.getPosition());
+            while (qA == qB) {
+                current.subDivide();
+                current = current.children[qA];
+                qA = current.which(a.getPosition());
+                qB = current.which(body.getPosition());
+
+                // Update total center and mass
+                Point3D posMassA = a.getPosition().multiply(a.getMass());
+                Point3D posMassB = body.getPosition().multiply(body.getMass());
+                current.weightedPositions = current.weightedPositions.add(posMassA);
+                current.weightedPositions = current.weightedPositions.add(posMassB);
+                current.totalMass += a.getMass() + body.getMass();
+            }
+
+            current.subDivide();
+            current.children[qA].body = a;
+            current.children[qB].body = body;
+
+            // Update center of mass and total for lowest-level child
+            Point3D posMassA = a.getPosition().multiply(a.getMass());
+            Point3D posMassB = body.getPosition().multiply(body.getMass());
+            current.children[qA].weightedPositions = current.children[qA].weightedPositions.add(posMassA);
+            current.children[qB].weightedPositions = current.children[qB].weightedPositions.add(posMassB);
+            current.children[qA].totalMass += a.getMass();
+            current.children[qB].totalMass += body.getMass();
+
+            // Internal node do not have bodies
+            this.body = null;
         }
     }
 

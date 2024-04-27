@@ -50,9 +50,9 @@
                <children>
                   <SplitPane fx:id="splitPane" dividerPositions="0.16989987484355443, 0.8340112640801001" prefHeight="891.0" prefWidth="1176.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
-                      <AnchorPane maxWidth="300.0" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="250.0" style="-fx-background-color: #D3D3D3;">
+                      <AnchorPane maxWidth="300.0" minHeight="0.0" minWidth="0.0" prefHeight="889.0" prefWidth="675.0" style="-fx-background-color: #D3D3D3;">
                            <children>
-                              <VBox fx:id="vbTools" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="889.0" style="-fx-border-style: solid solid none none; -fx-border-width: 2; -fx-border-color: #7c7c7c;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <VBox fx:id="vbTools" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="889.0" prefWidth="218.0" style="-fx-border-style: solid solid none none; -fx-border-width: 2; -fx-border-color: #7c7c7c;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Tools">
                                        <VBox.margin>
@@ -83,7 +83,7 @@
                                              </VBox.margin>
                                           </Button>
                                           <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Clear" />
-                                          <Button fx:id="btnAlgorithm" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Direct Sum Algorithm" />
+                                          <Button fx:id="btnAlgorithm" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Currently using Direct Sum Algorithm" />
                                           <Label text="Simulation Speed" />
                                           <Slider fx:id="sliderSpeed" majorTickUnit="1.0" max="10.0" min="0.01" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="1.0">
                                              <VBox.margin>

@@ -206,6 +206,9 @@ public class SimulatorController {
         subScene.setHeight(pane.getHeight());
         subScene.setWidth(pane.getWidth());
 
+        // Remove all previous rectangles
+        entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);
+
         if (usingBarnes) {
             updateBodiesBarnes();
         } else {
@@ -422,7 +425,7 @@ public class SimulatorController {
 
         // Switch between Direct sum and Barnes Hut algorithms
         btnAlgorithm.setOnAction(event -> {
-            btnAlgorithm.setText(String.format("%s Algorithm", usingBarnes ? "Direct Sum" : "Barnes-Hut"));
+            btnAlgorithm.setText(String.format("Currently using %s Algorithm", usingBarnes ? "Direct Sum" : "Barnes-Hut"));
             sliderTheta.setDisable(usingBarnes);
             tglBarnes.setDisable(usingBarnes);
             usingBarnes = !usingBarnes;
@@ -609,9 +612,6 @@ public class SimulatorController {
         }
 
         double length = Math.max(maxX - minX, maxZ - minZ);
-
-        // Remove all previous rectangles
-        entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);
 
         // Create root node with delimiting square
         Quad root = new Quad(minX, minZ, length, entities, tglBarnes.isSelected());

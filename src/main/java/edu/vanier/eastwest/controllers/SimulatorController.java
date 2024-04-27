@@ -3,7 +3,7 @@ package edu.vanier.eastwest.controllers;
 import edu.vanier.eastwest.MainApp;
 import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.MySplitPaneSkin;
-import edu.vanier.eastwest.models.TreeNode;
+import edu.vanier.eastwest.models.Quad;
 import edu.vanier.eastwest.models.Vector3D;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -34,8 +34,7 @@ import org.fxyz3d.shapes.polygon.PolygonMeshView;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static edu.vanier.eastwest.util.Utility.getAxes;
-import static edu.vanier.eastwest.util.Utility.getGrid;
+import static edu.vanier.eastwest.util.Utility.*;
 
 
 public class SimulatorController {
@@ -98,7 +97,7 @@ public class SimulatorController {
     private VBox vbTools;
 
     private Timeline timer;
-    private TreeNode node;
+    private Quad root;
     private Camera camera;
     private Group entities;
     private SubScene subScene;
@@ -116,6 +115,8 @@ public class SimulatorController {
 
 
     private static Boolean spinning = false;
+    private static final double theta = 0.5;
+    private static final double dt = 0.015; // Time between frames in seconds
 
     BodyCreatorController controller;
     AnchorPane bodyCreator;
@@ -168,7 +169,7 @@ public class SimulatorController {
         // Animation timer
         EventHandler<ActionEvent> onFinished = this::update;
         timer = new Timeline(
-                new KeyFrame(Duration.millis(10), onFinished)
+                new KeyFrame(Duration.seconds(dt), onFinished)
         );
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
@@ -191,7 +192,8 @@ public class SimulatorController {
         subScene.setHeight(pane.getHeight());
         subScene.setWidth(pane.getWidth());
 
-        updateBodies();
+        // updateBodies();
+        updateBodiesBarnes();
         updateVectors();
 
         if (selectedBody != null) {
@@ -221,22 +223,33 @@ public class SimulatorController {
      * @return Point3D vector representing the vector gravitational force on p1 by p2.
      */
     public Point3D getGravity(Point3D p1, Point3D p2, double m2, double r1, double r2) {
+        // Gravity formula from https://en.wikipedia.org/wiki/Newton%27s_law_of_universal_gravitation
         Point3D r = p2.subtract(p1);
         double rMag = r.magnitude();
 
+        // Distance between two bodies cannot be less than radius of 2 bodies because that would mean bodies are inside of each other
+        // TODO Add G Constant (for now it is always 1)
         double rMin = r1 + r2;
         return r.multiply((m2 / Math.pow(Math.max(rMag, rMin), 3)));
     }
 
     private void initBodies() {
-        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, -50), Color.rgb(255,255,0,1), null);
-        Body p1 = new Body("Earth", 10, 20000, new Point3D(150, 0, -100), Color.BLUE, null);
-        Body p2 = new Body("A", 10, 5000, new Point3D(0, 0, 100), Color.GREEN, null);
-        Body p3 = new Body("B", 10, 5000, new Point3D(0, 0, 200), Color.WHITE, null);
+        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, 0), Color.YELLOW, null);
+        Body p1 = new Body("Blue", 10, 20000, new Point3D(125, 0, 120), Color.BLUE, null);
+        Body p2 = new Body("Green", 10, 5000, new Point3D(200, 0, 100), Color.GREEN, null);
+        Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), Color.WHITE, null);
+        Body p4 = new Body("Red", 10, 5000, new Point3D(200, 0, 200), Color.RED, null);
+
+        // Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, -50), Color.rgb(255,255,0,1), null);
+        // Body p1 = new Body("Earth", 10, 20000, new Point3D(150, 0, -100), Color.BLUE, null);
+        // Body p2 = new Body("A", 10, 5000, new Point3D(0, 0, 100), Color.GREEN, null);
+        // Body p3 = new Body("B", 10, 5000, new Point3D(0, 0, 200), Color.WHITE, null);
+
         p1.setVelocity(new Point3D(0, 0, 10));
-        p2.setVelocity(new Point3D(-20, 0, 0));
+        p2.setVelocity(new Point3D(-4, 0, 0));
         p3.setVelocity(new Point3D(10, 0, 10));
-        entities.getChildren().addAll(sun, p1, p2, p3);
+        p4.setVelocity(new Point3D(0, 0, -5));
+        entities.getChildren().addAll(sun, p1, p2, p3, p4);
     }
 
     /***
@@ -548,9 +561,71 @@ public class SimulatorController {
                     double m2 = comparedBody.getMass();
 
                     Point3D a = getGravity(p1, p2, m2, currentBody.getRadius(), comparedBody.getRadius());
-                    currentBody.update(0.01, a);
+                    currentBody.update(dt, a);
 
                     collide(currentBody, comparedBody, currentBody.getPosition().distance(comparedBody.getPosition()));
+                }
+            }
+        }
+    }
+
+    public void updateBodiesBarnes() {
+        // https://www.cs.princeton.edu/courses/archive/fall03/cs126/assignments/barnes-hut.html
+
+        // Find min X and Z locations
+        double minX = Float.MAX_VALUE;
+        double maxX = Float.MIN_VALUE;
+        double minZ = Float.MAX_VALUE;
+        double maxZ = Float.MIN_VALUE;
+
+        for (Body body: bodies()) {
+            minX = Math.min(minX, body.getTranslateX());
+            maxX = Math.max(maxX, body.getTranslateX());
+            minZ = Math.min(minZ, body.getTranslateZ());
+            maxZ = Math.max(maxZ, body.getTranslateZ());
+        }
+
+        double length = Math.max(maxX - minX, maxZ - minZ);
+
+        // Remove all previous rectangles
+        entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);
+
+        // Create root node with delimiting square
+        root = new Quad(minX, minZ, length, entities);
+
+        // Construct Barnes-Hut Tree by insert bodies into root node
+        for (Body body: bodies()) {
+            root.insert(body);
+        }
+
+        // Compute gravity for all bodies
+        for (Body body: bodies()) {
+             gravitate(body, root);
+        }
+    }
+
+    void gravitate(Body body, Quad quad) {
+        // Base case - External nodes
+        if (quad.isExternal()) {
+            // Ignore if compared body is the same as current body or node does not contain a body
+            if (quad.body != null && body != quad.body) {
+                Point3D a = getGravity(body.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), body.getRadius());
+                body.update(dt, a);
+            }
+        } else {
+            // Center of mass obtained by diving sum of weighted positions with total mass
+            // https://math.libretexts.org/Courses/Mission_College/Math_3B%3A_Calculus_2_(Sklar)/06%3A_Applications_of_Integration/6.06%3A_Moments_and_Centers_of_Mass
+            Point3D centerMass = quad.weightedPositions.multiply(1.0 / quad.totalMass);
+
+            // Check if threshold for estimation has been met
+            if ((quad.getLength() / body.getPosition().distance(centerMass)) < theta) {
+                // Base case - Estimate internal node as a single body
+                Point3D a = getGravity(body.getPosition(), centerMass, quad.totalMass, body.getRadius(), body.getRadius());
+                body.update(dt, a);
+            } else {
+                // Recursive case - Threshold has not been met
+                for (Quad child : quad.children) {
+                    gravitate(body, child);
                 }
             }
         }
@@ -598,7 +673,7 @@ public class SimulatorController {
             vector.setAngle(newAngle);
             vector.setMagnitude(sumDirection.magnitude());
 
-            //Updating colors
+            // Updating colors
             if (!start) {
                 maxMagnitude = vector.getMagnitude();
                 minMagnitude = vector.getMagnitude();
@@ -612,6 +687,7 @@ public class SimulatorController {
                 }
             }
         }
+
         for (Vector3D vectorM : vectors()) {
             vectorM.setArrowColor(maxMagnitude, minMagnitude);
         }
@@ -628,6 +704,7 @@ public class SimulatorController {
     }
 
     private void collide(Body a, Body b, double distance) {
+        // Code adapted from https://stackoverflow.com/questions/345838/ball-to-ball-collision-detection-and-handling
         if (distance > a.getRadius() + b.getRadius()) {
             return;
         }

@@ -558,13 +558,12 @@ public class SimulatorController {
     }
 
     public void updateBodiesBarnes() {
-        // Find bounding square x,y locations
+        // Find min X and Z locations
         double minX = Float.MAX_VALUE;
         double maxX = Float.MIN_VALUE;
         double minZ = Float.MAX_VALUE;
         double maxZ = Float.MIN_VALUE;
 
-        // Find min X and Z locations
         for (Body body: bodies()) {
             minX = Math.min(minX, body.getTranslateX());
             maxX = Math.max(maxX, body.getTranslateX());
@@ -572,15 +571,15 @@ public class SimulatorController {
             maxZ = Math.max(maxZ, body.getTranslateZ());
         }
 
-        double width = Math.max(maxX - minX, maxZ - minZ);
+        double length = Math.max(maxX - minX, maxZ - minZ);
 
         // Remove all previous rectangles
         entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);
 
-        // Create root node via bounding square
-        root = new Quad(minX, minZ, width, entities);
+        // Create root node with delimiting square
+        root = new Quad(minX, minZ, length, entities);
 
-        // Insert planets into tree one by one
+        // Construct Barnes-Hut Tree by insert bodies into root node
         for (Body body: bodies()) {
             root.insert(body);
         }
@@ -591,29 +590,28 @@ public class SimulatorController {
         }
     }
 
-    void gravitate(Body p, Quad tn) {
+    void gravitate(Body p, Quad quad) {
         // Base case - External nodes
-        if (tn.external) {
-            if (tn.body == null || p == tn.body) return;
-            Point3D a = getGravity(p.getPosition(), tn.body.getPosition(), tn.body.getMass(), tn.body.getRadius(), p.getRadius());
-            p.update(dt, a);
-
-            return;
-        }
-
-        // Compute center of mass distribution
-        if (tn.centerMass == null) {
-            tn.centerMass = tn.weightedPositions.multiply(1.0 / tn.totalMass);
-        }
-
-        // Ratio s/d < theta
-        if ((tn.length / p.getPosition().distance(tn.centerMass)) < theta) {
-            // Base case - estimation of internal nodes
-            Point3D a = getGravity(p.getPosition(), tn.centerMass, tn.totalMass, p.getRadius(), 0);
+        if (quad.isExternal()) {
+            // Ignore if compared body is the same as current body or node does not contain a body
+            if (quad.body == null || p == quad.body) {
+                return;
+            }
+            Point3D a = getGravity(p.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), p.getRadius());
             p.update(dt, a);
         } else {
-            // Recursive case
-            for (Quad child : tn.children) gravitate(p, child);
+            // Compute center of mass distribution https://math.libretexts.org/Courses/Mission_College/Math_3B%3A_Calculus_2_(Sklar)/06%3A_Applications_of_Integration/6.06%3A_Moments_and_Centers_of_Mass
+            Point3D centerMass = quad.weightedPositions.multiply(1.0 / quad.totalMass);
+
+            // Check if threshold for estimation has been met
+            if ((quad.getLength() / p.getPosition().distance(centerMass)) < theta) {
+                // Base case - Estimate all bodies inside the quadrant as a single body at center of mass position
+                Point3D a = getGravity(p.getPosition(), centerMass, quad.totalMass, p.getRadius(), 0);
+                p.update(dt, a);
+            } else {
+                // Recursive case - Threshold has not been met
+                for (Quad child : quad.children) gravitate(p, child);
+            }
         }
     }
 

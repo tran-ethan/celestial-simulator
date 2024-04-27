@@ -70,9 +70,6 @@ public class SimulatorController {
     private Slider sldrSpeed;
 
     @FXML
-    private CheckBox enableSpin;
-
-    @FXML
     private ToggleSwitch tgl2D;
 
     @FXML
@@ -83,6 +80,9 @@ public class SimulatorController {
 
     @FXML
     private ToggleSwitch tglGrid;
+
+    @FXML
+    private ToggleSwitch tglCamRotate;
 
     @FXML
     private Label lblSelected;
@@ -114,8 +114,6 @@ public class SimulatorController {
     private final DoubleProperty angleZ = new SimpleDoubleProperty(0);
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
-
-    private static Boolean spinning = false;
     private static final double theta = 0.5;
     private static final double dt = 0.015; // Time between frames in seconds
 
@@ -311,14 +309,13 @@ public class SimulatorController {
         x2Rotate.angleProperty().bind(angleZ);
         yRotate.angleProperty().bind(angleY);
 
-        // Disable camera spin checkbox
-        enableSpin.setOnAction(actionEvent -> {
-            if (!spinning) {
+        // Camera rotate switch
+        tglCamRotate.setOnMouseClicked(event -> {
+            if (tglCamRotate.isSelected()) {
                 rotateTimer.play();
             } else {
                 rotateTimer.pause();
             }
-            spinning = !spinning;
         });
 
         // Mouse controls
@@ -334,14 +331,14 @@ public class SimulatorController {
             anchorAngleZ = angleZ.get();
             anchorAngleY = angleY.get();
 
-            if (spinning) {
+            if (tglCamRotate.isSelected()) {
                 rotateTimer.pause();
             }
         };
         MainApp.scene.setOnMousePressed(mousePressedHandler);
 
         EventHandler<MouseEvent> mouseReleasedHandler = event -> {
-            if (spinning) {
+            if (tglCamRotate.isSelected()) {
                 rotateTimer.play();
             }
         };

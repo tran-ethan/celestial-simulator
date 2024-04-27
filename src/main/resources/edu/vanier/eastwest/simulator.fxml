@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -91,11 +90,11 @@
                                                 <Insets />
                                              </VBox.margin>
                                           </Slider>
-                                          <CheckBox fx:id="enableSpin" mnemonicParsing="false" text="Auto Camera Spin" />
-                                          <ToggleSwitch fx:id="tgl2D" prefHeight="18.0" prefWidth="140.0" text="Toggle 2D View" />
-                                          <ToggleSwitch fx:id="tglVector" prefHeight="18.0" prefWidth="140.0" text="Toggle Vector Field" />
-                                          <ToggleSwitch fx:id="tglAxes" prefHeight="18.0" prefWidth="140.0" selected="true" text="Axes" />
-                                          <ToggleSwitch fx:id="tglGrid" prefHeight="18.0" prefWidth="140.0" selected="true" text="Grid" />
+                                          <ToggleSwitch fx:id="tglCamRotate" prefHeight="18.0" prefWidth="120.0" text="Camera Rotate" />
+                                          <ToggleSwitch fx:id="tgl2D" prefHeight="18.0" prefWidth="120.0" text="2D View" />
+                                          <ToggleSwitch fx:id="tglVector" prefHeight="18.0" prefWidth="120.0" text="Vector Field" />
+                                          <ToggleSwitch fx:id="tglAxes" prefHeight="18.0" prefWidth="120.0" selected="true" text="X,Y,Z Axes" />
+                                          <ToggleSwitch fx:id="tglGrid" prefHeight="18.0" prefWidth="120.0" selected="true" text="XZ Grid" />
                                        </children>
                                        <VBox.margin>
                                           <Insets top="20.0" />

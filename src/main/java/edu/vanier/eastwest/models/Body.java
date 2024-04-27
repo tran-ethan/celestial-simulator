@@ -1,6 +1,7 @@
 package edu.vanier.eastwest.models;
 
 import javafx.geometry.Point3D;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
@@ -23,14 +24,29 @@ public class Body extends Sphere {
      * @param mass The mass of the body
      * @param position The position of the body in the space
      * @param color The color of the object
+     * @parem texture The image on the body
      */
-    public Body(String name, double radius, double mass, Point3D position, Color color) {
+    public Body(String name, double radius, double mass, Point3D position, Color color, Image texture) {
         super(radius);
         this.name = name;
         this.mass = mass;
         setPosition(position);
         velocity = new Point3D(0, 0 , 0);
-        setColor(color);
+
+        if(texture != null){
+            System.out.println("exist");
+            PhongMaterial material = new PhongMaterial();
+            material.setDiffuseMap(texture);
+            setMaterial(material);
+        }
+        if(texture == null){
+            System.out.println("no exist");
+            setColor(color);
+        }
+        System.out.println(1);
+        //else if(texture == null){
+           // setColor(color);
+      //  }
     }
 
     /**

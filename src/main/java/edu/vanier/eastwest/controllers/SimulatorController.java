@@ -592,13 +592,13 @@ public class SimulatorController {
         }
     }
 
-    void gravitate(Body p, Quad quad) {
+    void gravitate(Body body, Quad quad) {
         // Base case - External nodes
         if (quad.isExternal()) {
             // Ignore if compared body is the same as current body or node does not contain a body
-            if (quad.body != null && p != quad.body) {
-                Point3D a = getGravity(p.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), p.getRadius());
-                p.update(dt, a);
+            if (quad.body != null && body != quad.body) {
+                Point3D a = getGravity(body.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), body.getRadius());
+                body.update(dt, a);
             }
         } else {
             // Center of mass obtained by diving sum of weighted positions with total mass
@@ -606,14 +606,14 @@ public class SimulatorController {
             Point3D centerMass = quad.weightedPositions.multiply(1.0 / quad.totalMass);
 
             // Check if threshold for estimation has been met
-            if ((quad.getLength() / p.getPosition().distance(centerMass)) < theta) {
+            if ((quad.getLength() / body.getPosition().distance(centerMass)) < theta) {
                 // Base case - Estimate internal node as a single body
-                Point3D a = getGravity(p.getPosition(), centerMass, quad.totalMass, p.getRadius(), p.getRadius());
-                p.update(dt, a);
+                Point3D a = getGravity(body.getPosition(), centerMass, quad.totalMass, body.getRadius(), body.getRadius());
+                body.update(dt, a);
             } else {
                 // Recursive case - Threshold has not been met
                 for (Quad child : quad.children) {
-                    gravitate(p, child);
+                    gravitate(body, child);
                 }
             }
         }

@@ -8,6 +8,16 @@ import lombok.Getter;
 
 import static edu.vanier.eastwest.util.Utility.*;
 
+/**
+ * A Quad is a node in the Quadtree structure used in the Barnes-Hut algorithm.
+ * The Barnes-Hut algorithm works by approximating the forces of bodies that are sufficiently far away
+ * as a single body by using its center of mass.
+ * <p>
+ * It represents a square region in space in the two-dimensional XZ plane. The root node represents the whole space,
+ * and each of its four children represent a quadrant within that space.
+ * <p>
+ * Modeled after <a href="https://www.cs.princeton.edu/courses/archive/fall03/cs126/assignments/barnes-hut.html">this document</a>.
+ */
 public class Quad {
 
     private final double x;
@@ -36,6 +46,11 @@ public class Quad {
         this.weightedPositions = new Point3D(0, 0, 0); // Mass times position for all bodies
     }
 
+    /**
+     * Subdivides the current quadrant into four smaller quadrants.
+     * Since quadrant now has children, it is no longer an external node.
+     * Visualizes the Barnes-Hut algorithm by creating rectangles for each node.
+     */
     public void subdivide() {
         double half = length / 2;
         // North West
@@ -49,6 +64,7 @@ public class Quad {
 
         this.external = false;
 
+        // Visualize rectangles (but slows down the simulation significantly)
         Rectangle quad0 = createSquare(x,0, z, half);
         Rectangle quad1 = createSquare(x + half, 0, z, half);
         Rectangle quad2 = createSquare(x, 0,  z + half, half);
@@ -56,7 +72,13 @@ public class Quad {
         entities.getChildren().addAll(quad0, quad1, quad2, quad3);
     }
 
-    // Returns index of child at location p, ignore bodies not fully fitting inside square
+    /**
+     * Determines the quadrant of the quadrant that contains the given position.
+     *
+     * @param pos The position to determine the quadrant for
+     * @return An integer representing the quadrant index:
+     *         0 for North West, 1 for North East, 2 for South West, 3 for South East
+     */
     int getQuadrant(Point3D pos) {
         double half = length / 2;
         boolean isTop = pos.getZ() < z + half;
@@ -72,6 +94,15 @@ public class Quad {
         return index;
     }
 
+    /**
+     * Inserts a body into the Quadtree structure.
+     * If the current Quad is empty, the body is added directly.
+     * If the Quad is external and empty, the body occupies this Quad.
+     * If the Quad is external and already contains a body, the Quad is subdivided
+     * until each body occupies a separate quadrant.
+     *
+     * @param body The body to be inserted into the Quadtree
+     */
     public void insert(Body body) {
         if (this.body == null) {
             // Update weighted positions and total mass for current quadrant
@@ -131,7 +162,7 @@ public class Quad {
             pointer.children[quad1].totalMass += body.getMass();
             pointer.children[quad2].totalMass += body2.getMass();
 
-            // After being subdivided the current quadrant is an internal node
+            // After being subdivided the current quadrant is an internal node (no bodies)
             this.body = null;
         }
     }

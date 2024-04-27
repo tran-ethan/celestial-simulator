@@ -558,6 +558,8 @@ public class SimulatorController {
     }
 
     public void updateBodiesBarnes() {
+        // https://www.cs.princeton.edu/courses/archive/fall03/cs126/assignments/barnes-hut.html
+
         // Find min X and Z locations
         double minX = Float.MAX_VALUE;
         double maxX = Float.MIN_VALUE;
@@ -594,23 +596,25 @@ public class SimulatorController {
         // Base case - External nodes
         if (quad.isExternal()) {
             // Ignore if compared body is the same as current body or node does not contain a body
-            if (quad.body == null || p == quad.body) {
-                return;
+            if (quad.body != null && p != quad.body) {
+                Point3D a = getGravity(p.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), p.getRadius());
+                p.update(dt, a);
             }
-            Point3D a = getGravity(p.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), p.getRadius());
-            p.update(dt, a);
         } else {
-            // Compute center of mass distribution https://math.libretexts.org/Courses/Mission_College/Math_3B%3A_Calculus_2_(Sklar)/06%3A_Applications_of_Integration/6.06%3A_Moments_and_Centers_of_Mass
+            // Center of mass obtained by diving sum of weighted positions with total mass
+            // https://math.libretexts.org/Courses/Mission_College/Math_3B%3A_Calculus_2_(Sklar)/06%3A_Applications_of_Integration/6.06%3A_Moments_and_Centers_of_Mass
             Point3D centerMass = quad.weightedPositions.multiply(1.0 / quad.totalMass);
 
             // Check if threshold for estimation has been met
             if ((quad.getLength() / p.getPosition().distance(centerMass)) < theta) {
-                // Base case - Estimate all bodies inside the quadrant as a single body at center of mass position
-                Point3D a = getGravity(p.getPosition(), centerMass, quad.totalMass, p.getRadius(), 0);
+                // Base case - Estimate internal node as a single body
+                Point3D a = getGravity(p.getPosition(), centerMass, quad.totalMass, p.getRadius(), p.getRadius());
                 p.update(dt, a);
             } else {
                 // Recursive case - Threshold has not been met
-                for (Quad child : quad.children) gravitate(p, child);
+                for (Quad child : quad.children) {
+                    gravitate(p, child);
+                }
             }
         }
     }

@@ -15,12 +15,12 @@ public class Quad {
     @Getter
     private final double length;
     @Getter
-    private boolean external; // Whether this node is a external or internal node
+    private boolean external; // Whether this node is an external or internal node
 
     public Body body;
     public Quad[] children; // Reference to children
-    public Point3D weightedPositions; // Sum of positions of bodies times by mass
     public double totalMass;
+    public Point3D weightedPositions; // Sum of positions of bodies times mass
     public Group entities; // Spawn rectangles
 
     public Quad(double x, double z, double length, Group entities) {
@@ -29,19 +29,23 @@ public class Quad {
         this.z = z;
         this.length = length;
         this.external = true;
+
         this.body = null;
         this.children = new Quad[4];
-
-        this.weightedPositions = new Point3D(0, 0, 0); // Mass times position for all bodies
         this.totalMass = 0;
+        this.weightedPositions = new Point3D(0, 0, 0); // Mass times position for all bodies
     }
 
     public void subdivide() {
         double half = length / 2;
-        children[0] = new Quad(x, z, half, entities); // North West
-        children[1] = new Quad(x + half, z, half, entities); // North East
-        children[2] = new Quad(x, z + half, half, entities); // South West
-        children[3] = new Quad(x + half, z + half, half, entities); // South East
+        // North West
+        children[0] = new Quad(x, z, half, entities);
+        // North East
+        children[1] = new Quad(x + half, z, half, entities);
+        // South West
+        children[2] = new Quad(x, z + half, half, entities);
+        // South East
+        children[3] = new Quad(x + half, z + half, half, entities);
 
         this.external = false;
 
@@ -111,7 +115,7 @@ public class Quad {
                 Point3D posMass2 = body2.getPosition().multiply(body2.getMass());
                 pointer.weightedPositions = pointer.weightedPositions.add(posMass1);
                 pointer.weightedPositions = pointer.weightedPositions.add(posMass2);
-                pointer.totalMass += body2.getMass() + body.getMass();
+                pointer.totalMass += body.getMass() + body2.getMass();
             }
 
             // Add bodies to inner nodes

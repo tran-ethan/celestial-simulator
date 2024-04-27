@@ -94,6 +94,9 @@ public class SimulatorController {
     private ToggleSwitch tglCamRotate;
 
     @FXML
+    private ToggleSwitch tglBarnes;
+
+    @FXML
     private Label lblSelected;
 
     @FXML
@@ -421,6 +424,7 @@ public class SimulatorController {
         btnAlgorithm.setOnAction(event -> {
             btnAlgorithm.setText(String.format("%s Algorithm", usingBarnes ? "Direct Sum" : "Barnes-Hut"));
             sliderTheta.setDisable(usingBarnes);
+            tglBarnes.setDisable(usingBarnes);
             usingBarnes = !usingBarnes;
         });
 
@@ -610,7 +614,7 @@ public class SimulatorController {
         entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);
 
         // Create root node with delimiting square
-        Quad root = new Quad(minX, minZ, length, entities);
+        Quad root = new Quad(minX, minZ, length, entities, tglBarnes.isSelected());
 
         // Construct Barnes-Hut Tree by insert bodies into root node
         for (Body body: bodies()) {

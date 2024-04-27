@@ -26,6 +26,7 @@ public class Quad {
     private final double length;
     @Getter
     private boolean external; // Whether this node is an external or internal node
+    private boolean spawn; // Whether to spawn rectangles to visualize barnes hut
 
     public Body body;
     public Quad[] children; // Reference to children
@@ -33,7 +34,7 @@ public class Quad {
     public Point3D weightedPositions; // Sum of positions of bodies times mass
     public Group entities; // Spawn rectangles
 
-    public Quad(double x, double z, double length, Group entities) {
+    public Quad(double x, double z, double length, Group entities, boolean spawn) {
         this.entities = entities;
         this.x = x;
         this.z = z;
@@ -44,6 +45,7 @@ public class Quad {
         this.children = new Quad[4];
         this.totalMass = 0;
         this.weightedPositions = new Point3D(0, 0, 0); // Mass times position for all bodies
+        this.spawn = spawn;
     }
 
     /**
@@ -54,22 +56,24 @@ public class Quad {
     public void subdivide() {
         double half = length / 2;
         // North West
-        children[0] = new Quad(x, z, half, entities);
+        children[0] = new Quad(x, z, half, entities, spawn);
         // North East
-        children[1] = new Quad(x + half, z, half, entities);
+        children[1] = new Quad(x + half, z, half, entities, spawn);
         // South West
-        children[2] = new Quad(x, z + half, half, entities);
+        children[2] = new Quad(x, z + half, half, entities, spawn);
         // South East
-        children[3] = new Quad(x + half, z + half, half, entities);
+        children[3] = new Quad(x + half, z + half, half, entities, spawn);
 
         this.external = false;
 
         // Visualize rectangles (but slows down the simulation significantly)
-        Rectangle quad0 = createSquare(x, z, half);
-        Rectangle quad1 = createSquare(x + half, z, half);
-        Rectangle quad2 = createSquare(x, z + half, half);
-        Rectangle quad3 = createSquare(x + half, z + half, half);
-        entities.getChildren().addAll(quad0, quad1, quad2, quad3);
+        if (spawn) {
+            Rectangle quad0 = createSquare(x, z, half);
+            Rectangle quad1 = createSquare(x + half, z, half);
+            Rectangle quad2 = createSquare(x, z + half, half);
+            Rectangle quad3 = createSquare(x + half, z + half, half);
+            entities.getChildren().addAll(quad0, quad1, quad2, quad3);
+        }
     }
 
     /**

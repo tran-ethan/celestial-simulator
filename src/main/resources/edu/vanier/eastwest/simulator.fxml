@@ -70,7 +70,7 @@
                                     <ToggleButton fx:id="btnSelection" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Selection Tool" textAlignment="CENTER" />
                                     <ToggleButton fx:id="btnAdd" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Add Body" textAlignment="CENTER" />
                                     <ToggleButton fx:id="btnRemove" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Remove Body" textAlignment="CENTER" />
-                                    <VBox alignment="TOP_CENTER" prefHeight="341.0" prefWidth="185.0" spacing="10.0" style="-fx-border-color: black; -fx-border-style: solid none none none;">
+                                    <VBox alignment="TOP_CENTER" prefHeight="584.0" prefWidth="210.0" spacing="10.0" style="-fx-border-color: black; -fx-border-style: solid none none none;">
                                        <children>
                                           <Button fx:id="btnPlay" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Play">
                                              <VBox.margin>
@@ -94,11 +94,12 @@
                                           <Slider fx:id="sliderG" majorTickUnit="1.0" max="5.0" min="0.01" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="1.0" />
                                           <Label text="Barnes-Hut Criterion" />
                                           <Slider fx:id="sliderTheta" disable="true" majorTickUnit="0.5" max="2.0" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="0.5" />
-                                          <ToggleSwitch fx:id="tglCamRotate" prefHeight="18.0" prefWidth="120.0" text="Camera Rotate" />
-                                          <ToggleSwitch fx:id="tgl2D" prefHeight="18.0" prefWidth="120.0" text="2D View" />
-                                          <ToggleSwitch fx:id="tglVector" prefHeight="18.0" prefWidth="120.0" text="Vector Field" />
-                                          <ToggleSwitch fx:id="tglAxes" prefHeight="18.0" prefWidth="120.0" selected="true" text="X,Y,Z Axes" />
-                                          <ToggleSwitch fx:id="tglGrid" prefHeight="18.0" prefWidth="120.0" selected="true" text="XZ Grid" />
+                                          <ToggleSwitch fx:id="tglCamRotate" prefHeight="18.0" prefWidth="150.0" text="Camera Rotate" />
+                                          <ToggleSwitch fx:id="tgl2D" prefHeight="18.0" prefWidth="150.0" text="2D View" />
+                                          <ToggleSwitch fx:id="tglVector" prefHeight="18.0" prefWidth="150.0" text="Vector Field" />
+                                          <ToggleSwitch fx:id="tglAxes" prefHeight="18.0" prefWidth="150.0" selected="true" text="X,Y,Z Axes" />
+                                          <ToggleSwitch fx:id="tglGrid" prefHeight="18.0" prefWidth="150.0" selected="true" text="XZ Grid" />
+                                          <ToggleSwitch fx:id="tglBarnes" disable="true" prefHeight="18.0" prefWidth="150.0" selected="true" text="Barnes-Hut Squares" />
                                        </children>
                                        <VBox.margin>
                                           <Insets top="20.0" />

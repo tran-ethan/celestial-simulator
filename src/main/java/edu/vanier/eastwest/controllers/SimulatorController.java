@@ -97,15 +97,16 @@ public class SimulatorController {
     private VBox vbTools;
 
     private Timeline timer;
-    private Quad root;
     private Camera camera;
     private Group entities;
     private SubScene subScene;
     Body selectedBody;
 
     private double anchorX, anchorY;
-    private int xVariableForVectorSpawning = 5, zVariableForVectorSpawning = 5, xDistanceForVectorSpawning = 100,
-            zDistanceForVectorSpawning = 100;
+    private final int xVariableForVectorSpawning = 5;
+    private final int zVariableForVectorSpawning = 5;
+    private final int xDistanceForVectorSpawning = 100;
+    private final int zDistanceForVectorSpawning = 100;
 
     private double anchorAngleX, anchorAngleZ, anchorAngleY = 0;
 
@@ -379,14 +380,10 @@ public class SimulatorController {
         });
 
         // Pan toggle button
-        btnPan.setOnAction(event -> {
-            toggleToolButtons(btnPan);
-        });
+        btnPan.setOnAction(event -> toggleToolButtons(btnPan));
 
         // Selection toggle button
-        btnSelection.setOnAction(event -> {
-            toggleToolButtons(btnSelection);
-        });
+        btnSelection.setOnAction(event -> toggleToolButtons(btnSelection));
 
         // Vector Field visual toggle button
         tglVector.setOnMouseClicked(event -> {
@@ -407,9 +404,7 @@ public class SimulatorController {
             bodyCreator.setVisible(true);
         });
 
-        btnRemove.setOnAction(event -> {
-            System.out.println("removing body");
-        });
+        btnRemove.setOnAction(event -> System.out.println("removing body"));
 
         // Play, pause, reset buttons
         btnPlay.setOnAction(event -> timer.play());
@@ -591,7 +586,7 @@ public class SimulatorController {
         entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);
 
         // Create root node with delimiting square
-        root = new Quad(minX, minZ, length, entities);
+        Quad root = new Quad(minX, minZ, length, entities);
 
         // Construct Barnes-Hut Tree by insert bodies into root node
         for (Body body: bodies()) {
@@ -691,16 +686,6 @@ public class SimulatorController {
         for (Vector3D vectorM : vectors()) {
             vectorM.setArrowColor(maxMagnitude, minMagnitude);
         }
-    }
-
-    //TODO: build2 @Author: 
-    public void updateNodes() {
-
-    }
-
-    //TODO: build 2
-    public void updateAnim() {
-
     }
 
     private void collide(Body a, Body b, double distance) {

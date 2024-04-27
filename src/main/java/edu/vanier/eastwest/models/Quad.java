@@ -65,10 +65,10 @@ public class Quad {
         this.external = false;
 
         // Visualize rectangles (but slows down the simulation significantly)
-        Rectangle quad0 = createSquare(x,0, z, half);
-        Rectangle quad1 = createSquare(x + half, 0, z, half);
-        Rectangle quad2 = createSquare(x, 0,  z + half, half);
-        Rectangle quad3 = createSquare(x + half, 0, z + half, half);
+        Rectangle quad0 = createSquare(x, z, half);
+        Rectangle quad1 = createSquare(x + half, z, half);
+        Rectangle quad2 = createSquare(x, z + half, half);
+        Rectangle quad3 = createSquare(x + half, z + half, half);
         entities.getChildren().addAll(quad0, quad1, quad2, quad3);
     }
 
@@ -96,10 +96,11 @@ public class Quad {
 
     /**
      * Inserts a body into the Quadtree structure.
-     * If the current Quad is empty, the body is added directly.
-     * If the Quad is external and empty, the body occupies this Quad.
-     * If the Quad is external and already contains a body, the Quad is subdivided
-     * until each body occupies a separate quadrant.
+     * <p>
+     * If the quadrant has no bodies and is external, the body is added directly.
+     * If the quadrant is internal, recursively insert the into the right quadrant.
+     * If the quadrant is external and already contains a body, the quadrant is subdivided
+     * until each body occupies a different quadrant.
      *
      * @param body The body to be inserted into the Quadtree
      */

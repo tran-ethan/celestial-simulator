@@ -146,41 +146,16 @@ public class Utility {
     }
 
 
-    public static Rectangle createSquare(double x, double y, double z, double w) {
-        // Remove all previous
-//        entities.getChildren().removeIf(n -> n instanceof Cylinder);
-//
-//        Cylinder x1 = new Cylinder(1, w);
-//        Cylinder x2 = new Cylinder(1, w);
-//
-//        x1.getTransforms().addAll(new Rotate(90, Rotate.Z_AXIS), new Translate(0, -w / 2, 0));
-//        x2.getTransforms().addAll(new Rotate(90, Rotate.Z_AXIS), new Translate(0, -w / 2, w));
-//
-//        x1.setTranslateX(x);
-//        x1.setTranslateY(y);
-//        x1.setTranslateZ(z);
-//
-//        x2.setTranslateX(x);
-//        x2.setTranslateY(y);
-//        x2.setTranslateZ(z);
-//
-//        Cylinder z1 = new Cylinder(1, w);
-//        Cylinder z2 = new Cylinder(1, w);
-//
-//        z1.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS), new Translate(0, w / 2, 0));
-//        z2.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS), new Translate(w, w / 2, 0));
-//
-//        z1.setTranslateX(x);
-//        z1.setTranslateY(y);
-//        z1.setTranslateZ(z);
-//
-//        z2.setTranslateX(x);
-//        z2.setTranslateY(y);
-//        z2.setTranslateZ(z);
-//
-//        entities.getChildren().addAll(x1, x2, z1, z2);
-
-        Rectangle p = new Rectangle(w, w, Color.TRANSPARENT);
+    /**
+     * Creates a square with specified width and positions it in 3D space on the XZ plane.
+     *
+     * @param x The x-coordinate position of the square
+     * @param z The z-coordinate position of the square
+     * @param length The length of the square
+     * @return A Rectangle object representing a square positioned in 3D space
+     */
+    public static Rectangle createSquare(double x, double z, double length) {
+        Rectangle p = new Rectangle(length, length, Color.TRANSPARENT);
         p.setStroke(Color.GREEN);
         p.setStrokeWidth(1);
         p.getTransforms().addAll(

@@ -65,12 +65,19 @@ public class Quad {
     }
 
     // Returns index of child at location p, ignore bodies not fully fitting inside square
-    int which(Point3D p) {
+    int getQuadrant(Point3D pos) {
         double half = length / 2;
-        if (p.getZ() < z + half) {
-            return p.getX() < x + half ? 0 : 1;
+        boolean isTop = pos.getZ() < z + half;
+        boolean isLeft = pos.getX() < x + half;
+
+        int index;
+
+        if (isTop) {
+            index =  isLeft ? 0 : 1;
+        } else {
+            index = isLeft ? 2 : 3;
         }
-        return p.getX() < x + half ? 2 : 3;
+        return index;
     }
 
     public void insert(Body body) {
@@ -85,11 +92,11 @@ public class Quad {
                 this.body = body;
             } else {
                 // Case 2 - Internal node, insert in appropriate quadrant
-                children[which(body.getPosition())].insert(body);
+                children[getQuadrant(body.getPosition())].insert(body);
             }
         } else {
             // Case 3 - External node already contains another body
-            Body a = this.body;
+            Body body2 = this.body;
 
             weightedPositions = weightedPositions.add(body.getPosition().multiply(body.getMass()));
             totalMass += body.getMass();
@@ -98,35 +105,36 @@ public class Quad {
             Quad pointer = this;
 
             // Quadrants for body A and body B
-            int quadA = pointer.which(a.getPosition());
-            int quadB = pointer.which(body.getPosition());
+            int quad1 = pointer.getQuadrant(body2.getPosition());
+            int quad2 = pointer.getQuadrant(body.getPosition());
 
             // Continue subdividing until bodies are no longer in the same quadrant
-            while (quadA == quadB) {
+            while (quad1 == quad2) {
                 pointer.subdivide();
-                pointer = pointer.children[quadA];
-                quadA = pointer.which(a.getPosition());
-                quadB = pointer.which(body.getPosition());
+                pointer = pointer.children[quad1];
+                quad1 = pointer.getQuadrant(body2.getPosition());
+                quad2 = pointer.getQuadrant(body.getPosition());
 
-                // Update total center and mass
-                Point3D posMassA = a.getPosition().multiply(a.getMass());
+                // Update weighted positions for current node
+                Point3D posMassA = body2.getPosition().multiply(body2.getMass());
                 Point3D posMassB = body.getPosition().multiply(body.getMass());
                 pointer.weightedPositions = pointer.weightedPositions.add(posMassA);
                 pointer.weightedPositions = pointer.weightedPositions.add(posMassB);
-                pointer.totalMass += a.getMass() + body.getMass();
+                pointer.totalMass += body2.getMass() + body.getMass();
             }
 
+            // Add bodies to inner nodes
             pointer.subdivide();
-            pointer.children[quadA].body = a;
-            pointer.children[quadB].body = body;
+            pointer.children[quad1].body = body2;
+            pointer.children[quad2].body = body;
 
-            // Update center of mass and total for lowest-level child
-            Point3D posMassA = a.getPosition().multiply(a.getMass());
+            // Update positions and weights for bottom children
+            Point3D posMassA = body2.getPosition().multiply(body2.getMass());
             Point3D posMassB = body.getPosition().multiply(body.getMass());
-            pointer.children[quadA].weightedPositions = pointer.children[quadA].weightedPositions.add(posMassA);
-            pointer.children[quadB].weightedPositions = pointer.children[quadB].weightedPositions.add(posMassB);
-            pointer.children[quadA].totalMass += a.getMass();
-            pointer.children[quadB].totalMass += body.getMass();
+            pointer.children[quad1].weightedPositions = pointer.children[quad1].weightedPositions.add(posMassA);
+            pointer.children[quad2].weightedPositions = pointer.children[quad2].weightedPositions.add(posMassB);
+            pointer.children[quad1].totalMass += body2.getMass();
+            pointer.children[quad2].totalMass += body.getMass();
 
             // Internal node do not have bodies
             this.body = null;

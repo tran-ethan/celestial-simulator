@@ -58,6 +58,9 @@ public class SimulatorController {
     private Button btnReset;
 
     @FXML
+    private Button btnAlgorithm;
+
+    @FXML
     private ToggleButton btnSelection;
 
     @FXML
@@ -71,6 +74,9 @@ public class SimulatorController {
 
     @FXML
     private Slider sliderG;
+
+    @FXML
+    private Slider sliderTheta;
 
     @FXML
     private ToggleSwitch tgl2D;
@@ -118,7 +124,8 @@ public class SimulatorController {
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
     // Simulator parameters
-    private static final double theta = 0.5;
+    private static boolean usingBarnes = false;
+    private static double theta = 0.5;
     private static double G = 1;
     private static final double dt = 0.015; // Time between frames in seconds
 
@@ -196,8 +203,12 @@ public class SimulatorController {
         subScene.setHeight(pane.getHeight());
         subScene.setWidth(pane.getWidth());
 
-        // updateBodies();
-        updateBodiesBarnes();
+        if (usingBarnes) {
+            updateBodiesBarnes();
+        } else {
+            updateBodies();
+        }
+
         updateVectors();
 
         if (selectedBody != null) {
@@ -406,6 +417,13 @@ public class SimulatorController {
             bodyCreator.setVisible(true);
         });
 
+        // Switch between Direct sum and Barnes Hut algorithms
+        btnAlgorithm.setOnAction(event -> {
+            btnAlgorithm.setText(String.format("%s Algorithm", usingBarnes ? "Direct Sum" : "Barnes-Hut"));
+            sliderTheta.setDisable(usingBarnes);
+            usingBarnes = !usingBarnes;
+        });
+
         btnRemove.setOnAction(event -> System.out.println("removing body"));
 
         // Play, pause, reset buttons
@@ -438,6 +456,8 @@ public class SimulatorController {
         sliderSpeed.setOnMouseReleased(event -> timer.setRate(sliderSpeed.getValue()));
 
         sliderG.setOnMouseReleased(event -> G = sliderG.getValue());
+
+        sliderTheta.setOnMouseReleased(event -> theta = sliderTheta.getValue());
 
         tgl2D.setOnMouseClicked(event -> {
             if (tgl2D.isSelected()) {

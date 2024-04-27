@@ -70,7 +70,6 @@
                                     <ToggleButton fx:id="btnSelection" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Selection Tool" textAlignment="CENTER" />
                                     <ToggleButton fx:id="btnAdd" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Add Body" textAlignment="CENTER" />
                                     <ToggleButton fx:id="btnRemove" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Remove Body" textAlignment="CENTER" />
-                                    <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="etc" textAlignment="CENTER" />
                                     <VBox alignment="TOP_CENTER" prefHeight="341.0" prefWidth="185.0" spacing="10.0" style="-fx-border-color: black; -fx-border-style: solid none none none;">
                                        <children>
                                           <Button fx:id="btnPlay" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Play">
@@ -84,14 +83,17 @@
                                              </VBox.margin>
                                           </Button>
                                           <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Clear" />
+                                          <Button fx:id="btnAlgorithm" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Direct Sum Algorithm" />
                                           <Label text="Simulation Speed" />
-                                          <Slider fx:id="sliderSpeed" majorTickUnit="1.0" max="10.0" min="0.01" minorTickCount="0" showTickLabels="true" showTickMarks="true" value="1.0">
+                                          <Slider fx:id="sliderSpeed" majorTickUnit="1.0" max="10.0" min="0.01" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="1.0">
                                              <VBox.margin>
                                                 <Insets />
                                              </VBox.margin>
                                           </Slider>
-                                          <Label text="Gravitational constant" />
-                                          <Slider fx:id="sliderG" majorTickUnit="1.0" max="5.0" min="0.01" minorTickCount="0" showTickLabels="true" showTickMarks="true" value="1.0" />
+                                          <Label text="Gravitational Constant" />
+                                          <Slider fx:id="sliderG" majorTickUnit="1.0" max="5.0" min="0.01" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="1.0" />
+                                          <Label text="Barnes-Hut Criterion" />
+                                          <Slider fx:id="sliderTheta" disable="true" majorTickUnit="0.5" max="2.0" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="0.5" />
                                           <ToggleSwitch fx:id="tglCamRotate" prefHeight="18.0" prefWidth="120.0" text="Camera Rotate" />
                                           <ToggleSwitch fx:id="tgl2D" prefHeight="18.0" prefWidth="120.0" text="2D View" />
                                           <ToggleSwitch fx:id="tglVector" prefHeight="18.0" prefWidth="120.0" text="Vector Field" />

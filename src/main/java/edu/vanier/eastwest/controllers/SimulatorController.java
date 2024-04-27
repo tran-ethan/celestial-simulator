@@ -67,7 +67,10 @@ public class SimulatorController {
     private SplitPane splitPane;
 
     @FXML
-    private Slider sldrSpeed;
+    private Slider sliderSpeed;
+
+    @FXML
+    private Slider sliderG;
 
     @FXML
     private ToggleSwitch tgl2D;
@@ -114,7 +117,9 @@ public class SimulatorController {
     private final DoubleProperty angleZ = new SimpleDoubleProperty(0);
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
+    // Simulator parameters
     private static final double theta = 0.5;
+    private static double G = 1;
     private static final double dt = 0.015; // Time between frames in seconds
 
     BodyCreatorController controller;
@@ -229,7 +234,7 @@ public class SimulatorController {
         // Distance between two bodies cannot be less than radius of 2 bodies because that would mean bodies are inside of each other
         // TODO Add G Constant (for now it is always 1)
         double rMin = r1 + r2;
-        return r.multiply((m2 / Math.pow(Math.max(rMag, rMin), 3)));
+        return r.multiply(G * (m2 / Math.pow(Math.max(rMag, rMin), 3)));
     }
 
     private void initBodies() {
@@ -430,7 +435,9 @@ public class SimulatorController {
             }
         });
 
-        sldrSpeed.setOnMouseReleased(event -> timer.setRate(sldrSpeed.getValue()));
+        sliderSpeed.setOnMouseReleased(event -> timer.setRate(sliderSpeed.getValue()));
+
+        sliderG.setOnMouseReleased(event -> G = sliderG.getValue());
 
         tgl2D.setOnMouseClicked(event -> {
             if (tgl2D.isSelected()) {

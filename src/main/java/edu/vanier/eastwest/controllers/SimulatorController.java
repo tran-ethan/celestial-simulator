@@ -192,9 +192,9 @@ public class SimulatorController {
         subScene.setHeight(pane.getHeight());
         subScene.setWidth(pane.getWidth());
 
-        updateBodies();
-        // updateBodiesBarnes();
-        // updateVectors();
+        // updateBodies();
+        updateBodiesBarnes();
+        updateVectors();
 
         if (selectedBody != null) {
             // Move camera around selected planet

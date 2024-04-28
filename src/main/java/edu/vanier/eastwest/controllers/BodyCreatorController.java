@@ -37,6 +37,9 @@ public class BodyCreatorController {
     private Button confirmBtn;
 
     @FXML
+    private Button posBtn;
+
+    @FXML
     private Button textureBtn;
 
 
@@ -45,8 +48,7 @@ public class BodyCreatorController {
 
     @FXML
     public void initialize(){
-
-        //Code taken from https://stackoverflow.com/a/45981297
+        // Code adapted from https://stackoverflow.com/a/45981297
         Pattern validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
 
         UnaryOperator<TextFormatter.Change> filter = c -> {
@@ -69,7 +71,6 @@ public class BodyCreatorController {
                 }
             }
 
-
             @Override
             public String toString(Double d) {
                 return d.toString();
@@ -80,12 +81,11 @@ public class BodyCreatorController {
         radiusField.setTextFormatter(textFormatterRadius);
         TextFormatter<Double> textFormatterMass = new TextFormatter<>(converter, 0.0, filter);
         massField.setTextFormatter(textFormatterMass);
-
     }
+
     public void initController(SimulatorController simulatorController) {
         this.simulatorController = simulatorController;
     }
-
 
     @FXML
     void spawn(ActionEvent event) {
@@ -98,26 +98,39 @@ public class BodyCreatorController {
             double mass = Double.parseDouble(massField.getText());
             Color color = colorField.getValue();
             simulatorController.spawnBody(name, radius, mass, color, texture);
-            confirmBtn.setDisable(false);
+            posBtn.setDisable(false);
             spawnBtn.setDisable(true);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @FXML
+    void confirmPos(ActionEvent event) {
+        posBtn.setDisable(true);
+        confirmBtn.setDisable(false);
+        simulatorController.confirmPos();
+    }
+
+    @FXML
     void confirm(ActionEvent event) {
         simulatorController.confirmBody();
+
+        // Reset buttons
+        spawnBtn.setDisable(false);
+        posBtn.setDisable(true);
+        confirmBtn.setDisable(true);
     }
 
     @FXML
     void selectFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         File selectedImage = fileChooser.showOpenDialog(null);
-        if(selectedImage == null){
+        if (selectedImage == null) {
             return;
         }
-        if(selectedImage.getName().endsWith(".png") || selectedImage.getName().endsWith(".jpg")){
+        if (selectedImage.getName().endsWith(".png") || selectedImage.getName().endsWith(".jpg")) {
             System.out.println("picture selected");
             texture = new Image(selectedImage.toURI().toString());
         }

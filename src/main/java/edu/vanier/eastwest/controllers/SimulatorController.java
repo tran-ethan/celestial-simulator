@@ -355,8 +355,8 @@ public class SimulatorController {
                 bodies().forEach(n -> n.setOnMouseClicked(e -> {
                     selectedBody = n;
 
-                    //Timeline to smoothly move between the selected bodies
-                    Timeline smoothTransition = new Timeline(
+                    //Timeline to smoothly jump between camera positions
+                    Timeline jump = new Timeline(
                             new KeyFrame(
                                     Duration.seconds(0),
                                     new KeyValue(camera.translateXProperty(), camera.getTranslateX())
@@ -382,7 +382,7 @@ public class SimulatorController {
                                     new KeyValue(camera.translateZProperty(), selectedBody.getTranslateZ())
                             )
                     );
-                    smoothTransition.play();
+                    jump.play();
 
                     // Update properties panel
                     lblSelected.setText(selectedBody.getName());

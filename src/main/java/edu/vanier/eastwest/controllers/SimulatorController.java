@@ -191,7 +191,7 @@ public class SimulatorController {
         // Camera
         camera = new PerspectiveCamera(true);
         camera.setNearClip(1);
-        camera.setFarClip(20000);
+        camera.setFarClip(50000);
 
         // Sub scene
         subScene = new SubScene(entities, 850, 850, true, SceneAntialiasing.BALANCED);
@@ -307,14 +307,6 @@ public class SimulatorController {
     }
 
     private void initControls() {
-        MainApp.scene.setOnKeyPressed(e -> {
-            switch (e.getCode()) {
-                case W -> camera.setTranslateZ(camera.getTranslateZ() + 10);
-                case A -> camera.setTranslateX(camera.getTranslateX() - 10);
-                case S -> camera.setTranslateZ(camera.getTranslateZ() - 10);
-                case D -> camera.setTranslateX(camera.getTranslateX() + 10);
-            }
-        });
 
         // Bind rotation angle to camera with mouse movement
         Rotate x1Rotate = new Rotate(0, Rotate.X_AXIS);
@@ -362,7 +354,12 @@ public class SimulatorController {
         EventHandler<MouseEvent> mousePressedHandler = event -> {
             // Select planet by clicking it with LMB when not panning
             if (selectedTool == btnSelection) {
-                bodies().forEach(n -> n.setOnMouseClicked(e -> selectedBody = n));
+                bodies().forEach(n -> n.setOnMouseClicked(e -> {
+                    selectedBody = n;
+                    camera.setTranslateX(selectedBody.getTranslateX());
+                    camera.setTranslateY(selectedBody.getTranslateY());
+                    camera.setTranslateZ(selectedBody.getTranslateZ());
+                }));
             }
 
             anchorX = event.getSceneX();
@@ -596,10 +593,10 @@ public class SimulatorController {
         newBody.setOnMouseReleased(null);
 
         // Full opacity indicates body has been spawned in successfully
-        if (newBody.getMaterial() == null) {
+        if (newBody.getColor() != null) {
             Color color = newBody.getColor();
-            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
-            newBody.setColor(color);
+            Color fullAlpha = new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
+            newBody.setColor(fullAlpha);
         }
         plane.setOnMouseDragOver(null);
 

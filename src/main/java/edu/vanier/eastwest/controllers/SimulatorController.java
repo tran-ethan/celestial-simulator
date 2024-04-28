@@ -593,7 +593,7 @@ public class SimulatorController {
         newBody.setOnMouseReleased(null);
 
         // Full opacity indicates body has been spawned in successfully
-        if (newBody.getMaterial() != null) {
+        if (newBody.getMaterial() == null) {
             Color color = newBody.getColor();
             color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
             newBody.setColor(color);

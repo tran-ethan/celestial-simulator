@@ -7,6 +7,8 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
@@ -40,7 +42,7 @@ public class BodyCreatorController {
     private Button posBtn;
 
     @FXML
-    private Button textureBtn;
+    private Pane paneImage;
 
 
     public SimulatorController simulatorController;
@@ -101,6 +103,7 @@ public class BodyCreatorController {
             posBtn.setDisable(false);
             spawnBtn.setDisable(true);
             texture = null;
+            paneImage.getChildren().clear();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -133,6 +136,11 @@ public class BodyCreatorController {
         if (selectedImage.getName().endsWith(".png") || selectedImage.getName().endsWith(".jpg")) {
             System.out.println("picture selected");
             texture = new Image(selectedImage.toURI().toString());
+            ImageView temp = new ImageView(texture);
+            temp.setFitHeight(paneImage.getHeight());
+            temp.setFitWidth(paneImage.getWidth());
+            paneImage.getChildren().add(temp);
+
         }
     }
 }

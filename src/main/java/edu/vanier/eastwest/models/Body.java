@@ -15,7 +15,7 @@ public class Body extends Sphere {
     private double mass;
     @Setter @Getter
     private Point3D velocity;
-    @Getter @Setter
+    @Getter
     private Color color;
     @Getter @Setter
     private Image texture;
@@ -81,10 +81,6 @@ public class Body extends Sphere {
     public void setColor(Color color) {
         this.color = color;
         setMaterial(new PhongMaterial(color));
-    }
-
-    public Color getColor() {
-        return color;
     }
 
     @Override

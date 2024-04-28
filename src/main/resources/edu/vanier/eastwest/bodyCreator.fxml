@@ -7,10 +7,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="255.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.BodyCreatorController">
+<AnchorPane prefHeight="551.0" prefWidth="255.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.BodyCreatorController">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -75,6 +76,7 @@
             <Button fx:id="spawnBtn" mnemonicParsing="false" onAction="#spawn" prefHeight="25.0" prefWidth="120.0" text="Spawn" />
             <Button fx:id="posBtn" disable="true" mnemonicParsing="false" onAction="#confirmPos" prefHeight="25.0" prefWidth="120.0" text="Confirm position" />
             <Button fx:id="confirmBtn" disable="true" mnemonicParsing="false" onAction="#confirm" prefHeight="25.0" prefWidth="120.0" text="Confirm" />
+            <Pane fx:id="paneImage" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </VBox>
    </children>

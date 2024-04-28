@@ -5,6 +5,7 @@ import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.MySplitPaneSkin;
 import edu.vanier.eastwest.models.Quad;
 import edu.vanier.eastwest.models.Vector3D;
+import edu.vanier.eastwest.util.SaveFileManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -29,11 +30,13 @@ import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.ToggleSwitch;
-import org.fxyz3d.shapes.composites.PolyLine3D;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -110,6 +113,12 @@ public class SimulatorController {
 
     @FXML
     private VBox vbTools;
+
+    @FXML
+    private MenuItem menuSave;
+
+    @FXML
+    private MenuItem menuLoad;
 
     private Timeline timer;
     private Camera camera;
@@ -486,6 +495,10 @@ public class SimulatorController {
                 initX.setAngle(-30);
             }
         });
+
+        //Saving & Loading Body objects
+        menuSave.setOnAction(this::save);
+        menuLoad.setOnAction(this::load);
     }
 
     public void spawnBody(String name, double radius, double mass, Color color, Image texture) {
@@ -948,5 +961,34 @@ public class SimulatorController {
         // Change in momentum
         a.setVelocity(a.getVelocity().add(impulse.multiply(im1)));
         b.setVelocity(b.getVelocity().subtract(impulse.multiply(im2)));
+    }
+
+    /***
+     * Saves all the Body objects into a Json file.
+     */
+    public void save(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        Stage stage = new Stage();
+        File saveFile = fileChooser.showSaveDialog(stage);
+
+        if (saveFile != null){
+            SaveFileManager.toJson(bodies(), saveFile.getPath());
+        }
+    }
+
+    /***
+     * Loads all the Body objects saved in a Json file.
+     */
+    public void load(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        Stage stage = new Stage();
+        File saveFile = fileChooser.showOpenDialog(stage);
+
+        if (saveFile != null){
+            entities.getChildren().removeAll(bodies());
+            entities.getChildren().addAll(SaveFileManager.fromJson(saveFile.getPath()));
+        }
     }
 }

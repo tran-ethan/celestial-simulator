@@ -35,7 +35,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.ToggleSwitch;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
-
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -594,7 +593,7 @@ public class SimulatorController {
         newBody.setOnMouseReleased(null);
 
         // Full opacity indicates body has been spawned in successfully
-        if (newBody.getMaterial() != null) {
+        if (newBody.getColor() != null) {
             Color color = newBody.getColor();
             color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
             newBody.setColor(color);

@@ -36,13 +36,11 @@ public class Body extends Sphere {
         this.velocity = velocity;
 
         if(texture != null){
-            System.out.println("exist");
             PhongMaterial material = new PhongMaterial();
             material.setDiffuseMap(texture);
             setMaterial(material);
         }
         if(texture == null){
-            System.out.println("no exist");
             setColor(color);
         }
         System.out.println(1);

@@ -72,6 +72,10 @@ public class Quad {
             Rectangle quad1 = createSquare(x + half, z, half);
             Rectangle quad2 = createSquare(x, z + half, half);
             Rectangle quad3 = createSquare(x + half, z + half, half);
+            quad0.setMouseTransparent(true);
+            quad1.setMouseTransparent(true);
+            quad2.setMouseTransparent(true);
+            quad3.setMouseTransparent(true);
             entities.getChildren().addAll(quad0, quad1, quad2, quad3);
         }
     }

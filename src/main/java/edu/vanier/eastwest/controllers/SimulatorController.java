@@ -616,7 +616,7 @@ public class SimulatorController {
         // Create root node with delimiting square
         Quad root = new Quad(minX, minZ, length, entities, tglBarnes.isSelected());
 
-        // Construct Barnes-Hut Tree by insert bodies into root node
+        // Construct Barnes-Hut Tree by inserting bodies into root node
         for (Body body: bodies()) {
             root.insert(body);
         }

@@ -13,10 +13,12 @@ public class Body extends Sphere {
     private String name;
     @Getter
     private double mass;
-    @Setter
-    @Getter
+    @Setter @Getter
     private Point3D velocity;
+    @Getter @Setter
     private Color color;
+    @Getter @Setter
+    private Image texture;
 
     /**
      * Constructor for a Body object using 4 parameters.
@@ -24,14 +26,14 @@ public class Body extends Sphere {
      * @param mass The mass of the body
      * @param position The position of the body in the space
      * @param color The color of the object
-     * @parem texture The image on the body
+     * @param texture The image on the body
      */
-    public Body(String name, double radius, double mass, Point3D position, Color color, Image texture) {
+    public Body(String name, double radius, double mass, Point3D position, Point3D velocity, Color color, Image texture) {
         super(radius);
         this.name = name;
         this.mass = mass;
         setPosition(position);
-        velocity = new Point3D(0, 0 , 0);
+        this.velocity = velocity;
 
         if(texture != null){
             System.out.println("exist");

@@ -254,21 +254,17 @@ public class SimulatorController {
     }
 
     private void initBodies() {
-        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, 0), Color.YELLOW, null);
-        Body p1 = new Body("Blue", 10, 20000, new Point3D(125, 0, 120), Color.BLUE, null);
-        Body p2 = new Body("Green", 10, 5000, new Point3D(200, 0, 100), Color.GREEN, null);
-        Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), Color.WHITE, null);
-        Body p4 = new Body("Red", 10, 5000, new Point3D(200, 0, 200), Color.RED, null);
+        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.YELLOW, null);
+        Body p1 = new Body("Blue", 10, 20000, new Point3D(125, 0, 120), new Point3D(0, 0, 10), Color.BLUE, null);
+        Body p2 = new Body("Green", 10, 5000, new Point3D(200, 0, 100), new Point3D(-4, 0, 0), Color.GREEN, null);
+        Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), new Point3D(10, 0, 10), Color.WHITE, null);
+        Body p4 = new Body("Red", 10, 5000, new Point3D(200, 0, 200), new Point3D(0, 0, -5), Color.RED, null);
 
         // Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, -50), Color.rgb(255,255,0,1), null);
         // Body p1 = new Body("Earth", 10, 20000, new Point3D(150, 0, -100), Color.BLUE, null);
         // Body p2 = new Body("A", 10, 5000, new Point3D(0, 0, 100), Color.GREEN, null);
         // Body p3 = new Body("B", 10, 5000, new Point3D(0, 0, 200), Color.WHITE, null);
 
-        p1.setVelocity(new Point3D(0, 0, 10));
-        p2.setVelocity(new Point3D(-4, 0, 0));
-        p3.setVelocity(new Point3D(10, 0, 10));
-        p4.setVelocity(new Point3D(0, 0, -5));
         entities.getChildren().addAll(sun, p1, p2, p3, p4);
     }
 
@@ -486,7 +482,7 @@ public class SimulatorController {
 
         // Slight transparency indicates body has not been spawned in yet
         color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 0.4);
-        newBody = new Body(name, radius, mass, new Point3D(0, 0, 0), color, texture);
+        newBody = new Body(name, radius, mass, new Point3D(0, 0, 0), new Point3D(0, 0, 0), color, texture);
         entities.getChildren().add(newBody);
 
         newBody.setOnDragDetected(event -> {
@@ -574,7 +570,7 @@ public class SimulatorController {
     }
 
     /***
-     * TODO Documentation, Use Barnes Hut
+     * Calculates the gravity between each Body object using a direct sum algorithm.
      *
      */
     public void updateBodies() {
@@ -594,6 +590,10 @@ public class SimulatorController {
         }
     }
 
+    /***
+     * Calculates the gravity between each Body object using the Barnes-Hut algorithm.
+     *
+     */
     public void updateBodiesBarnes() {
         // https://www.cs.princeton.edu/courses/archive/fall03/cs126/assignments/barnes-hut.html
 
@@ -658,7 +658,7 @@ public class SimulatorController {
     }
 
     /***
-     * TODO Documentation, Use Barnes Hut
+     * Rotates the vectors towards the direction of the net gravitational field caused by all the Body objects using a direct sum algorithm.
      *
      */
     public void updateVectors() {

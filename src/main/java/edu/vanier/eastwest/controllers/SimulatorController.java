@@ -437,7 +437,6 @@ public class SimulatorController {
         // Adding bodies
         btnAdd.setOnAction(event -> {
             toggleToolButtons(btnAdd);
-            timer.pause();
             bodyCreator.setVisible(true);
         });
 
@@ -537,6 +536,10 @@ public class SimulatorController {
             newBody.setTranslateY(position.getY());
             newBody.setTranslateZ(position.getZ());
         });
+        timer.pause();
+        btnPlay.setDisable(true);
+        btnPause.setDisable(true);
+        btnReset.setDisable(true);
     }
 
     public void confirmPos() {
@@ -606,7 +609,10 @@ public class SimulatorController {
         entities.getChildren().remove(arrow);
         arrow = null;
         newBody = null;
-
+        timer.play();
+        btnPlay.setDisable(false);
+        btnPause.setDisable(false);
+        btnReset.setDisable(false);
         toggleToolButtons(null);
     }
 
@@ -619,7 +625,6 @@ public class SimulatorController {
         selectedBody = null;
         bodies().forEach(n -> n.setOnMouseClicked(null));
         bodyCreator.setVisible(false);
-        timer.play();
 
         if (selected == selectedTool) {
             // User clicks on same button twice to deselect the tool

@@ -24,11 +24,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import org.controlsfx.control.ToggleSwitch;
+import org.fxyz3d.shapes.composites.PolyLine3D;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
 import java.util.List;
@@ -144,6 +147,16 @@ public class SimulatorController {
      * This object represents the new body that is created when user clicks on Add Body
      */
     Body newBody;
+
+    /**
+     * This object represents the velocity vector of a newly added body
+     */
+    Cylinder arrow;
+
+    /**
+     * Velocity of newly added body
+     */
+    Point3D velocity = new Point3D(0, 0, 0);
     ToggleButton selectedTool;
 
     float size = 8000; // Size of plane
@@ -512,18 +525,72 @@ public class SimulatorController {
         });
     }
 
+    public void confirmPos() {
+        // Cylinder start and end point https://netzwerg.ch/blog/2015/03/22/javafx-3d-line/
+        Point3D yAxis = new Point3D(0, 1, 0);
+
+        arrow = new Cylinder(1, 2);
+        arrow.setMaterial(new PhongMaterial(Color.DARKRED));
+        Translate moveToMidpoint = new Translate();
+        Rotate rotateAroundCenter = new Rotate();
+        arrow.getTransforms().addAll(
+                moveToMidpoint,
+                rotateAroundCenter
+        );
+        entities.getChildren().add(arrow);
+
+        newBody.setOnDragDetected(event -> {
+            // Capture mouse events only for plane (which acts as drag surface)
+            plane.setMouseTransparent(false);
+            newBody.setMouseTransparent(true);
+            newBody.startFullDrag();
+            newBody.setCursor(Cursor.CROSSHAIR);
+        });
+
+        plane.setOnMouseDragOver(event -> {
+            // Localize mouse position intersect with plane
+            Point3D position = event.getPickResult().getIntersectedPoint();
+            position = plane.localToParent(position);
+
+            // Distance and midpoint
+            Point3D r = position.subtract(newBody.getPosition());
+            Point3D mid = position.midpoint(newBody.getPosition());
+            double height = r.magnitude();
+
+            // Move cylinder end point
+            moveToMidpoint.setX(mid.getX());
+            moveToMidpoint.setZ(mid.getZ());
+
+            // Rotate cylinder to end point
+            Point3D axisOfRotation = r.crossProduct(yAxis);
+            double angle = Math.acos(r.normalize().dotProduct(yAxis));
+            rotateAroundCenter.setAxis(axisOfRotation);
+            rotateAroundCenter.setAngle(-Math.toDegrees(angle));
+            arrow.setHeight(height);
+
+            // Set velocity for confirming body
+            velocity = r;
+        });
+    }
+
     public void confirmBody() {
         // Reset mouse events
         newBody.setOnDragDetected(null);
         newBody.setOnMouseReleased(null);
 
         // Full opacity indicates body has been spawned in successfully
-        if(newBody.getMaterial() != null) {
+        if (newBody.getMaterial() != null) {
             Color color = newBody.getColor();
             color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
             newBody.setColor(color);
         }
         plane.setOnMouseDragOver(null);
+
+        // Remove arrow, deselect body, reset velocity
+        newBody.setVelocity(velocity.multiply(0.4));
+        velocity = new Point3D(0, 0, 0);
+        entities.getChildren().remove(arrow);
+        arrow = null;
         newBody = null;
 
         toggleToolButtons(null);

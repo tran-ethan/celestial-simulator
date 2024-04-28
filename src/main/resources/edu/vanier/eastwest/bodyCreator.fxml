@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="255.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.BodyCreatorController">
+<AnchorPane prefHeight="400.0" prefWidth="255.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.BodyCreatorController">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -72,8 +72,9 @@
                   <Button fx:id="textureBtn" mnemonicParsing="false" onAction="#selectFile" text="Choose File" />
                </children>
             </HBox>
-            <Button fx:id="spawnBtn" mnemonicParsing="false" onAction="#spawn" prefHeight="25.0" prefWidth="70.0" text="Spawn" />
-            <Button fx:id="confirmBtn" disable="true" mnemonicParsing="false" onAction="#confirm" prefHeight="25.0" prefWidth="70.0" text="Confirm" />
+            <Button fx:id="spawnBtn" mnemonicParsing="false" onAction="#spawn" prefHeight="25.0" prefWidth="120.0" text="Spawn" />
+            <Button fx:id="posBtn" mnemonicParsing="false" onAction="#confirmPos" prefHeight="25.0" prefWidth="120.0" text="Confirm position" />
+            <Button fx:id="confirmBtn" disable="true" mnemonicParsing="false" onAction="#confirm" prefHeight="25.0" prefWidth="120.0" text="Confirm" />
          </children>
       </VBox>
    </children>

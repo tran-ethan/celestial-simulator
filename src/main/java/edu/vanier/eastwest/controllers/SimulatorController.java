@@ -724,7 +724,7 @@ public class SimulatorController {
             double length = Math.max(maxX - minX, maxZ - minZ);
 
             // Create root node with delimiting square
-            Quad root = new Quad(minX, minZ, length, entities, tglBarnes.isSelected());
+            Quad root = new Quad(minX, minZ, length, entities, false);
 
             // Construct Barnes-Hut Tree by inserting bodies into root node
             for (Body body : bodies()) {

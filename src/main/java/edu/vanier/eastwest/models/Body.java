@@ -15,6 +15,8 @@ public class Body extends Sphere {
     private double mass;
     @Setter @Getter
     private Point3D velocity;
+    @Setter @ Getter
+    private Point3D acceleration;
     @Getter
     private Color color;
     @Getter @Setter
@@ -34,13 +36,14 @@ public class Body extends Sphere {
         this.mass = mass;
         setPosition(position);
         this.velocity = velocity;
+        this.acceleration = new Point3D(0, 0, 0);
 
-        if(texture != null){
+        if (texture != null) {
             PhongMaterial material = new PhongMaterial();
             material.setDiffuseMap(texture);
             setMaterial(material);
         }
-        if(texture == null){
+        if (texture == null) {
             setColor(color);
         }
     }
@@ -48,14 +51,16 @@ public class Body extends Sphere {
     /**
      * Updates the velocity of the Body object instance.
      * @param time The time that passes
-     * @param acceleration The acceleration of the body
      */
-    public void update(double time, Point3D acceleration){
+    public void update(double time) {
         // Update position
         setPosition(getPosition().add(velocity.multiply(time)));
 
         // Update velocity
         velocity = velocity.add(acceleration.multiply(time));
+
+        // Reset acceleration
+        acceleration = new Point3D(0, 0, 0);
     }
 
     /**

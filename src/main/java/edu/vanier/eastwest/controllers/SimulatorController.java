@@ -254,7 +254,6 @@ public class SimulatorController {
             lblSelected.setText("<No Body Selected>");
             lblProperties.setText("");
         }
-
     }
 
     /**
@@ -664,10 +663,11 @@ public class SimulatorController {
                     double m2 = comparedBody.getMass();
 
                     Point3D a = getGravity(p1, p2, m2, currentBody.getRadius(), comparedBody.getRadius());
-                    currentBody.update(dt, a);
+                    currentBody.setAcceleration(a);
 
                     collide(currentBody, comparedBody);
                 }
+                currentBody.update(dt);
             }
         }
     }
@@ -798,13 +798,16 @@ public class SimulatorController {
         // Base case - External nodes
         if (quad.isExternal()) {
             // Ignore if compared body is the same as current body or node does not contain a body
-            if (quad.body != null && body != quad.body) {
-                // Gravity
-                Point3D a = getGravity(body.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), body.getRadius());
-                body.update(dt, a);
+            if (quad.body != null) {
+                if (body != quad.body) {
+                    // Gravity
+                    Point3D a = getGravity(body.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), body.getRadius());
+                    body.setAcceleration(a);
 
-                // Collisions
-                collide(body, quad.body);
+                    // Collisions
+                    collide(body, quad.body);
+                }
+                body.update(dt);
             }
         } else {
             // Center of mass obtained by diving sum of weighted positions with total mass
@@ -815,7 +818,8 @@ public class SimulatorController {
             if ((quad.getLength() / body.getPosition().distance(centerMass)) < theta) {
                 // Base case - Estimate internal node as a single body
                 Point3D a = getGravity(body.getPosition(), centerMass, quad.totalMass, body.getRadius(), body.getRadius());
-                body.update(dt, a);
+                body.setAcceleration(a);
+                body.update(dt);
             } else {
                 // Recursive case - Threshold has not been met
                 for (Quad child : quad.children) {

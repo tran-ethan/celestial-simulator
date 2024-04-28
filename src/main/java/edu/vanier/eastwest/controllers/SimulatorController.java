@@ -248,8 +248,7 @@ public class SimulatorController {
         Point3D r = p2.subtract(p1);
         double rMag = r.magnitude();
 
-        // Distance between two bodies cannot be less than radius of 2 bodies because that would mean bodies are inside of each other
-        // TODO Add G Constant (for now it is always 1)
+        // Distance between bodies cannot be less than radius of 2 bodies because bodies would be inside each other
         double rMin = r1 + r2;
         return r.multiply(G * (m2 / Math.pow(Math.max(rMag, rMin), 3)));
     }
@@ -589,7 +588,7 @@ public class SimulatorController {
                     Point3D a = getGravity(p1, p2, m2, currentBody.getRadius(), comparedBody.getRadius());
                     currentBody.update(dt, a);
 
-                    collide(currentBody, comparedBody, currentBody.getPosition().distance(comparedBody.getPosition()));
+                    collide(currentBody, comparedBody);
                 }
             }
         }
@@ -621,19 +620,23 @@ public class SimulatorController {
             root.insert(body);
         }
 
-        // Compute gravity for all bodies
+        // Compute gravity and collisions for all bodies
         for (Body body: bodies()) {
-             gravitate(body, root);
+             attract(body, root);
         }
     }
 
-    void gravitate(Body body, Quad quad) {
+    void attract(Body body, Quad quad) {
         // Base case - External nodes
         if (quad.isExternal()) {
             // Ignore if compared body is the same as current body or node does not contain a body
             if (quad.body != null && body != quad.body) {
+                // Gravity
                 Point3D a = getGravity(body.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), body.getRadius());
                 body.update(dt, a);
+
+                // Collisions
+                collide(body, quad.body);
             }
         } else {
             // Center of mass obtained by diving sum of weighted positions with total mass
@@ -648,7 +651,7 @@ public class SimulatorController {
             } else {
                 // Recursive case - Threshold has not been met
                 for (Quad child : quad.children) {
-                    gravitate(body, child);
+                    attract(body, child);
                 }
             }
         }
@@ -716,8 +719,9 @@ public class SimulatorController {
         }
     }
 
-    private void collide(Body a, Body b, double distance) {
+    private void collide(Body a, Body b) {
         // Code adapted from https://stackoverflow.com/questions/345838/ball-to-ball-collision-detection-and-handling
+        double distance = a.getPosition().distance(b.getPosition());
         if (distance > a.getRadius() + b.getRadius()) {
             return;
         }

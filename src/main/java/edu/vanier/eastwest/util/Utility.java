@@ -158,9 +158,7 @@ public class Utility {
         Rectangle p = new Rectangle(length, length, Color.TRANSPARENT);
         p.setStroke(Color.GREEN);
         p.setStrokeWidth(1);
-        p.getTransforms().addAll(
-                new Rotate(90, Rotate.X_AXIS)
-        );
+        p.getTransforms().add(new Rotate(90, Rotate.X_AXIS));
         p.setTranslateX(x);
         p.setTranslateZ(z);
         p.setMouseTransparent(true);

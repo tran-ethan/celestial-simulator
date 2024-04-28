@@ -20,7 +20,9 @@ import static edu.vanier.eastwest.util.Utility.*;
  */
 public class Quad {
 
+    @Getter
     private final double x;
+    @Getter
     private final double z;
     @Getter
     private final double length;
@@ -143,8 +145,8 @@ public class Quad {
             while (quad2 == quad1) {
                 pointer.subdivide();
                 pointer = pointer.children[quad2];
-                quad2 = pointer.getQuadrant(body2.getPosition());
                 quad1 = pointer.getQuadrant(body.getPosition());
+                quad2 = pointer.getQuadrant(body2.getPosition());
 
                 // Update weighted positions for current node
                 Point3D posMass1 = body.getPosition().multiply(body.getMass());

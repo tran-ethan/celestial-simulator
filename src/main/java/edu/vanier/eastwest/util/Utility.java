@@ -163,6 +163,7 @@ public class Utility {
         );
         p.setTranslateX(x);
         p.setTranslateZ(z);
+        p.setMouseTransparent(true);
         return p;
     }
 }

@@ -5,10 +5,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="920.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.MainController">
    <children>
-      <Button layoutX="584.0" layoutY="443.0" mnemonicParsing="false" onAction="#start" prefHeight="34.0" prefWidth="112.0" text="Start" />
-      <Text layoutX="441.0" layoutY="268.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Celestial Simulator">
+      <Button layoutX="903.0" layoutY="452.0" mnemonicParsing="false" onAction="#start" prefHeight="34.0" prefWidth="112.0" text="Start" />
+      <Text layoutX="761.0" layoutY="283.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Celestial Simulator" AnchorPane.leftAnchor="761.0" AnchorPane.rightAnchor="761.93212890625">
          <font>
             <Font name="Calibri Bold" size="51.0" />
          </font>

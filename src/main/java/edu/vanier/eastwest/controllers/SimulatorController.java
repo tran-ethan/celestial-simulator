@@ -146,7 +146,7 @@ public class SimulatorController {
     Body newBody;
     ToggleButton selectedTool;
 
-    float size = 8000; // Size of plane
+    float size = 5000; // Size of plane
 
     @FXML
     public void initialize() {
@@ -211,11 +211,13 @@ public class SimulatorController {
 
         if (usingBarnes) {
             updateBodiesBarnes();
+            updateVectorsBarnes();
         } else {
             updateBodies();
+            updateVectors();
         }
 
-        updateVectors();
+        //updateVectors();
 
         if (selectedBody != null) {
             // Move camera around selected planet
@@ -626,6 +628,125 @@ public class SimulatorController {
         }
     }
 
+    public void updateVectorsBarnes() {
+        double minMagnitude = 0, maxMagnitude = 0;
+        boolean start = false;
+
+        // https://www.cs.princeton.edu/courses/archive/fall03/cs126/assignments/barnes-hut.html
+
+        // Find min X and Z locations
+        double minX = Float.MAX_VALUE;
+        double maxX = Float.MIN_VALUE;
+        double minZ = Float.MAX_VALUE;
+        double maxZ = Float.MIN_VALUE;
+
+        for (Body body : bodies()) {
+            minX = Math.min(minX, body.getTranslateX());
+            maxX = Math.max(maxX, body.getTranslateX());
+            minZ = Math.min(minZ, body.getTranslateZ());
+            maxZ = Math.max(maxZ, body.getTranslateZ());
+        }
+        for (Vector3D vector : vectors()) {
+            double currentAngle = vector.getAngle();
+            double x = 0, z = 0;
+            minX = Math.min(minX, vector.getTranslateX());
+            maxX = Math.max(maxX, vector.getTranslateX());
+            minZ = Math.min(minZ, vector.getTranslateZ());
+            maxZ = Math.max(maxZ, vector.getTranslateZ());
+
+            double length = Math.max(maxX - minX, maxZ - minZ);
+
+            // Create root node with delimiting square
+            Quad root = new Quad(minX, minZ, length, entities, tglBarnes.isSelected());
+
+            // Construct Barnes-Hut Tree by inserting bodies into root node
+            for (Body body : bodies()) {
+                root.insert(body);
+            }
+
+            // Compute gravity
+            Point3D temp = attractVector(vector, root);
+            //System.out.println(" x: " + temp.getX() + ", z: " + temp.getZ());
+            System.out.println(temp.magnitude());
+            Point3D sumDirection = new Point3D(temp.getX(), 0, temp.getZ());
+            double newAngle = sumDirection.angle(new Point3D(100, 0, 0));
+
+
+            double angle;
+            if (vector.getPosition().getZ() > 0) {
+                angle = newAngle - currentAngle;
+                if (sumDirection.getZ() > 0) {
+                    angle = -angle;
+                }
+            } else {
+                angle = currentAngle - newAngle;
+                if (sumDirection.getZ() < 0) {
+                    angle = -angle;
+                }
+            }
+            Rotate rotate = new Rotate(angle, Rotate.X_AXIS);
+            vector.getXRotate().angleProperty().set(vector.getXRotate().getAngle() + angle);
+            vector.setAngle(newAngle);
+
+             
+            vector.setMagnitude(sumDirection.magnitude());
+
+            // Updating colors
+            if (!start) {
+                maxMagnitude = vector.getMagnitude();
+                minMagnitude = vector.getMagnitude();
+                start = true;
+            } else {
+                if (vector.getMagnitude() > maxMagnitude) {
+                    maxMagnitude = vector.getMagnitude();
+                }
+                if (vector.getMagnitude() < minMagnitude) {
+                    minMagnitude = vector.getMagnitude();
+                }
+            }
+        }
+
+        for (Vector3D vectorM : vectors()) {
+            vectorM.setArrowColor(maxMagnitude, minMagnitude);
+        }
+
+    }
+
+
+    Point3D attractVector(Vector3D vector, Quad quad) {
+        double x = 0, z = 0;
+        // Base case - External nodes
+        if (quad.isExternal()) {
+            // Ignore if node does not contain a body
+            if (quad.body != null) {
+                // Gravity
+                Point3D temp = getGravity(vector.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), 1);
+                x += temp.getX();
+                z += temp.getZ();
+            }
+        } else {
+            // Center of mass obtained by diving sum of weighted positions with total mass
+            // https://math.libretexts.org/Courses/Mission_College/Math_3B%3A_Calculus_2_(Sklar)/06%3A_Applications_of_Integration/6.06%3A_Moments_and_Centers_of_Mass
+            Point3D centerMass = quad.weightedPositions.multiply(1.0 / quad.totalMass);
+
+            // Check if threshold for estimation has been met
+            if ((quad.getLength() / vector.getPosition().distance(centerMass)) < theta) {
+                // Base case - Estimate internal node as a single body
+                Point3D temp = getGravity(vector.getPosition(), centerMass, quad.totalMass, 1,1);
+                x += temp.getX();
+                z += temp.getZ();
+            } else {
+                // Recursive case - Threshold has not been met
+                for (Quad child : quad.children) {
+                    Point3D temp = attractVector(vector, child);
+                    x += temp.getX();
+                    z += temp.getZ();
+                }
+            }
+        }
+        return new Point3D(x, 0, z);
+    }
+
     void attract(Body body, Quad quad) {
         // Base case - External nodes
         if (quad.isExternal()) {
@@ -670,6 +791,7 @@ public class SimulatorController {
             double currentAngle = vector.getAngle();
             double x = 0;
             double z = 0;
+
             for (Body body : bodies()) {
                 Point3D p2 = body.getPosition();
                 double m2 = body.getMass();

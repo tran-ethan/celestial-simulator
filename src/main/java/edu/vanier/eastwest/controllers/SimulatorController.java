@@ -239,8 +239,6 @@ public class SimulatorController {
             updateVectors();
         }
 
-        //updateVectors();
-
         if (selectedBody != null) {
             // Move camera around selected planet
             camera.setTranslateX(selectedBody.getTranslateX());
@@ -356,9 +354,39 @@ public class SimulatorController {
             if (selectedTool == btnSelection) {
                 bodies().forEach(n -> n.setOnMouseClicked(e -> {
                     selectedBody = n;
-                    camera.setTranslateX(selectedBody.getTranslateX());
-                    camera.setTranslateY(selectedBody.getTranslateY());
-                    camera.setTranslateZ(selectedBody.getTranslateZ());
+
+                    //Timeline to smoothly move between the selected bodies
+                    Timeline smoothTransition = new Timeline(
+                            new KeyFrame(
+                                    Duration.seconds(0),
+                                    new KeyValue(camera.translateXProperty(), camera.getTranslateX())
+                            ),
+                            new KeyFrame(
+                                    Duration.seconds(0),
+                                    new KeyValue(camera.translateYProperty(), camera.getTranslateY())
+                            ),
+                            new KeyFrame(
+                                    Duration.seconds(0),
+                                    new KeyValue(camera.translateZProperty(), camera.getTranslateZ())
+                            ),
+                            new KeyFrame(
+                                    Duration.seconds(0.1),
+                                    new KeyValue(camera.translateXProperty(), selectedBody.getTranslateX())
+                            ),
+                            new KeyFrame(
+                                    Duration.seconds(0.1),
+                                    new KeyValue(camera.translateYProperty(), selectedBody.getTranslateY())
+                            ),
+                            new KeyFrame(
+                                    Duration.seconds(0.1),
+                                    new KeyValue(camera.translateZProperty(), selectedBody.getTranslateZ())
+                            )
+                    );
+                    smoothTransition.play();
+
+                    // Update properties panel
+                    lblSelected.setText(selectedBody.getName());
+                    lblProperties.setText(selectedBody.toString());
                 }));
             }
 

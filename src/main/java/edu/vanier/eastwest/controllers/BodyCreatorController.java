@@ -100,7 +100,7 @@ public class BodyCreatorController {
             simulatorController.spawnBody(name, radius, mass, color, texture);
             posBtn.setDisable(false);
             spawnBtn.setDisable(true);
-
+            texture = null;
         } catch (Exception e) {
             e.printStackTrace();
         }

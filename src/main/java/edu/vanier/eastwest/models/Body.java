@@ -43,10 +43,6 @@ public class Body extends Sphere {
         if(texture == null){
             setColor(color);
         }
-        System.out.println(1);
-        //else if(texture == null){
-           // setColor(color);
-      //  }
     }
 
     /**

@@ -158,6 +158,7 @@ public class SimulatorController {
      */
     Point3D velocity = new Point3D(0, 0, 0);
     ToggleButton selectedTool;
+    Quad root;
 
     float size = 5000; // Size of plane
 
@@ -682,7 +683,7 @@ public class SimulatorController {
         double length = Math.max(maxX - minX, maxZ - minZ);
 
         // Create root node with delimiting square
-        Quad root = new Quad(minX, minZ, length, entities, tglBarnes.isSelected());
+        root = new Quad(minX, minZ, length, entities, tglBarnes.isSelected());
 
         // Construct Barnes-Hut Tree by inserting bodies into root node
         for (Body body: bodies()) {
@@ -696,48 +697,17 @@ public class SimulatorController {
     }
 
     public void updateVectorsBarnes() {
+        // https://www.cs.princeton.edu/courses/archive/fall03/cs126/assignments/barnes-hut.html
         double minMagnitude = 0, maxMagnitude = 0;
         boolean start = false;
 
-        // https://www.cs.princeton.edu/courses/archive/fall03/cs126/assignments/barnes-hut.html
-
-        // Find min X and Z locations
-        double minX = Float.MAX_VALUE;
-        double maxX = Float.MIN_VALUE;
-        double minZ = Float.MAX_VALUE;
-        double maxZ = Float.MIN_VALUE;
-
-        for (Body body : bodies()) {
-            minX = Math.min(minX, body.getTranslateX());
-            maxX = Math.max(maxX, body.getTranslateX());
-            minZ = Math.min(minZ, body.getTranslateZ());
-            maxZ = Math.max(maxZ, body.getTranslateZ());
-        }
         for (Vector3D vector : vectors()) {
             double currentAngle = vector.getAngle();
-            double x = 0, z = 0;
-            minX = Math.min(minX, vector.getTranslateX());
-            maxX = Math.max(maxX, vector.getTranslateX());
-            minZ = Math.min(minZ, vector.getTranslateZ());
-            maxZ = Math.max(maxZ, vector.getTranslateZ());
-
-            double length = Math.max(maxX - minX, maxZ - minZ);
-
-            // Create root node with delimiting square
-            Quad root = new Quad(minX, minZ, length, entities, false);
-
-            // Construct Barnes-Hut Tree by inserting bodies into root node
-            for (Body body : bodies()) {
-                root.insert(body);
-            }
 
             // Compute gravity
             Point3D temp = attractVector(vector, root);
-            //System.out.println(" x: " + temp.getX() + ", z: " + temp.getZ());
-            System.out.println(temp.magnitude());
             Point3D sumDirection = new Point3D(temp.getX(), 0, temp.getZ());
             double newAngle = sumDirection.angle(new Point3D(100, 0, 0));
-
 
             double angle;
             if (vector.getPosition().getZ() > 0) {
@@ -751,11 +721,9 @@ public class SimulatorController {
                     angle = -angle;
                 }
             }
-            Rotate rotate = new Rotate(angle, Rotate.X_AXIS);
             vector.getXRotate().angleProperty().set(vector.getXRotate().getAngle() + angle);
             vector.setAngle(newAngle);
 
-             
             vector.setMagnitude(sumDirection.magnitude());
 
             // Updating colors

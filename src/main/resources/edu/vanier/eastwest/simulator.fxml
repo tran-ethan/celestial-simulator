@@ -24,13 +24,22 @@
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                    <MenuItem fx:id="menuSave" mnemonicParsing="false" text="Save" />
-                        <MenuItem fx:id="menuLoad" mnemonicParsing="false" text="Load" />
+                    <MenuItem mnemonicParsing="false" text="Close" />
                   </items>
                 </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                  <Menu mnemonicParsing="false" text="Options">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                    </items>
+                  </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                   <items>
-                    <MenuItem fx:id="menuGuide" mnemonicParsing="false" text="Guide" />
+                    <MenuItem mnemonicParsing="false" text="About" />
                   </items>
                 </Menu>
               </menus>
@@ -50,47 +59,98 @@
                                           <Insets top="20.0" />
                                        </VBox.margin>
                                        <font>
-                                          <Font size="20.0" />
+                                          <Font name="Impact" size="20.0" />
                                        </font>
                                     </Label>
-                                    <ToggleButton fx:id="btnPan" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Pan" textAlignment="CENTER">
+                                    <ToggleButton fx:id="btnPan" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" prefWidth="110.0" text="Pan" textAlignment="CENTER">
                                        <VBox.margin>
                                           <Insets top="20.0" />
                                        </VBox.margin>
+                                       <font>
+                                          <Font name="Impact" size="20.0" />
+                                       </font>
                                     </ToggleButton>
-                                    <ToggleButton fx:id="btnSelection" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Selection Tool" textAlignment="CENTER" />
-                                    <ToggleButton fx:id="btnAdd" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Add Body" textAlignment="CENTER" />
-                                    <ToggleButton fx:id="btnRemove" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="110.0" text="Remove Body" textAlignment="CENTER" />
+                                    <ToggleButton fx:id="btnSelection" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" prefWidth="110.0" text="Selection Tool" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Impact" size="20.0" />
+                                       </font></ToggleButton>
+                                    <ToggleButton fx:id="btnAdd" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" prefWidth="110.0" text="Add Body" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Impact" size="20.0" />
+                                       </font></ToggleButton>
+                                    <ToggleButton fx:id="btnRemove" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" prefWidth="110.0" text="Remove Body" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Impact" size="20.0" />
+                                       </font></ToggleButton>
                                     <VBox alignment="TOP_CENTER" prefHeight="584.0" prefWidth="210.0" spacing="10.0" style="-fx-border-color: black; -fx-border-style: solid none none none;">
                                        <children>
                                           <Button fx:id="btnPlay" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Play">
                                              <VBox.margin>
                                                 <Insets />
                                              </VBox.margin>
+                                             <font>
+                                                <Font name="Impact" size="13.0" />
+                                             </font>
                                           </Button>
                                           <Button fx:id="btnPause" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Pause">
                                              <VBox.margin>
                                                 <Insets />
                                              </VBox.margin>
+                                             <font>
+                                                <Font name="Impact" size="13.0" />
+                                             </font>
                                           </Button>
-                                          <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Clear" />
-                                          <Button fx:id="btnAlgorithm" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Currently using Direct Sum Algorithm" />
-                                          <Label text="Simulation Speed" />
+                                          <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Clear">
+                                             <font>
+                                                <Font name="Impact" size="13.0" />
+                                             </font></Button>
+                                          <Button fx:id="btnAlgorithm" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Currently using Direct Sum Algorithm">
+                                             <font>
+                                                <Font name="Impact" size="13.0" />
+                                             </font></Button>
+                                          <Label text="Simulation Speed">
+                                             <font>
+                                                <Font name="Impact" size="15.0" />
+                                             </font></Label>
                                           <Slider fx:id="sliderSpeed" majorTickUnit="1.0" max="10.0" min="0.01" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="1.0">
                                              <VBox.margin>
                                                 <Insets />
                                              </VBox.margin>
                                           </Slider>
-                                          <Label text="Gravitational Constant" />
+                                          <Label text="Gravitational Constant">
+                                             <font>
+                                                <Font name="Impact" size="15.0" />
+                                             </font></Label>
                                           <Slider fx:id="sliderG" majorTickUnit="1.0" max="5.0" min="0.01" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="1.0" />
-                                          <Label text="Barnes-Hut Criterion" />
+                                          <Label text="Barnes-Hut Criterion">
+                                             <font>
+                                                <Font name="Impact" size="15.0" />
+                                             </font></Label>
                                           <Slider fx:id="sliderTheta" disable="true" majorTickUnit="0.5" max="2.0" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="0.5" />
-                                          <ToggleSwitch fx:id="tglCamRotate" prefHeight="18.0" prefWidth="150.0" text="Camera Rotate" />
-                                          <ToggleSwitch fx:id="tgl2D" prefHeight="18.0" prefWidth="150.0" text="2D View" />
-                                          <ToggleSwitch fx:id="tglVector" prefHeight="18.0" prefWidth="150.0" text="Vector Field" />
-                                          <ToggleSwitch fx:id="tglAxes" prefHeight="18.0" prefWidth="150.0" selected="true" text="X,Y,Z Axes" />
-                                          <ToggleSwitch fx:id="tglGrid" prefHeight="18.0" prefWidth="150.0" selected="true" text="XZ Grid" />
-                                          <ToggleSwitch fx:id="tglBarnes" disable="true" prefHeight="18.0" prefWidth="150.0" selected="true" text="Barnes-Hut Squares" />
+                                          <ToggleSwitch fx:id="tglCamRotate" prefHeight="18.0" prefWidth="200.0" text="Automatic Camera Rotate">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font></ToggleSwitch>
+                                          <ToggleSwitch fx:id="tgl2D" prefHeight="18.0" prefWidth="200.0" text="2D View">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font></ToggleSwitch>
+                                          <ToggleSwitch fx:id="tglVector" prefHeight="18.0" prefWidth="200.0" text="Vector Field">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font></ToggleSwitch>
+                                          <ToggleSwitch fx:id="tglAxes" prefHeight="18.0" prefWidth="200.0" selected="true" text="Primary Axes">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font></ToggleSwitch>
+                                          <ToggleSwitch fx:id="tglGrid" prefHeight="18.0" prefWidth="200.0" selected="true" text="XZ Grid">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font></ToggleSwitch>
+                                          <ToggleSwitch fx:id="tglBarnes" disable="true" prefHeight="18.0" prefWidth="200.0" selected="true" text="Visualize Barnes-Hut (Lag) ">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font></ToggleSwitch>
                                        </children>
                                        <VBox.margin>
                                           <Insets top="20.0" />
@@ -111,16 +171,16 @@
                            <children>
                               <SplitPane fx:id="spProperties" dividerPositions="0.1000453720508167" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="887.0" prefWidth="200.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c; -fx-background-color: #D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <items>
-                                    <VBox alignment="CENTER" prefHeight="440.0" prefWidth="154.0">
+                                    <VBox alignment="TOP_CENTER" prefHeight="440.0" prefWidth="154.0">
                                        <children>
                                           <Label text="Properties of">
                                              <font>
-                                                <Font size="20.0" />
+                                                <Font name="Impact" size="20.0" />
                                              </font>
                                           </Label>
                                           <Label fx:id="lblSelected" text="&lt;No Body Selected&gt;">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font name="Impact" size="20.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -132,7 +192,7 @@
                                        <children>
                                           <Label fx:id="lblProperties" alignment="TOP_LEFT" text="Properties">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font name="Impact" size="20.0" />
                                              </font></Label>
                                        </children>
                                        <padding>

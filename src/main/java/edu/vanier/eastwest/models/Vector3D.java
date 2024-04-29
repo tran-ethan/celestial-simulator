@@ -61,6 +61,8 @@ public class Vector3D extends Group {
     private Cylinder c1 = new Cylinder(), c2 = new Cylinder();
     @Getter @Setter
     private MeshView meshView = new MeshView();
+    @Getter @Setter
+    private Point3D truePosition = new Point3D(0, 0, 0);
 
     @Getter @Setter
     Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
@@ -73,10 +75,19 @@ public class Vector3D extends Group {
 
         arrow = creatingArrow();
     }
+
+    /***
+     * Returns the position of the Vector3D object within the simulation.
+     * @return Vector3D position
+     */
     public Point3D getPosition() {
         return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
     }
 
+    /***
+     * Updates the position the Vector3D object.
+     * @param position The current x, y, z position of the vector.
+     */
     public void setPosition(Point3D position) {
         setTranslateX(position.getX());
         setTranslateY(position.getY());

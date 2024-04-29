@@ -286,13 +286,12 @@ public class SimulatorController {
     }
 
     /***
-     * TODO: Make vectors appear only near bodies
      * Creates Vector3D arrows around Body objects.
      */
       private void initVectors() {
           for (Body body : bodies()){
-              int xVariableForVectorSpawning = (int) body.getRadius()/8;
-              int zVariableForVectorSpawning = (int) body.getRadius()/8;
+              int xVariableForVectorSpawning = (int) body.getRadius()/5;
+              int zVariableForVectorSpawning = (int) body.getRadius()/5;
               int xDistanceForVectorSpawning = 100;
               int zDistanceForVectorSpawning = 100;
               for (int i = -xVariableForVectorSpawning; i <= xVariableForVectorSpawning; i++) {
@@ -300,12 +299,16 @@ public class SimulatorController {
                       Vector3D v = new Vector3D(7, 25, new Point3D(i * xDistanceForVectorSpawning + (int)Math.round(body.getTranslateX()/100)*100, 0, j * zDistanceForVectorSpawning + (int)Math.round(body.getTranslateZ()/100)*100));
                       v.getTransforms().add(new Rotate(90, 1, 0, 0));
                       v.getTransforms().add(v.getXRotate());
+                      body.getVectors().add(v);
                       entities.getChildren().add(v);
                   }
               }
           }
       }
 
+    /***
+     * Initializes all the EventHandlers for user inputs.
+     */
     private void initControls() {
 
         // Bind rotation angle to camera with mouse movement
@@ -444,7 +447,9 @@ public class SimulatorController {
         });
 
         // Pan toggle button
-        btnPan.setOnAction(event -> toggleToolButtons(btnPan));
+        btnPan.setOnAction(event -> {
+            toggleToolButtons(btnPan);
+        });
 
         // Selection toggle button
         btnSelection.setOnAction(event -> toggleToolButtons(btnSelection));
@@ -650,15 +655,19 @@ public class SimulatorController {
     private void toggleToolButtons(ToggleButton selected) {
         // Disable selection and add body tools when other tools are selected
         selectedBody = null;
+        pane.setCursor(Cursor.DEFAULT);
         bodies().forEach(n -> n.setOnMouseClicked(null));
         bodyCreator.setVisible(false);
 
         if (selected == selectedTool) {
             // User clicks on same button twice to deselect the tool
             selectedTool = null;
-        } else {
+        } else if(selected != null){
             // Tool selection
             selectedTool = selected;
+            if(selected.equals(btnPan)){
+                pane.setCursor(Cursor.MOVE);
+            }
         }
 
         // Deselect all other tools

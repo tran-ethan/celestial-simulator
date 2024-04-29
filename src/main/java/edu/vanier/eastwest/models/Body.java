@@ -8,6 +8,10 @@ import javafx.scene.shape.Sphere;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 public class Body extends Sphere {
     @Getter
     private String name;
@@ -21,6 +25,8 @@ public class Body extends Sphere {
     private Color color;
     @Getter @Setter
     private Image texture;
+    @Getter
+    private List<Vector3D> vectors = new ArrayList<>();;
 
     /**
      * Constructor for a Body object using 4 parameters.
@@ -42,8 +48,7 @@ public class Body extends Sphere {
             PhongMaterial material = new PhongMaterial();
             material.setDiffuseMap(texture);
             setMaterial(material);
-        }
-        if (texture == null) {
+        } else{
             setColor(color);
         }
     }
@@ -56,11 +61,27 @@ public class Body extends Sphere {
         // Update position
         setPosition(getPosition().add(velocity.multiply(time)));
 
+        //Moving the vectors
+        for (Vector3D vector : this.getVectors()){
+            vector.setTruePosition(new Point3D(vector.getPosition().getX() + this.getVelocity().multiply(time).getX(), 0, vector.getPosition().getZ() + this.getVelocity().multiply(time).getZ()));
+            double vectorX = Math.round((vector.getTruePosition().getX() + this.getVelocity().multiply(time).getX())/100) * 100;
+            double vectorZ = Math.round((vector.getTruePosition().getZ() + this.getVelocity().multiply(time).getZ())/100) * 100;
+            vector.setPosition(new Point3D(vectorX, 0, vectorZ));
+        }
+
         // Update velocity
         velocity = velocity.add(acceleration.multiply(time));
 
         // Reset acceleration
         acceleration = new Point3D(0, 0, 0);
+    }
+
+    /***
+     * Returns the position of the Body object within the simulation.
+     * @return Point3D position
+     */
+    public Point3D getPosition() {
+        return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
     }
 
     /**
@@ -73,10 +94,10 @@ public class Body extends Sphere {
         setTranslateZ(position.getZ());
     }
 
-    public Point3D getPosition() {
-        return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
-    }
-
+    /***
+     * Sets the color of the Body object.
+     * @param color
+     */
     public void setColor(Color color) {
         this.color = color;
         setMaterial(new PhongMaterial(color));

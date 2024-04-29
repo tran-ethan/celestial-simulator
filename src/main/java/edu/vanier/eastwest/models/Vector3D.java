@@ -62,13 +62,14 @@ public class Vector3D extends Group {
     @Getter @Setter
     private MeshView meshView = new MeshView();
     @Getter @Setter
-    private Point3D truePosition = new Point3D(0, 0, 0);
+    private Point3D truePosition;
 
     @Getter @Setter
     Rotate xRotate = new Rotate(0, Rotate.X_AXIS);
 
     public Vector3D(int r, int h, Point3D p) {
         setPosition(p);
+        truePosition = p;
         radius = r;
         magnitude = 0;
         height = h / 5 * 2;

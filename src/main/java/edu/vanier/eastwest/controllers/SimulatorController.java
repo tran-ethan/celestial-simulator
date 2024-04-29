@@ -749,6 +749,41 @@ public class SimulatorController {
         }
     }
 
+    void attract(Body body, Quad quad) {
+        // Base case - External nodes
+        if (quad.isExternal()) {
+            // Ignore if compared body is the same as current body or node does not contain a body
+            if (quad.body != null) {
+                if (body != quad.body) {
+                    // Gravity
+                    Point3D a = getGravity(body.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), body.getRadius());
+                    body.setAcceleration(a);
+
+                    // Collisions
+                    collide(body, quad.body);
+                }
+                body.update(dt);
+            }
+        } else {
+            // Center of mass obtained by diving sum of weighted positions with total mass
+            // https://math.libretexts.org/Courses/Mission_College/Math_3B%3A_Calculus_2_(Sklar)/06%3A_Applications_of_Integration/6.06%3A_Moments_and_Centers_of_Mass
+            Point3D centerMass = quad.weightedPositions.multiply(1.0 / quad.totalMass);
+
+            // Check if threshold for estimation has been met
+            if ((quad.getLength() / body.getPosition().distance(centerMass)) < theta) {
+                // Base case - Estimate internal node as a single body
+                Point3D a = getGravity(body.getPosition(), centerMass, quad.totalMass, body.getRadius(), body.getRadius());
+                body.setAcceleration(a);
+                body.update(dt);
+            } else {
+                // Recursive case - Threshold has not been met
+                for (Quad child : quad.children) {
+                    attract(body, child);
+                }
+            }
+        }
+    }
+
     public void updateVectorsBarnes() {
         // https://www.cs.princeton.edu/courses/archive/fall03/cs126/assignments/barnes-hut.html
         double minMagnitude = 0, maxMagnitude = 0;
@@ -835,40 +870,6 @@ public class SimulatorController {
         return new Point3D(x, 0, z);
     }
 
-    void attract(Body body, Quad quad) {
-        // Base case - External nodes
-        if (quad.isExternal()) {
-            // Ignore if compared body is the same as current body or node does not contain a body
-            if (quad.body != null) {
-                if (body != quad.body) {
-                    // Gravity
-                    Point3D a = getGravity(body.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), body.getRadius());
-                    body.setAcceleration(a);
-
-                    // Collisions
-                    collide(body, quad.body);
-                }
-                body.update(dt);
-            }
-        } else {
-            // Center of mass obtained by diving sum of weighted positions with total mass
-            // https://math.libretexts.org/Courses/Mission_College/Math_3B%3A_Calculus_2_(Sklar)/06%3A_Applications_of_Integration/6.06%3A_Moments_and_Centers_of_Mass
-            Point3D centerMass = quad.weightedPositions.multiply(1.0 / quad.totalMass);
-
-            // Check if threshold for estimation has been met
-            if ((quad.getLength() / body.getPosition().distance(centerMass)) < theta) {
-                // Base case - Estimate internal node as a single body
-                Point3D a = getGravity(body.getPosition(), centerMass, quad.totalMass, body.getRadius(), body.getRadius());
-                body.setAcceleration(a);
-                body.update(dt);
-            } else {
-                // Recursive case - Threshold has not been met
-                for (Quad child : quad.children) {
-                    attract(body, child);
-                }
-            }
-        }
-    }
 
     /***
      * Rotates the vectors towards the direction of the net gravitational field caused by all the Body objects using a direct sum algorithm.
@@ -893,25 +894,25 @@ public class SimulatorController {
                 z += a.getZ();
             }
 
-            Point3D sumDirection = new Point3D(x, 0, z);
-            double newAngle = sumDirection.angle(new Point3D(100, 0, 0));
+            Point3D sumGravityField = new Point3D(x, 0, z);
+            double newAngle = sumGravityField.angle(new Point3D(1, 0, 0));
 
             double angle;
             if (vector.getPosition().getZ() > 0) {
                 angle = newAngle - currentAngle;
-                if (sumDirection.getZ() > 0) {
+                if (sumGravityField.getZ() > 0) {
                     angle = -angle;
                 }
             } else {
                 angle = currentAngle - newAngle;
-                if (sumDirection.getZ() < 0) {
+                if (sumGravityField.getZ() < 0) {
                     angle = -angle;
                 }
             }
             Rotate rotate = new Rotate(angle, Rotate.X_AXIS);
             vector.getXRotate().angleProperty().set(vector.getXRotate().getAngle() + angle);
             vector.setAngle(newAngle);
-            vector.setMagnitude(sumDirection.magnitude());
+            vector.setMagnitude(sumGravityField.magnitude());
 
             // Updating colors
             if (!start) {

@@ -93,7 +93,7 @@ public class Body extends Sphere {
         setTranslateY(0);
         setTranslateZ(position.getZ());
     }
-    
+
     public void setVelocity(Point3D velocity) {
         this.velocity = new Point3D(velocity.getX(), 0, velocity.getZ());
     }

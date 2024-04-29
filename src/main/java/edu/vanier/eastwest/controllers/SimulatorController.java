@@ -37,6 +37,7 @@ import org.controlsfx.control.ToggleSwitch;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static edu.vanier.eastwest.util.Utility.*;
@@ -286,24 +287,33 @@ public class SimulatorController {
     }
 
     /***
-     * Creates Vector3D arrows around Body objects.
+     * Creates Vector3D arrows around Body object with the most mass.
      */
       private void initVectors() {
-          for (Body body : bodies()){
-              int xVariableForVectorSpawning = (int) body.getRadius()/5;
-              int zVariableForVectorSpawning = (int) body.getRadius()/5;
-              int xDistanceForVectorSpawning = 100;
-              int zDistanceForVectorSpawning = 100;
-              for (int i = -xVariableForVectorSpawning; i <= xVariableForVectorSpawning; i++) {
-                  for(int j = -zVariableForVectorSpawning; j <= zVariableForVectorSpawning; j++) {
-                      Vector3D v = new Vector3D(7, 25, new Point3D(i * xDistanceForVectorSpawning + (int)Math.round(body.getTranslateX()/100)*100, 0, j * zDistanceForVectorSpawning + (int)Math.round(body.getTranslateZ()/100)*100));
-                      v.getTransforms().add(new Rotate(90, 1, 0, 0));
-                      v.getTransforms().add(v.getXRotate());
-                      body.getVectors().add(v);
-                      entities.getChildren().add(v);
+          Body body = null;
+          for (Body compared : bodies()){
+              if (body != null){
+                  if(body.getMass() < compared.getMass()){
+                      body = compared;
                   }
+              }else{
+                  body = compared;
               }
           }
+          int xVariableForVectorSpawning = (int) body.getRadius()/8;
+          int zVariableForVectorSpawning = (int) body.getRadius()/8;
+          int xDistanceForVectorSpawning = 100;
+          int zDistanceForVectorSpawning = 100;
+          for (int i = -xVariableForVectorSpawning; i <= xVariableForVectorSpawning; i++) {
+              for(int j = -zVariableForVectorSpawning; j <= zVariableForVectorSpawning; j++) {
+                  Vector3D v = new Vector3D(7, 25, new Point3D(i * xDistanceForVectorSpawning + (int)Math.round(body.getTranslateX()/100)*100, 0, j * zDistanceForVectorSpawning + (int)Math.round(body.getTranslateZ()/100)*100));
+                  v.getTransforms().add(new Rotate(90, 1, 0, 0));
+                  v.getTransforms().add(v.getXRotate());
+                  body.getVectors().add(v);
+                  entities.getChildren().add(v);
+              }
+          }
+          updateVectors();
       }
 
     /***
@@ -462,7 +472,9 @@ public class SimulatorController {
             }
             else {
                 // Add vector field
-                initVectors();
+                if(!bodies().isEmpty()){
+                    initVectors();
+                }
             }
         });
 
@@ -882,35 +894,33 @@ public class SimulatorController {
         for (Vector3D vector : vectors()) {
             Point3D vectorPosition = vector.getPosition();
             double currentAngle = vector.getAngle();
-            double x = 0;
-            double z = 0;
+            Point3D sumGravityField = new Point3D(0, 0, 0);
 
             for (Body body : bodies()) {
-                Point3D p2 = body.getPosition();
-                double m2 = body.getMass();
-                Point3D a = getGravity(vectorPosition, p2, m2, 1, body.getRadius());
+                Point3D bodyPosition = body.getPosition();
+                double bodyMass = body.getMass();
+                Point3D gravityField = getGravity(vectorPosition, bodyPosition, bodyMass, body.getRadius(), body.getRadius());
                 //Summing the gravitational field forces
-                x += a.getX();
-                z += a.getZ();
+                sumGravityField = sumGravityField.add(gravityField.getX(), 0, gravityField.getZ());
             }
 
-            Point3D sumGravityField = new Point3D(x, 0, z);
-            double newAngle = sumGravityField.angle(new Point3D(1, 0, 0));
+
+            double newAngle = sumGravityField.angle(new Point3D(Integer.MAX_VALUE, 0, 0));
 
             double angle;
             if (vector.getPosition().getZ() > 0) {
                 angle = newAngle - currentAngle;
-                if (sumGravityField.getZ() > 0) {
+                if (sumGravityField.getZ() >= 0) {
                     angle = -angle;
                 }
             } else {
                 angle = currentAngle - newAngle;
-                if (sumGravityField.getZ() < 0) {
+                if (sumGravityField.getZ() <= 0) {
                     angle = -angle;
                 }
             }
             Rotate rotate = new Rotate(angle, Rotate.X_AXIS);
-            vector.getXRotate().angleProperty().set(vector.getXRotate().getAngle() + angle);
+            vector.getXRotate().setAngle(vector.getXRotate().getAngle() + angle);
             vector.setAngle(newAngle);
             vector.setMagnitude(sumGravityField.magnitude());
 
@@ -1001,7 +1011,7 @@ public class SimulatorController {
 
         if (saveFile != null){
             entities.getChildren().removeAll(bodies());
-            entities.getChildren().addAll(SaveFileManager.fromJson(saveFile.getPath()));
+            entities.getChildren().addAll(Objects.requireNonNull(SaveFileManager.fromJson(saveFile.getPath())));
         }
     }
 }

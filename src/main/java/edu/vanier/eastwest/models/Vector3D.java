@@ -73,7 +73,7 @@ public class Vector3D extends Group {
         radius = r;
         magnitude = 0;
         height = h / 5 * 2;
-
+        angle = 0;
         arrow = creatingArrow();
     }
 
@@ -82,7 +82,7 @@ public class Vector3D extends Group {
      * @return Vector3D position
      */
     public Point3D getPosition() {
-        return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
+        return new Point3D(getTranslateX(), 0, getTranslateZ());
     }
 
     /***

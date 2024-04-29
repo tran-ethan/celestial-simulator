@@ -20,6 +20,7 @@ import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -273,18 +274,29 @@ public class SimulatorController {
     }
 
     private void initBodies() {
-        Body sun = new Body("Sun", 40, 100000, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.YELLOW, null);
-        Body p1 = new Body("Blue", 10, 20000, new Point3D(125, 0, 120), new Point3D(0, 0, 10), Color.BLUE, null);
-        Body p2 = new Body("Green", 10, 5000, new Point3D(200, 0, 100), new Point3D(-4, 0, 0), Color.GREEN, null);
-        Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), new Point3D(10, 0, 10), Color.WHITE, null);
-        Body p4 = new Body("Red", 10, 5000, new Point3D(200, 0, 200), new Point3D(0, 0, -5), Color.RED, null);
+        if (MainApp.preset.equals("three")) {
+            Point3D p1 = new Point3D(0, 0 , 100);
+            Point3D p2 = new Point3D(100 * Math.sqrt(3) / 2, 0, -100 * 0.5);
+            Point3D p3 = new Point3D(-100 * Math.sqrt(3) / 2, 0, -100 * 0.5);
+            Point3D v1 = new Point3D(10, 0, 0);
+            Point3D v2 = new Point3D(-10 * Math.cos(Math.PI / 3), 0, -10 * Math.sin(Math.PI / 3));
+            Point3D v3 = new Point3D(-10 * Math.cos(Math.PI / 3), 0, 10 * Math.sin(Math.PI / 3));
+            Body b1 = new Body("Mass 1", 20, 50000, p1, v1, Color.RED, null);
+            Body b2 = new Body("Mass 2", 20, 50000, p2, v2, Color.YELLOW, null);
+            Body b3 = new Body("Mass 3", 20, 50000, p3, v3, Color.BLUE, null);
+            entities.getChildren().addAll(b1, b2, b3);
 
-        // Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, -50), Color.rgb(255,255,0,1), null);
-        // Body p1 = new Body("Earth", 10, 20000, new Point3D(150, 0, -100), Color.BLUE, null);
-        // Body p2 = new Body("A", 10, 5000, new Point3D(0, 0, 100), Color.GREEN, null);
-        // Body p3 = new Body("B", 10, 5000, new Point3D(0, 0, 200), Color.WHITE, null);
+        } else if (MainApp.preset.equals("five")) {
+            // TODO
+        } else if (MainApp.preset.equals("solar")) {
+            Body sun = new Body("Sun", 40, 100000, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.YELLOW, null);
+            Body p1 = new Body("Blue", 10, 20000, new Point3D(125, 0, 120), new Point3D(0, 0, 10), Color.BLUE, null);
+            Body p2 = new Body("Green", 10, 5000, new Point3D(200, 0, 100), new Point3D(-4, 0, 0), Color.GREEN, null);
+            Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), new Point3D(10, 0, 10), Color.WHITE, null);
+            Body p4 = new Body("Red", 10, 5000, new Point3D(200, 0, 200), new Point3D(0, 0, -5), Color.RED, null);
 
-        entities.getChildren().addAll(sun, p1, p2, p3, p4);
+            entities.getChildren().addAll(sun, p1, p2, p3, p4);
+        }
     }
 
     /***

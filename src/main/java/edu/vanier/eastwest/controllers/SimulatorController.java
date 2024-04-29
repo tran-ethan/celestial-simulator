@@ -6,6 +6,7 @@ import edu.vanier.eastwest.models.MySplitPaneSkin;
 import edu.vanier.eastwest.models.Quad;
 import edu.vanier.eastwest.models.Vector3D;
 import edu.vanier.eastwest.util.SaveFileManager;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -300,8 +301,8 @@ public class SimulatorController {
                   body = compared;
               }
           }
-          int xVariableForVectorSpawning = (int) body.getRadius()/8;
-          int zVariableForVectorSpawning = (int) body.getRadius()/8;
+          int xVariableForVectorSpawning = (int) body.getRadius() / 8;
+          int zVariableForVectorSpawning = (int) body.getRadius() / 8;
           int xDistanceForVectorSpawning = 100;
           int zDistanceForVectorSpawning = 100;
           for (int i = -xVariableForVectorSpawning; i <= xVariableForVectorSpawning; i++) {
@@ -385,16 +386,16 @@ public class SimulatorController {
                                     new KeyValue(camera.translateZProperty(), camera.getTranslateZ())
                             ),
                             new KeyFrame(
-                                    Duration.seconds(0.1),
-                                    new KeyValue(camera.translateXProperty(), selectedBody.getTranslateX())
+                                    Duration.seconds(0.15),
+                                    new KeyValue(camera.translateXProperty(), selectedBody.getTranslateX(), Interpolator.EASE_BOTH)
                             ),
                             new KeyFrame(
-                                    Duration.seconds(0.1),
-                                    new KeyValue(camera.translateYProperty(), selectedBody.getTranslateY())
+                                    Duration.seconds(0.15),
+                                    new KeyValue(camera.translateYProperty(), selectedBody.getTranslateY(), Interpolator.EASE_BOTH)
                             ),
                             new KeyFrame(
-                                    Duration.seconds(0.1),
-                                    new KeyValue(camera.translateZProperty(), selectedBody.getTranslateZ())
+                                    Duration.seconds(0.15),
+                                    new KeyValue(camera.translateZProperty(), selectedBody.getTranslateZ(), Interpolator.EASE_BOTH)
                             )
                     );
                     jump.play();
@@ -560,7 +561,7 @@ public class SimulatorController {
             plane.setMouseTransparent(false);
             newBody.setMouseTransparent(true);
             newBody.startFullDrag();
-            newBody.setCursor(Cursor.MOVE);
+            newBody.setCursor(Cursor.CLOSED_HAND);
         });
 
         newBody.setOnMouseReleased(event -> {
@@ -781,14 +782,14 @@ public class SimulatorController {
             // https://math.libretexts.org/Courses/Mission_College/Math_3B%3A_Calculus_2_(Sklar)/06%3A_Applications_of_Integration/6.06%3A_Moments_and_Centers_of_Mass
             Point3D centerMass = quad.weightedPositions.multiply(1.0 / quad.totalMass);
 
-            // Check if threshold for estimation has been met
+            // Check if Barnes-Hut criterion for estimation has been met
             if ((quad.getLength() / body.getPosition().distance(centerMass)) < theta) {
                 // Base case - Estimate internal node as a single body
                 Point3D a = getGravity(body.getPosition(), centerMass, quad.totalMass, body.getRadius(), body.getRadius());
                 body.setAcceleration(a);
                 body.update(dt);
             } else {
-                // Recursive case - Threshold has not been met
+                // Recursive case - Barnes-Hut criterion has not been met
                 for (Quad child : quad.children) {
                     attract(body, child);
                 }
@@ -797,7 +798,6 @@ public class SimulatorController {
     }
 
     public void updateVectorsBarnes() {
-        // https://www.cs.princeton.edu/courses/archive/fall03/cs126/assignments/barnes-hut.html
         double minMagnitude = 0, maxMagnitude = 0;
         boolean start = false;
 
@@ -890,7 +890,7 @@ public class SimulatorController {
     public void updateVectors() {
         double minMagnitude = 0, maxMagnitude = 0;
         boolean start = false;
-        //Updating angle
+        // Update angles
         for (Vector3D vector : vectors()) {
             Point3D vectorPosition = vector.getPosition();
             double currentAngle = vector.getAngle();
@@ -924,7 +924,7 @@ public class SimulatorController {
             vector.setAngle(newAngle);
             vector.setMagnitude(sumGravityField.magnitude());
 
-            // Updating colors
+            // Update colors
             if (!start) {
                 maxMagnitude = vector.getMagnitude();
                 minMagnitude = vector.getMagnitude();

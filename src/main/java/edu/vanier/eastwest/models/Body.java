@@ -57,7 +57,7 @@ public class Body extends Sphere {
         setPosition(getPosition().add(velocity.multiply(time)));
 
         // Update velocity
-        velocity = velocity.add(acceleration.multiply(time));
+        setVelocity(velocity.add(acceleration.multiply(time)));
 
         // Reset acceleration
         acceleration = new Point3D(0, 0, 0);

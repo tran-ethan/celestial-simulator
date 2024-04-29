@@ -275,15 +275,22 @@ public class SimulatorController {
 
     private void initBodies() {
         if (MainApp.preset.equals("three")) {
-            Point3D p1 = new Point3D(0, 0 , 100);
-            Point3D p2 = new Point3D(100 * Math.sqrt(3) / 2, 0, -100 * 0.5);
-            Point3D p3 = new Point3D(-100 * Math.sqrt(3) / 2, 0, -100 * 0.5);
-            Point3D v1 = new Point3D(10, 0, 0);
-            Point3D v2 = new Point3D(-10 * Math.cos(Math.PI / 3), 0, -10 * Math.sin(Math.PI / 3));
-            Point3D v3 = new Point3D(-10 * Math.cos(Math.PI / 3), 0, 10 * Math.sin(Math.PI / 3));
-            Body b1 = new Body("Mass 1", 20, 50000, p1, v1, Color.RED, null);
-            Body b2 = new Body("Mass 2", 20, 50000, p2, v2, Color.YELLOW, null);
-            Body b3 = new Body("Mass 3", 20, 50000, p3, v3, Color.BLUE, null);
+            double l = 100;
+            Point3D p1 = new Point3D(0, 0 , l);
+            Point3D p2 = new Point3D(l * Math.sqrt(3) / 2, 0, -l * 0.5);
+            Point3D p3 = new Point3D(-l * Math.sqrt(3) / 2, 0, -l * 0.5);
+
+            double v = 10;
+            Point3D v1 = new Point3D(v, 0, 0);
+            Point3D v2 = new Point3D(-v * 0.5, 0, -v * Math.sqrt(3) / 2);
+            Point3D v3 = new Point3D(-v * 0.5, 0, v * Math.sqrt(3) / 2);
+
+            double mass = 50000;
+            double radius = 20;
+
+            Body b1 = new Body("Mass 1", radius, mass, p1, v1, Color.RED, null);
+            Body b2 = new Body("Mass 2", radius, mass, p2, v2, Color.YELLOW, null);
+            Body b3 = new Body("Mass 3", radius, mass, p3, v3, Color.BLUE, null);
             entities.getChildren().addAll(b1, b2, b3);
 
         } else if (MainApp.preset.equals("five")) {

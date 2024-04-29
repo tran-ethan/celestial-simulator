@@ -7,7 +7,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="940.0" prefWidth="1800.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.MainController">
    <children>
-      <Button layoutX="904.0" layoutY="421.0" mnemonicParsing="false" onAction="#start" prefHeight="34.0" prefWidth="112.0" text="Start" />
+      <Button layoutX="904.0" layoutY="421.0" mnemonicParsing="false" onAction="#start" prefHeight="34.0" prefWidth="112.0" text="New" />
       <Text layoutX="761.0" layoutY="283.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Celestial Simulator" AnchorPane.leftAnchor="761.0" AnchorPane.rightAnchor="761.93212890625">
          <font>
             <Font name="Calibri Bold" size="51.0" />

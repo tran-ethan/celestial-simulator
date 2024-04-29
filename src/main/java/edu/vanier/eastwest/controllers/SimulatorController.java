@@ -126,10 +126,6 @@ public class SimulatorController {
     Body selectedBody;
 
     private double anchorX, anchorY;
-    private final int xVariableForVectorSpawning = 5;
-    private final int zVariableForVectorSpawning = 5;
-    private final int xDistanceForVectorSpawning = 100;
-    private final int zDistanceForVectorSpawning = 100;
 
     private double anchorAngleX, anchorAngleZ, anchorAngleY = 0;
 
@@ -275,7 +271,7 @@ public class SimulatorController {
     }
 
     private void initBodies() {
-        Body sun = new Body("Sun", 30, 100000, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.YELLOW, null);
+        Body sun = new Body("Sun", 40, 100000, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.YELLOW, null);
         Body p1 = new Body("Blue", 10, 20000, new Point3D(125, 0, 120), new Point3D(0, 0, 10), Color.BLUE, null);
         Body p2 = new Body("Green", 10, 5000, new Point3D(200, 0, 100), new Point3D(-4, 0, 0), Color.GREEN, null);
         Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), new Point3D(10, 0, 10), Color.WHITE, null);
@@ -293,16 +289,22 @@ public class SimulatorController {
      * TODO: Make vectors appear only near bodies
      * Creates Vector3D arrows around Body objects.
      */
-    private void initVectors() {
-        for (int i = -xVariableForVectorSpawning; i <= xVariableForVectorSpawning; i++) {
-            for(int j = -zVariableForVectorSpawning; j <= zVariableForVectorSpawning; j++) {
-                Vector3D v = new Vector3D(7, 25, new Point3D(i * xDistanceForVectorSpawning, 0, zDistanceForVectorSpawning*j));
-                v.getTransforms().add(new Rotate(90, 1, 0, 0));
-                v.getTransforms().add(v.getXRotate());
-                entities.getChildren().add(v);
-            }
-        }
-    }
+      private void initVectors() {
+          for (Body body : bodies()){
+              int xVariableForVectorSpawning = (int) body.getRadius()/8;
+              int zVariableForVectorSpawning = (int) body.getRadius()/8;
+              int xDistanceForVectorSpawning = 100;
+              int zDistanceForVectorSpawning = 100;
+              for (int i = -xVariableForVectorSpawning; i <= xVariableForVectorSpawning; i++) {
+                  for(int j = -zVariableForVectorSpawning; j <= zVariableForVectorSpawning; j++) {
+                      Vector3D v = new Vector3D(7, 25, new Point3D(i * xDistanceForVectorSpawning + (int)Math.round(body.getTranslateX()/100)*100, 0, j * zDistanceForVectorSpawning + (int)Math.round(body.getTranslateZ()/100)*100));
+                      v.getTransforms().add(new Rotate(90, 1, 0, 0));
+                      v.getTransforms().add(v.getXRotate());
+                      entities.getChildren().add(v);
+                  }
+              }
+          }
+      }
 
     private void initControls() {
 

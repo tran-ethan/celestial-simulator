@@ -17,7 +17,7 @@ public class Body extends Sphere {
     private String name;
     @Getter
     private double mass;
-    @Setter @Getter
+    @Getter
     private Point3D velocity;
     @Setter @ Getter
     private Point3D acceleration;
@@ -70,7 +70,7 @@ public class Body extends Sphere {
         }
 
         // Update velocity
-        velocity = velocity.add(acceleration.multiply(time));
+        setVelocity(velocity.add(acceleration.multiply(time)));
 
         // Reset acceleration
         acceleration = new Point3D(0, 0, 0);
@@ -81,7 +81,7 @@ public class Body extends Sphere {
      * @return Point3D position
      */
     public Point3D getPosition() {
-        return new Point3D(getTranslateX(), getTranslateY(), getTranslateZ());
+        return new Point3D(getTranslateX(), 0, getTranslateZ());
     }
 
     /**
@@ -90,8 +90,12 @@ public class Body extends Sphere {
      */
     public void setPosition(Point3D position) {
         setTranslateX(position.getX());
-        setTranslateY(position.getY());
+        setTranslateY(0);
         setTranslateZ(position.getZ());
+    }
+    
+    public void setVelocity(Point3D velocity) {
+        this.velocity = new Point3D(velocity.getX(), 0, velocity.getZ());
     }
 
     /***

@@ -38,6 +38,7 @@ import javafx.util.Duration;
 import org.controlsfx.control.ToggleSwitch;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -127,6 +128,7 @@ public class SimulatorController {
     private Group entities;
     private SubScene subScene;
     Body selectedBody;
+    Body selectedBodyToRemove;
 
     private double anchorX, anchorY;
 
@@ -385,8 +387,14 @@ public class SimulatorController {
 
         // Mouse controls
         EventHandler<MouseEvent> mousePressedHandler = event -> {
+            if(btnRemove.isSelected()){
+                bodies().forEach(n -> n.setOnMouseClicked(e -> {
+                            selectedBodyToRemove = n;
+                    entities.getChildren().remove(selectedBodyToRemove);
+            }));
+            }
             // Select planet by clicking it with LMB when not panning
-            if (selectedTool == btnSelection) {
+            else if (selectedTool == btnSelection) {
                 bodies().forEach(n -> n.setOnMouseClicked(e -> {
                     selectedBody = n;
 
@@ -504,6 +512,10 @@ public class SimulatorController {
             bodyCreator.setVisible(true);
         });
 
+        btnRemove.setOnAction(event -> {
+            btnRemove.setSelected(true);
+            toggleToolButtons(btnRemove);
+        });
         // Switch between Direct sum and Barnes Hut algorithms
         btnAlgorithm.setOnAction(event -> {
             btnAlgorithm.setText(String.format("Currently using %s Algorithm", usingBarnes ? "Direct Sum" : "Barnes-Hut"));
@@ -512,7 +524,6 @@ public class SimulatorController {
             usingBarnes = !usingBarnes;
         });
 
-        btnRemove.setOnAction(event -> System.out.println("removing body"));
 
         // Play, pause, reset buttons
         btnPlay.setOnAction(event -> timer.play());

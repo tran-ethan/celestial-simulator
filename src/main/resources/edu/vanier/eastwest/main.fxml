@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="940.0" prefWidth="1800.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1800.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.MainController">
    <children>
       <Button layoutX="904.0" layoutY="421.0" mnemonicParsing="false" onAction="#start" prefHeight="34.0" prefWidth="112.0" text="New" />
       <Text layoutX="761.0" layoutY="283.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Celestial Simulator" AnchorPane.leftAnchor="761.0" AnchorPane.rightAnchor="761.93212890625">
@@ -14,8 +14,8 @@
          </font>
       </Text>
       <Button layoutX="904.0" layoutY="485.0" mnemonicParsing="false" onAction="#load" prefHeight="34.0" prefWidth="112.0" text="Load" />
-      <Button fx:id="three" layoutX="893.0" layoutY="704.0" mnemonicParsing="false" onAction="#load" prefHeight="34.0" prefWidth="135.0" text="3 body simulation" />
-      <Button fx:id="solar" layoutX="893.0" layoutY="791.0" mnemonicParsing="false" onAction="#load" prefHeight="34.0" prefWidth="135.0" text="Solar system" />
-      <Button fx:id="five" layoutX="893.0" layoutY="748.0" mnemonicParsing="false" onAction="#load" prefHeight="34.0" prefWidth="135.0" text="5 body simulation" />
+      <Button fx:id="three" layoutX="893.0" layoutY="715.0" mnemonicParsing="false" onAction="#load" prefHeight="34.0" prefWidth="135.0" text="3 body simulation" />
+      <Button fx:id="solar" layoutX="893.0" layoutY="808.0" mnemonicParsing="false" onAction="#load" prefHeight="34.0" prefWidth="135.0" text="Solar system" />
+      <Button fx:id="five" layoutX="893.0" layoutY="761.0" mnemonicParsing="false" onAction="#load" prefHeight="34.0" prefWidth="135.0" text="5 body simulation" />
    </children>
 </AnchorPane>

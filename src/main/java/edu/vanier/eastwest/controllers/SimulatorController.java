@@ -20,7 +20,6 @@ import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -37,13 +36,14 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.ToggleSwitch;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static edu.vanier.eastwest.util.Utility.*;
+import static edu.vanier.eastwest.util.Utility.getAxes;
+import static edu.vanier.eastwest.util.Utility.getGrid;
 
 
 public class SimulatorController {
@@ -398,7 +398,7 @@ public class SimulatorController {
                 bodies().forEach(n -> n.setOnMouseClicked(e -> {
                     selectedBody = n;
 
-                    //Timeline to smoothly jump between camera positions
+                    // Timeline to smoothly jump between camera positions
                     Timeline jump = new Timeline(
                             new KeyFrame(
                                     Duration.seconds(0),
@@ -485,22 +485,20 @@ public class SimulatorController {
         });
 
         // Pan toggle button
-        btnPan.setOnAction(event -> {
-            toggleToolButtons(btnPan);
-        });
+        btnPan.setOnAction(event -> toggleToolButtons(btnPan));
 
         // Selection toggle button
         btnSelection.setOnAction(event -> toggleToolButtons(btnSelection));
 
         // Vector Field visual toggle button
         tglVector.setOnMouseClicked(event -> {
-            if (!tglVector.isSelected()){
+            if (!tglVector.isSelected()) {
                 // Remove vector field
                 entities.getChildren().removeAll(vectors());
             }
             else {
                 // Add vector field
-                if(!bodies().isEmpty()){
+                if (!bodies().isEmpty()){
                     initVectors();
                 }
             }
@@ -516,6 +514,7 @@ public class SimulatorController {
             btnRemove.setSelected(true);
             toggleToolButtons(btnRemove);
         });
+
         // Switch between Direct sum and Barnes Hut algorithms
         btnAlgorithm.setOnAction(event -> {
             btnAlgorithm.setText(String.format("Currently using %s Algorithm", usingBarnes ? "Direct Sum" : "Barnes-Hut"));
@@ -569,7 +568,7 @@ public class SimulatorController {
             }
         });
 
-        //Saving & Loading Body objects
+        // Saving & Loading Body objects
         menuSave.setOnAction(this::save);
         menuLoad.setOnAction(this::load);
     }
@@ -598,7 +597,7 @@ public class SimulatorController {
             // Reset mouse events
             plane.setMouseTransparent(true);
             newBody.setMouseTransparent(false);
-            newBody.setCursor(Cursor.DEFAULT);
+            newBody.setCursor(Cursor.OPEN_HAND);
         });
 
         plane.setOnMouseDragOver(event -> {
@@ -636,7 +635,7 @@ public class SimulatorController {
             plane.setMouseTransparent(false);
             newBody.setMouseTransparent(true);
             newBody.startFullDrag();
-            newBody.setCursor(Cursor.CROSSHAIR);
+            newBody.setCursor(Cursor.DEFAULT);
         });
 
         plane.setOnMouseDragOver(event -> {
@@ -705,11 +704,15 @@ public class SimulatorController {
         if (selected == selectedTool) {
             // User clicks on same button twice to deselect the tool
             selectedTool = null;
-        } else if(selected != null){
+        } else if (selected != null) {
             // Tool selection
             selectedTool = selected;
-            if(selected.equals(btnPan)){
+            if (selected == btnPan) {
                 pane.setCursor(Cursor.MOVE);
+            } else if (selected == btnSelection || selected == btnRemove) {
+                pane.setCursor(Cursor.CROSSHAIR);
+            } else if (selected == btnAdd) {
+                pane.setCursor(Cursor.OPEN_HAND);
             }
         }
 

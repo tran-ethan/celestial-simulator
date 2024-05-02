@@ -6,6 +6,7 @@ module edu.vanier.eastwest {
     requires javafx.graphics;
     requires static lombok;
     requires com.google.gson;
+    requires de.jensd.fx.glyphs.fontawesome;
 
 
     opens edu.vanier.eastwest to javafx.fxml;

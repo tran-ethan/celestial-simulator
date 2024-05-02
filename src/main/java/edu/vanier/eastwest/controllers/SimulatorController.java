@@ -1,5 +1,7 @@
 package edu.vanier.eastwest.controllers;
 
+
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import edu.vanier.eastwest.MainApp;
 import edu.vanier.eastwest.models.Body;
 import edu.vanier.eastwest.models.MySplitPaneSkin;
@@ -55,10 +57,10 @@ public class SimulatorController {
     private ToggleButton btnPan;
 
     @FXML
-    private Button btnPause;
+    private Button btnPlay;
 
     @FXML
-    private Button btnPlay;
+    private FontAwesomeIconView play;
 
     @FXML
     private ToggleButton btnRemove;
@@ -525,9 +527,17 @@ public class SimulatorController {
 
 
         // Play, pause, reset buttons
-        btnPlay.setOnAction(event -> timer.play());
-
-        btnPause.setOnAction(event -> timer.stop());
+        btnPlay.setOnAction(event -> {
+            if (btnPlay.getText().equals("Play")) {
+                timer.play();
+                btnPlay.setText("Pause");
+                play.setGlyphName("PAUSE");
+            } else {
+                timer.pause();
+                btnPlay.setText("Play");
+                play.setGlyphName("PLAY");
+            }
+        });
 
         btnReset.setOnAction(event -> {
             entities.getChildren().removeIf(object -> object instanceof Body);
@@ -612,7 +622,6 @@ public class SimulatorController {
         });
         timer.pause();
         btnPlay.setDisable(true);
-        btnPause.setDisable(true);
         btnReset.setDisable(true);
     }
 
@@ -685,7 +694,6 @@ public class SimulatorController {
         newBody = null;
         timer.play();
         btnPlay.setDisable(false);
-        btnPause.setDisable(false);
         btnReset.setDisable(false);
         toggleToolButtons(null);
     }

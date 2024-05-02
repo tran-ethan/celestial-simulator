@@ -133,7 +133,7 @@ public class SimulatorController {
     private Timeline timer;
     private Camera camera;
     private Group entities;
-    private Group previewGroup;
+    public Group previewGroup;
     private SubScene subScene;
     Body selectedBody;
     Body selectedBodyToRemove;

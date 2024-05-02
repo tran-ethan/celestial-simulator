@@ -22,7 +22,7 @@ public class Body extends Sphere {
     private Point3D acceleration;
     @Getter
     private Color color;
-    @Getter @Setter
+    @Getter
     private Image texture;
     @Getter
     private List<Vector3D> vectors = new ArrayList<>();;
@@ -44,9 +44,7 @@ public class Body extends Sphere {
         this.acceleration = new Point3D(0, 0, 0);
 
         if (texture != null) {
-            PhongMaterial material = new PhongMaterial();
-            material.setDiffuseMap(texture);
-            setMaterial(material);
+            setTexture(texture);
         } else{
             setColor(color);
         }
@@ -104,6 +102,12 @@ public class Body extends Sphere {
     public void setColor(Color color) {
         this.color = color;
         setMaterial(new PhongMaterial(color));
+    }
+
+    public void setTexture(Image texture) {
+        PhongMaterial material = new PhongMaterial();
+        material.setDiffuseMap(texture);
+        setMaterial(material);
     }
 
     @Override

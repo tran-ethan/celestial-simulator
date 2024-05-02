@@ -1,8 +1,10 @@
 package edu.vanier.eastwest.controllers;
 
 
+import edu.vanier.eastwest.models.Body;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Point3D;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -44,6 +46,8 @@ public class BodyCreatorController {
     @FXML
     private Pane paneImage;
 
+    private Body previewBody;
+
 
     public SimulatorController simulatorController;
     private Image texture = null;
@@ -79,14 +83,27 @@ public class BodyCreatorController {
             }
         };
 
-        TextFormatter<Double> textFormatterRadius = new TextFormatter<>(converter, 0.0, filter);
+        TextFormatter<Double> textFormatterRadius = new TextFormatter<>(converter, 1.0, filter);
         radiusField.setTextFormatter(textFormatterRadius);
-        TextFormatter<Double> textFormatterMass = new TextFormatter<>(converter, 0.0, filter);
+        TextFormatter<Double> textFormatterMass = new TextFormatter<>(converter, 1.0, filter);
         massField.setTextFormatter(textFormatterMass);
+
+        // TODO Error handling
+        radiusField.setOnAction(event -> {
+            previewBody.setRadius(Double.parseDouble(radiusField.getText()));
+        });
+
+        // TODO error handling
+        colorField.setOnAction(event -> {
+            previewBody.setColor(colorField.getValue());
+        });
+
     }
 
     public void initController(SimulatorController simulatorController) {
         this.simulatorController = simulatorController;
+        previewBody = new Body("", 1, 1, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.WHITE, null);
+        simulatorController.previewGroup.getChildren().add(previewBody);
     }
 
     @FXML
@@ -134,13 +151,8 @@ public class BodyCreatorController {
             return;
         }
         if (selectedImage.getName().endsWith(".png") || selectedImage.getName().endsWith(".jpg")) {
-            System.out.println("picture selected");
             texture = new Image(selectedImage.toURI().toString());
-            ImageView temp = new ImageView(texture);
-            temp.setFitHeight(paneImage.getHeight());
-            temp.setFitWidth(paneImage.getWidth());
-            paneImage.getChildren().add(temp);
-
+            previewBody.setTexture(texture);
         }
     }
 }

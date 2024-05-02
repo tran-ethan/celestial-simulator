@@ -551,7 +551,6 @@ public class SimulatorController {
         btnAdd.setOnAction(event -> {
             toggleToolButtons(btnAdd);
             spProperties.setDividerPosition(0, 0.3);
-            bodyCreator.setVisible(true);
             controller.initBody();
         });
 
@@ -766,6 +765,7 @@ public class SimulatorController {
                 pane.setCursor(Cursor.CROSSHAIR);
             } else if (selected == btnAdd) {
                 pane.setCursor(Cursor.OPEN_HAND);
+                bodyCreator.setVisible(true);
             }
         }
 

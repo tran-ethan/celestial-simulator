@@ -114,6 +114,9 @@ public class SimulatorController {
     private Label lblProperties;
 
     @FXML
+    private SplitPane spProperties;
+
+    @FXML
     private VBox propertiesPanel;
 
     @FXML
@@ -303,37 +306,41 @@ public class SimulatorController {
     }
 
     private void initBodies() {
-        if (MainApp.preset.equals("three")) {
-            double l = 100;
-            Point3D p1 = new Point3D(0, 0 , l);
-            Point3D p2 = new Point3D(l * Math.sqrt(3) / 2, 0, -l * 0.5);
-            Point3D p3 = new Point3D(-l * Math.sqrt(3) / 2, 0, -l * 0.5);
+        switch (MainApp.preset) {
+            case "three" -> {
+                double l = 100;
+                Point3D p1 = new Point3D(0, 0, l);
+                Point3D p2 = new Point3D(l * Math.sqrt(3) / 2, 0, -l * 0.5);
+                Point3D p3 = new Point3D(-l * Math.sqrt(3) / 2, 0, -l * 0.5);
 
-            double v = 10;
-            Point3D v1 = new Point3D(v, 0, 0);
-            Point3D v2 = new Point3D(-v * 0.5, 0, -v * Math.sqrt(3) / 2);
-            Point3D v3 = new Point3D(-v * 0.5, 0, v * Math.sqrt(3) / 2);
+                double v = 10;
+                Point3D v1 = new Point3D(v, 0, 0);
+                Point3D v2 = new Point3D(-v * 0.5, 0, -v * Math.sqrt(3) / 2);
+                Point3D v3 = new Point3D(-v * 0.5, 0, v * Math.sqrt(3) / 2);
 
-            double mass = 50000;
-            double radius = 20;
+                double mass = 50000;
+                double radius = 20;
 
-            Body b1 = new Body("Mass 1", radius, mass, p1, v1, Color.RED, null);
-            Body b2 = new Body("Mass 2", radius, mass, p2, v2, Color.YELLOW, null);
-            Body b3 = new Body("Mass 3", radius, mass, p3, v3, Color.BLUE, null);
-            entities.getChildren().addAll(b1, b2, b3);
+                Body b1 = new Body("Mass 1", radius, mass, p1, v1, Color.RED, null);
+                Body b2 = new Body("Mass 2", radius, mass, p2, v2, Color.YELLOW, null);
+                Body b3 = new Body("Mass 3", radius, mass, p3, v3, Color.BLUE, null);
+                entities.getChildren().addAll(b1, b2, b3);
 
-        } else if (MainApp.preset.equals("five")) {
-            // TODO
-        } else if (MainApp.preset.equals("solar")) {
-            Body sun = new Body("Sun", 40, 100000, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.YELLOW, null);
-            Body p1 = new Body("Blue", 10, 20000, new Point3D(125, 0, 120), new Point3D(0, 0, 10), Color.BLUE, null);
-            Body p2 = new Body("Green", 10, 5000, new Point3D(200, 0, 100), new Point3D(-4, 0, 0), Color.GREEN, null);
-            Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), new Point3D(10, 0, 10), Color.WHITE, null);
-            Body p4 = new Body("Red", 10, 5000, new Point3D(200, 0, 200), new Point3D(0, 0, -5), Color.RED, null);
+            }
+            case "five" -> {
+                // TODO
+            }
+            case "solar" -> {
+                Body sun = new Body("Sun", 40, 100000, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.YELLOW, null);
+                Body p1 = new Body("Blue", 10, 20000, new Point3D(125, 0, 120), new Point3D(0, 0, 10), Color.BLUE, null);
+                Body p2 = new Body("Green", 10, 5000, new Point3D(200, 0, 100), new Point3D(-4, 0, 0), Color.GREEN, null);
+                Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), new Point3D(10, 0, 10), Color.WHITE, null);
+                Body p4 = new Body("Red", 10, 5000, new Point3D(200, 0, 200), new Point3D(0, 0, -5), Color.RED, null);
 
-            entities.getChildren().addAll(sun, p1, p2, p3, p4);
-        }else if (MainApp.preset.equals("load")) {
-
+                entities.getChildren().addAll(sun, p1, p2, p3, p4);
+            }
+            case "load" -> {
+            }
         }
     }
 
@@ -429,6 +436,7 @@ public class SimulatorController {
                     selectedBody = body;
 
                     // Update preview scene
+                    spProperties.setDividerPosition(0, 0.3);
                     previewGroup.getChildren().clear();
                     previewBody = selectedBody.clonePreview();
                     previewGroup.getChildren().add(previewBody);
@@ -542,6 +550,7 @@ public class SimulatorController {
         // Adding bodies
         btnAdd.setOnAction(event -> {
             toggleToolButtons(btnAdd);
+            spProperties.setDividerPosition(0, 0.3);
             bodyCreator.setVisible(true);
             controller.initBody();
         });
@@ -747,6 +756,7 @@ public class SimulatorController {
         if (selected == selectedTool) {
             // User clicks on same button twice to deselect the tool
             selectedTool = null;
+            spProperties.setDividerPosition(0, 0);
         } else if (selected != null) {
             // Tool selection
             selectedTool = selected;
@@ -983,19 +993,20 @@ public class SimulatorController {
 
             double newAngle = sumGravityField.angle(new Point3D(Integer.MAX_VALUE, 0, 0));
 
-            double angle;
-            if (vector.getPosition().getZ() > 0) {
-                angle = newAngle - currentAngle;
-                if (sumGravityField.getZ() >= 0) {
-                    angle = -angle;
-                }
-            } else {
-                angle = currentAngle - newAngle;
-                if (sumGravityField.getZ() <= 0) {
-                    angle = -angle;
+            double angle = 0;
+            if(sumGravityField.magnitude() < Integer.MAX_VALUE) {
+                if (vector.getPosition().getZ() > 0) {
+                    angle = newAngle - currentAngle;
+                    if (sumGravityField.getZ() >= 0) {
+                        angle = -angle;
+                    }
+                } else {
+                    angle = currentAngle - newAngle;
+                    if (sumGravityField.getZ() <= 0) {
+                        angle = -angle;
+                    }
                 }
             }
-            Rotate rotate = new Rotate(angle, Rotate.X_AXIS);
             vector.getXRotate().setAngle(vector.getXRotate().getAngle() + angle);
             vector.setAngle(newAngle);
             vector.setMagnitude(sumGravityField.magnitude());

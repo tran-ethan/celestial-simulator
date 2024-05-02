@@ -87,9 +87,9 @@
                                                 <FontAwesomeIconView fx:id="play" glyphName="PAUSE" />
                                              </graphic>
                                           </Button>
-                                          <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Clear">
+                                          <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Clear All Bodies">
                                              <font>
-                                                <Font name="MS Gothic" size="20.0" />
+                                                <Font name="MS UI Gothic" size="20.0" />
                                              </font></Button>
                                           <Button fx:id="btnAlgorithm" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Mode: Direct Sum Algorithm">
                                              <font>
@@ -111,7 +111,7 @@
                                           <Slider fx:id="sliderG" majorTickUnit="1.0" max="5.0" min="0.01" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="1.0" />
                                           <Label text="Barnes-Hut Criterion">
                                              <font>
-                                                <Font name="MS Gothic" size="20.0" />
+                                                <Font name="MS UI Gothic" size="20.0" />
                                              </font></Label>
                                           <Slider fx:id="sliderTheta" disable="true" majorTickUnit="0.5" max="2.0" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="0.5" />
                                           <ToggleSwitch fx:id="tglCamRotate" prefHeight="18.0" prefWidth="200.0" text="Automatic Camera Rotate">
@@ -156,7 +156,7 @@
                         <Pane fx:id="pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                         <AnchorPane maxWidth="500.0" minHeight="0.0" minWidth="0.0" prefHeight="1048.0" prefWidth="305.0">
                            <children>
-                              <SplitPane fx:id="spProperties" dividerPositions="0.31114808652246256" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="887.0" prefWidth="200.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c; -fx-background-color: #D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <SplitPane fx:id="spProperties" dividerPositions="0.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="887.0" prefWidth="200.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c; -fx-background-color: #D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <items>
                                     <VBox alignment="TOP_CENTER" prefHeight="440.0" prefWidth="266.0">
                                        <children>

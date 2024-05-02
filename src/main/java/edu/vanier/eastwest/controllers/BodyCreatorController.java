@@ -2,6 +2,7 @@ package edu.vanier.eastwest.controllers;
 
 
 import edu.vanier.eastwest.models.Body;
+import javafx.animation.RotateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point3D;
@@ -13,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 import java.io.File;
@@ -87,15 +89,8 @@ public class BodyCreatorController {
         TextFormatter<Double> textFormatterMass = new TextFormatter<>(converter, 1.0, filter);
         massField.setTextFormatter(textFormatterMass);
 
-        // TODO Error handling
-        radiusField.setOnAction(event -> {
-            previewBody.setRadius(Double.parseDouble(radiusField.getText()));
-        });
-
         // TODO error handling
-        colorField.setOnAction(event -> {
-            previewBody.setColor(colorField.getValue());
-        });
+        colorField.setOnAction(event -> previewBody.setColor(colorField.getValue()));
     }
 
     public void initController(SimulatorController simulatorController) {
@@ -104,7 +99,15 @@ public class BodyCreatorController {
 
     public void initBody() {
         simulatorController.previewGroup.getChildren().clear();
-        previewBody = new Body("", 1, 1, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.WHITE, null);
+        previewBody = new Body("", 10, 1, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.WHITE, null);
+
+        // Rotate on itself
+        RotateTransition spin = new RotateTransition(Duration.seconds(30), previewBody);
+        spin.setByAngle(360);
+        spin.setAxis(new Point3D(0, 1, 0));
+        spin.setCycleCount(RotateTransition.INDEFINITE);
+        spin.play();
+
         simulatorController.previewGroup.getChildren().add(previewBody);
     }
 

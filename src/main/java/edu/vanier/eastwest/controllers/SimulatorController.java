@@ -8,10 +8,7 @@ import edu.vanier.eastwest.models.MySplitPaneSkin;
 import edu.vanier.eastwest.models.Quad;
 import edu.vanier.eastwest.models.Vector3D;
 import edu.vanier.eastwest.util.SaveFileManager;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
@@ -239,7 +236,7 @@ public class SimulatorController {
     private void initPreview() {
         PerspectiveCamera previewCam = new PerspectiveCamera(true);
         previewCam.setFarClip(500);
-        previewCam.setTranslateZ(-150);
+        previewCam.setTranslateZ(-50);
 
         previewGroup = new Group();
 
@@ -425,7 +422,7 @@ public class SimulatorController {
         EventHandler<MouseEvent> mousePressedHandler = event -> {
             if (btnRemove.isSelected()) {
                 bodies().forEach(n -> n.setOnMouseClicked(e -> {
-                            selectedBodyToRemove = n;
+                    selectedBodyToRemove = n;
                     entities.getChildren().remove(selectedBodyToRemove);
             }));
             }
@@ -439,7 +436,14 @@ public class SimulatorController {
                     spProperties.setDividerPosition(0, 0.3);
                     previewGroup.getChildren().clear();
                     previewBody = selectedBody.clonePreview();
+                    previewBody.setRadius(10);
                     previewGroup.getChildren().add(previewBody);
+
+                    RotateTransition spin = new RotateTransition(Duration.seconds(30), previewBody);
+                    spin.setByAngle(360);
+                    spin.setAxis(new Point3D(0, 1, 0));
+                    spin.setCycleCount(RotateTransition.INDEFINITE);
+                    spin.play();
 
                     // Timeline to smoothly jump between camera positions
                     Timeline jump = new Timeline(

@@ -420,14 +420,13 @@ public class SimulatorController {
 
         // Mouse controls
         EventHandler<MouseEvent> mousePressedHandler = event -> {
-            if (btnRemove.isSelected()) {
+            if (selectedTool == btnRemove) {
                 bodies().forEach(n -> n.setOnMouseClicked(e -> {
                     selectedBodyToRemove = n;
                     entities.getChildren().remove(selectedBodyToRemove);
-            }));
-            }
-            // Select planet by clicking it with LMB when not panning
-            else if (selectedTool == btnSelection) {
+                }));
+            } else if (selectedTool == btnSelection) {
+                // Select planet by clicking it with LMB when not panning
                 bodies().forEach(body -> body.setOnMouseClicked(e -> {
                     // Update reference
                     selectedBody = body;
@@ -439,6 +438,7 @@ public class SimulatorController {
                     previewBody.setRadius(10);
                     previewGroup.getChildren().add(previewBody);
 
+                    // Rotate selected body in preview
                     RotateTransition spin = new RotateTransition(Duration.seconds(30), previewBody);
                     spin.setByAngle(360);
                     spin.setAxis(new Point3D(0, 1, 0));
@@ -554,7 +554,6 @@ public class SimulatorController {
         // Adding bodies
         btnAdd.setOnAction(event -> {
             toggleToolButtons(btnAdd);
-            spProperties.setDividerPosition(0, 0.3);
             controller.initBody();
         });
 
@@ -755,21 +754,27 @@ public class SimulatorController {
         pane.setCursor(Cursor.DEFAULT);
         bodies().forEach(n -> n.setOnMouseClicked(null));
         bodyCreator.setVisible(false);
+        preview.setVisible(false);
+        spProperties.setDividerPosition(0, 0);
 
         if (selected == selectedTool) {
             // User clicks on same button twice to deselect the tool
             selectedTool = null;
-            spProperties.setDividerPosition(0, 0);
         } else if (selected != null) {
             // Tool selection
             selectedTool = selected;
             if (selected == btnPan) {
                 pane.setCursor(Cursor.MOVE);
-            } else if (selected == btnSelection || selected == btnRemove) {
+            } else if (selected == btnSelection) {
+                pane.setCursor(Cursor.CROSSHAIR);
+                preview.setVisible(true);
+            } else if (selected == btnRemove) {
                 pane.setCursor(Cursor.CROSSHAIR);
             } else if (selected == btnAdd) {
                 pane.setCursor(Cursor.OPEN_HAND);
                 bodyCreator.setVisible(true);
+                preview.setVisible(true);
+                spProperties.setDividerPosition(0, 0.3);
             }
         }
 

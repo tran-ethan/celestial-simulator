@@ -25,7 +25,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
@@ -564,7 +563,7 @@ public class SimulatorController {
 
         // Switch between Direct sum and Barnes Hut algorithms
         btnAlgorithm.setOnAction(event -> {
-            btnAlgorithm.setText(String.format("Currently using %s Algorithm", usingBarnes ? "Direct Sum" : "Barnes-Hut"));
+            btnAlgorithm.setText(String.format("Algorithm: %s", usingBarnes ? "Direct Sum" : "Barnes-Hut"));
             sliderTheta.setDisable(usingBarnes);
             tglBarnes.setDisable(usingBarnes);
             usingBarnes = !usingBarnes;

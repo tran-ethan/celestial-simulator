@@ -42,6 +42,9 @@ public class BodyCreatorController {
     private Button confirmBtn;
 
     @FXML
+    private Button textureBtn;
+
+    @FXML
     private Button posBtn;
 
     @FXML
@@ -84,9 +87,9 @@ public class BodyCreatorController {
             }
         };
 
-        TextFormatter<Double> textFormatterRadius = new TextFormatter<>(converter, 1.0, filter);
+        TextFormatter<Double> textFormatterRadius = new TextFormatter<>(converter, 10.0, filter);
         radiusField.setTextFormatter(textFormatterRadius);
-        TextFormatter<Double> textFormatterMass = new TextFormatter<>(converter, 1.0, filter);
+        TextFormatter<Double> textFormatterMass = new TextFormatter<>(converter, 1000.0, filter);
         massField.setTextFormatter(textFormatterMass);
 
         // TODO error handling
@@ -126,10 +129,16 @@ public class BodyCreatorController {
             double mass = Double.parseDouble(massField.getText());
             Color color = colorField.getValue();
             simulatorController.spawnBody(name, radius, mass, color, texture);
-            posBtn.setDisable(false);
-            spawnBtn.setDisable(true);
             texture = null;
             paneImage.getChildren().clear();
+            // Disable buttons
+            posBtn.setDisable(false);
+            spawnBtn.setDisable(true);
+            massField.setDisable(true);
+            radiusField.setDisable(true);
+            nameField.setDisable(true);
+            colorField.setDisable(true);
+            textureBtn.setDisable(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -150,6 +159,11 @@ public class BodyCreatorController {
         spawnBtn.setDisable(false);
         posBtn.setDisable(true);
         confirmBtn.setDisable(true);
+        textureBtn.setDisable(false);
+        massField.setDisable(false);
+        radiusField.setDisable(false);
+        nameField.setDisable(false);
+        colorField.setDisable(false);
     }
 
     @FXML

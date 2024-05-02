@@ -128,7 +128,7 @@ public class SimulatorController {
     @FXML
     private Pane preview;
     private Body previewBody;
-
+    private SubScene subScenePreview;
 
     private Timeline timer;
     private Camera camera;
@@ -233,10 +233,28 @@ public class SimulatorController {
         }
     }
 
+    private void initPreview() {
+        PerspectiveCamera previewCam = new PerspectiveCamera(true);
+        previewCam.setFarClip(500);
+        previewCam.setTranslateZ(-150);
+
+        previewGroup = new Group();
+
+        subScenePreview = new SubScene(previewGroup, 200, 200, true, SceneAntialiasing.BALANCED);
+        subScenePreview.setCamera(previewCam);
+        subScenePreview.setFill(Color.rgb(0, 0, 0));
+
+        preview.getChildren().add(subScenePreview);
+
+        // TODO make body spin on itself
+    }
+
     private void update(ActionEvent event) {
         // Update size of subScene
         subScene.setHeight(pane.getHeight());
         subScene.setWidth(pane.getWidth());
+        subScenePreview.setHeight(preview.getHeight());
+        subScenePreview.setWidth(preview.getWidth());
 
         // Remove all previous rectangles
         entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);
@@ -314,6 +332,8 @@ public class SimulatorController {
             Body p4 = new Body("Red", 10, 5000, new Point3D(200, 0, 200), new Point3D(0, 0, -5), Color.RED, null);
 
             entities.getChildren().addAll(sun, p1, p2, p3, p4);
+        }else if (MainApp.preset.equals("load")) {
+
         }
     }
 
@@ -345,22 +365,6 @@ public class SimulatorController {
           }
         }
         updateVectors();
-    }
-
-    private void initPreview() {
-        PerspectiveCamera previewCam = new PerspectiveCamera(true);
-        previewCam.setFarClip(500);
-        previewCam.setTranslateZ(-150);
-
-        previewGroup = new Group();
-
-        SubScene subScene = new SubScene(previewGroup, 200, 200, true, SceneAntialiasing.BALANCED);
-        subScene.setCamera(previewCam);
-        subScene.setFill(Color.rgb(244, 244, 244));
-
-        preview.getChildren().add(subScene);
-
-        // TODO make body spin on itself
     }
 
     /***

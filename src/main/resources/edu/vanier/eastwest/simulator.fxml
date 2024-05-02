@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.ToggleSwitch?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1800.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.SimulatorController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1800.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.SimulatorController">
    <children>
       <BorderPane prefHeight="920.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -40,7 +40,7 @@
          <center>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <SplitPane fx:id="splitPane" dividerPositions="0.15648457047539616, 0.8471643035863219" prefHeight="891.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane fx:id="splitPane" dividerPositions="0.1563612099644128, 0.8141681494661922" prefHeight="891.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane maxWidth="500.0" minHeight="0.0" minWidth="0.0" prefHeight="889.0" prefWidth="675.0" style="-fx-background-color: #D3D3D3;">
                            <children>
@@ -51,7 +51,7 @@
                                           <Insets top="20.0" />
                                        </VBox.margin>
                                        <font>
-                                          <Font name="Impact" size="20.0" />
+                                          <Font name="MS UI Gothic" size="20.0" />
                                        </font>
                                     </Label>
                                     <ToggleButton fx:id="btnPan" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" prefWidth="110.0" text="Pan" textAlignment="CENTER">
@@ -59,20 +59,20 @@
                                           <Insets top="20.0" />
                                        </VBox.margin>
                                        <font>
-                                          <Font name="Impact" size="20.0" />
+                                          <Font name="MS UI Gothic" size="20.0" />
                                        </font>
                                     </ToggleButton>
                                     <ToggleButton fx:id="btnSelection" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" prefWidth="110.0" text="Select Body" textAlignment="CENTER">
                                        <font>
-                                          <Font name="Impact" size="20.0" />
+                                          <Font name="MS UI Gothic" size="20.0" />
                                        </font></ToggleButton>
                                     <ToggleButton fx:id="btnAdd" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" prefWidth="110.0" text="Add Body" textAlignment="CENTER">
                                        <font>
-                                          <Font name="Impact" size="20.0" />
+                                          <Font name="MS UI Gothic" size="20.0" />
                                        </font></ToggleButton>
                                     <ToggleButton fx:id="btnRemove" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" prefWidth="110.0" text="Remove Body" textAlignment="CENTER">
                                        <font>
-                                          <Font name="Impact" size="20.0" />
+                                          <Font name="MS UI Gothic" size="20.0" />
                                        </font></ToggleButton>
                                     <VBox alignment="TOP_CENTER" prefHeight="584.0" prefWidth="210.0" spacing="10.0" style="-fx-border-color: black; -fx-border-style: solid none none none;">
                                        <children>
@@ -81,7 +81,7 @@
                                                 <Insets />
                                              </VBox.margin>
                                              <font>
-                                                <Font name="Impact" size="13.0" />
+                                                <Font name="MS Gothic" size="20.0" />
                                              </font>
                                              <graphic>
                                                 <FontAwesomeIconView fx:id="play" glyphName="PAUSE" />
@@ -89,15 +89,15 @@
                                           </Button>
                                           <Button fx:id="btnReset" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Clear">
                                              <font>
-                                                <Font name="Impact" size="13.0" />
+                                                <Font name="MS Gothic" size="20.0" />
                                              </font></Button>
-                                          <Button fx:id="btnAlgorithm" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Currently using Direct Sum Algorithm">
+                                          <Button fx:id="btnAlgorithm" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" prefWidth="60.0" text="Mode: Direct Sum Algorithm">
                                              <font>
-                                                <Font name="Impact" size="13.0" />
+                                                <Font name="MS UI Gothic" size="18.0" />
                                              </font></Button>
                                           <Label text="Simulation Speed">
                                              <font>
-                                                <Font name="Impact" size="15.0" />
+                                                <Font name="MS UI Gothic" size="20.0" />
                                              </font></Label>
                                           <Slider fx:id="sliderSpeed" majorTickUnit="1.0" max="10.0" min="0.01" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="1.0">
                                              <VBox.margin>
@@ -106,12 +106,12 @@
                                           </Slider>
                                           <Label text="Gravitational Constant">
                                              <font>
-                                                <Font name="Impact" size="15.0" />
+                                                <Font name="MS UI Gothic" size="20.0" />
                                              </font></Label>
                                           <Slider fx:id="sliderG" majorTickUnit="1.0" max="5.0" min="0.01" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="1.0" />
                                           <Label text="Barnes-Hut Criterion">
                                              <font>
-                                                <Font name="Impact" size="15.0" />
+                                                <Font name="MS Gothic" size="20.0" />
                                              </font></Label>
                                           <Slider fx:id="sliderTheta" disable="true" majorTickUnit="0.5" max="2.0" minorTickCount="0" prefHeight="0.0" prefWidth="208.0" showTickLabels="true" showTickMarks="true" value="0.5" />
                                           <ToggleSwitch fx:id="tglCamRotate" prefHeight="18.0" prefWidth="200.0" text="Automatic Camera Rotate">
@@ -156,24 +156,24 @@
                         <Pane fx:id="pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                         <AnchorPane maxWidth="500.0" minHeight="0.0" minWidth="0.0" prefHeight="1048.0" prefWidth="305.0">
                            <children>
-                              <SplitPane fx:id="spProperties" dividerPositions="0.1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="887.0" prefWidth="200.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c; -fx-background-color: #D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <SplitPane fx:id="spProperties" dividerPositions="0.31114808652246256" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="887.0" prefWidth="200.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c; -fx-background-color: #D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <items>
-                                    <VBox alignment="TOP_CENTER" prefHeight="440.0" prefWidth="154.0">
+                                    <VBox alignment="TOP_CENTER" prefHeight="440.0" prefWidth="266.0">
                                        <children>
                                           <Label text="Properties of">
                                              <font>
-                                                <Font name="Impact" size="20.0" />
+                                                <Font name="MS UI Gothic" size="20.0" />
                                              </font>
                                           </Label>
                                           <Label fx:id="lblSelected" text="&lt;No Body Selected&gt;">
                                              <font>
-                                                <Font name="Impact" size="20.0" />
+                                                <Font name="MS UI Gothic" size="24.0" />
                                              </font>
                                           </Label>
-                                          <Pane prefHeight="48.0">
-                                             <children>
-                                                <Pane fx:id="preview" layoutX="44.0" layoutY="26.0" prefHeight="184.0" prefWidth="185.0" />
-                                             </children>
+                                          <Pane fx:id="preview" prefHeight="240.0" prefWidth="260.0">
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
                                           </Pane>
                                        </children>
                                        <opaqueInsets>
@@ -184,7 +184,7 @@
                                        <children>
                                           <Label fx:id="lblProperties" alignment="TOP_LEFT" text="Properties">
                                              <font>
-                                                <Font name="Impact" size="20.0" />
+                                                <Font name="MS UI Gothic" size="20.0" />
                                              </font></Label>
                                        </children>
                                        <padding>

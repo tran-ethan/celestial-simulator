@@ -125,9 +125,15 @@ public class SimulatorController {
     @FXML
     private MenuItem menuLoad;
 
+    @FXML
+    private Pane preview;
+    private Body previewBody;
+
+
     private Timeline timer;
     private Camera camera;
     private Group entities;
+    private Group previewGroup;
     private SubScene subScene;
     Body selectedBody;
     Body selectedBodyToRemove;
@@ -204,6 +210,7 @@ public class SimulatorController {
         // Initialize entities
         initBodies();
         initControls();
+        initPreview();
 
         // Animation timer
         EventHandler<ActionEvent> onFinished = this::update;
@@ -313,32 +320,48 @@ public class SimulatorController {
     /***
      * Creates Vector3D arrows around Body object with the most mass.
      */
-      private void initVectors() {
-          Body body = null;
-          for (Body compared : bodies()){
-              if (body != null){
-                  if(body.getMass() < compared.getMass()){
-                      body = compared;
-                  }
-              }else{
-                  body = compared;
-              }
+    private void initVectors() {
+        Body body = null;
+        for (Body compared : bodies()){
+            if (body != null) {
+                if (body.getMass() < compared.getMass()) {
+                    body = compared;
+                }
+          } else {
+              body = compared;
           }
-          int xVariableForVectorSpawning = (int) body.getRadius() / 8;
-          int zVariableForVectorSpawning = (int) body.getRadius() / 8;
-          int xDistanceForVectorSpawning = 100;
-          int zDistanceForVectorSpawning = 100;
-          for (int i = -xVariableForVectorSpawning; i <= xVariableForVectorSpawning; i++) {
-              for(int j = -zVariableForVectorSpawning; j <= zVariableForVectorSpawning; j++) {
-                  Vector3D v = new Vector3D(7, 25, new Point3D(i * xDistanceForVectorSpawning + (int)Math.round(body.getTranslateX()/100)*100, 0, j * zDistanceForVectorSpawning + (int)Math.round(body.getTranslateZ()/100)*100));
-                  v.getTransforms().add(new Rotate(90, 1, 0, 0));
-                  v.getTransforms().add(v.getXRotate());
-                  body.getVectors().add(v);
-                  entities.getChildren().add(v);
-              }
+        }
+        int xVariableForVectorSpawning = (int) body.getRadius() / 8;
+        int zVariableForVectorSpawning = (int) body.getRadius() / 8;
+        int xDistanceForVectorSpawning = 100;
+        int zDistanceForVectorSpawning = 100;
+        for (int i = -xVariableForVectorSpawning; i <= xVariableForVectorSpawning; i++) {
+          for(int j = -zVariableForVectorSpawning; j <= zVariableForVectorSpawning; j++) {
+              Vector3D v = new Vector3D(7, 25, new Point3D(i * xDistanceForVectorSpawning + (int)Math.round(body.getTranslateX()/100)*100, 0, j * zDistanceForVectorSpawning + (int)Math.round(body.getTranslateZ()/100)*100));
+              v.getTransforms().add(new Rotate(90, 1, 0, 0));
+              v.getTransforms().add(v.getXRotate());
+              body.getVectors().add(v);
+              entities.getChildren().add(v);
           }
-          updateVectors();
-      }
+        }
+        updateVectors();
+    }
+
+    private void initPreview() {
+        PerspectiveCamera previewCam = new PerspectiveCamera(true);
+        previewCam.setFarClip(500);
+        previewCam.setTranslateZ(-150);
+
+        previewGroup = new Group();
+
+        SubScene subScene = new SubScene(previewGroup, 200, 200, true, SceneAntialiasing.BALANCED);
+        subScene.setCamera(previewCam);
+        subScene.setFill(Color.rgb(244, 244, 244));
+
+        preview.getChildren().add(subScene);
+
+        // TODO make body spin on itself
+    }
 
     /***
      * Initializes all the EventHandlers for user inputs.
@@ -389,7 +412,7 @@ public class SimulatorController {
 
         // Mouse controls
         EventHandler<MouseEvent> mousePressedHandler = event -> {
-            if(btnRemove.isSelected()){
+            if (btnRemove.isSelected()) {
                 bodies().forEach(n -> n.setOnMouseClicked(e -> {
                             selectedBodyToRemove = n;
                     entities.getChildren().remove(selectedBodyToRemove);
@@ -397,8 +420,14 @@ public class SimulatorController {
             }
             // Select planet by clicking it with LMB when not panning
             else if (selectedTool == btnSelection) {
-                bodies().forEach(n -> n.setOnMouseClicked(e -> {
-                    selectedBody = n;
+                bodies().forEach(body -> body.setOnMouseClicked(e -> {
+                    // Update reference
+                    selectedBody = body;
+
+                    // Update preview scene
+                    previewGroup.getChildren().clear();
+                    previewBody = selectedBody.clonePreview();
+                    previewGroup.getChildren().add(previewBody);
 
                     // Timeline to smoothly jump between camera positions
                     Timeline jump = new Timeline(

@@ -173,12 +173,4 @@ public class Quad {
             this.body = null;
         }
     }
-
-    @Override
-    public String toString() {
-        return "Quad{" +
-                "centerMass=" + weightedPositions +
-                "\n, totalMass=" + totalMass +
-                '}';
-    }
 }

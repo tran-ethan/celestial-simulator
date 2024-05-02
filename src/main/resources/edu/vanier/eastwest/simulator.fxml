@@ -156,7 +156,7 @@
                         <Pane fx:id="pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                         <AnchorPane maxWidth="500.0" minHeight="0.0" minWidth="0.0" prefHeight="1048.0" prefWidth="305.0">
                            <children>
-                              <SplitPane fx:id="spProperties" dividerPositions="0.1000453720508167" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="887.0" prefWidth="200.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c; -fx-background-color: #D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <SplitPane fx:id="spProperties" dividerPositions="0.1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="887.0" prefWidth="200.0" style="-fx-border-style: solid none none solid; -fx-border-width: 2; -fx-border-color: #7c7c7c; -fx-background-color: #D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <items>
                                     <VBox alignment="TOP_CENTER" prefHeight="440.0" prefWidth="154.0">
                                        <children>
@@ -170,12 +170,17 @@
                                                 <Font name="Impact" size="20.0" />
                                              </font>
                                           </Label>
+                                          <Pane prefHeight="48.0">
+                                             <children>
+                                                <Pane fx:id="preview" layoutX="44.0" layoutY="26.0" prefHeight="184.0" prefWidth="185.0" />
+                                             </children>
+                                          </Pane>
                                        </children>
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>
                                     </VBox>
-                                    <VBox fx:id="propertiesPanel" prefHeight="709.0" prefWidth="154.0">
+                                    <VBox fx:id="propertiesPanel" prefHeight="709.0" prefWidth="266.0">
                                        <children>
                                           <Label fx:id="lblProperties" alignment="TOP_LEFT" text="Properties">
                                              <font>

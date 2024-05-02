@@ -10,7 +10,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class Body extends Sphere {
     @Getter
@@ -109,7 +108,7 @@ public class Body extends Sphere {
 
     @Override
     public String toString() {
-        return String.format("Name: %s\nMass (kg): %.2f\nPosition (m): [%.0f, %.0f, %.0f]\nVelocity (m/s): [%.0f, %.0f, %.0f]",
+        return String.format("Name: %s\nMass (kg): %.2f\nPosition (m): [%.0f, %.0f, %.0f]\nVelocity (m/s): [%.0f, %.0f, %.0f]\nAcceleration (m/s^2): [%.0f, %.0f, %.0f]",
                 getName(),
                 getMass(),
                 getTranslateX(),
@@ -117,7 +116,14 @@ public class Body extends Sphere {
                 getTranslateZ(),
                 getVelocity().getX(),
                 getVelocity().getY(),
-                getVelocity().getZ()
+                getVelocity().getZ(),
+                getAcceleration().getX(),
+                getAcceleration().getY(),
+                getAcceleration().getZ()
         );
+    }
+
+    public Body clonePreview() {
+        return new Body(this.name, this.getRadius(), this.mass, new Point3D(0, 0, 0), new Point3D(0, 0, 0), this.color, this.texture);
     }
 }

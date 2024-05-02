@@ -27,6 +27,22 @@ public class Body extends Sphere {
     @Getter
     private List<Vector3D> vectors = new ArrayList<>();;
 
+
+    /**
+     * Constructor for a Body object using 4 parameters.
+     * @param radius The radius of the Sphere
+     * @param mass The mass of the body
+     * @param position The position of the body in the space
+     */
+    private Body(String name, double radius, double mass, Point3D position, Point3D velocity) {
+        super(radius);
+        this.name = name;
+        this.mass = mass;
+        setPosition(position);
+        this.velocity = velocity;
+        this.acceleration = new Point3D(0, 0, 0);
+    }
+
     /**
      * Constructor for a Body object using 4 parameters.
      * @param radius The radius of the Sphere
@@ -36,17 +52,12 @@ public class Body extends Sphere {
      * @param texture The image on the body
      */
     public Body(String name, double radius, double mass, Point3D position, Point3D velocity, Color color, Image texture) {
-        super(radius);
-        this.name = name;
-        this.mass = mass;
-        setPosition(position);
-        this.velocity = velocity;
-        this.acceleration = new Point3D(0, 0, 0);
+        this(name, radius, mass, position, velocity);
 
-        if (texture != null) {
-            setTexture(texture);
-        } else{
+        if (texture == null) {
             setColor(color);
+        } else {
+            setTexture(texture);
         }
     }
 
@@ -105,6 +116,7 @@ public class Body extends Sphere {
     }
 
     public void setTexture(Image texture) {
+        this.texture = texture;
         PhongMaterial material = new PhongMaterial();
         material.setDiffuseMap(texture);
         setMaterial(material);
@@ -112,7 +124,7 @@ public class Body extends Sphere {
 
     @Override
     public String toString() {
-        return String.format("Name: %s\nMass (kg): %.2f\nPosition (m): [%.0f, %.0f, %.0f]\nVelocity (m/s): [%.0f, %.0f, %.0f]\nAcceleration (m/s^2): [%.0f, %.0f, %.0f]",
+        return String.format("Name: %s\nMass (kg): %.2f\nPosition (m): [%.0f, %.0f, %.0f]\nVelocity (m/s): [%.0f, %.0f, %.0f]",
                 getName(),
                 getMass(),
                 getTranslateX(),
@@ -120,10 +132,12 @@ public class Body extends Sphere {
                 getTranslateZ(),
                 getVelocity().getX(),
                 getVelocity().getY(),
-                getVelocity().getZ(),
-                getAcceleration().getX(),
-                getAcceleration().getY(),
-                getAcceleration().getZ()
+                getVelocity().getZ()
+                // TODO Fix acceleration always 0
+                //
+//                getAcceleration().getX(),
+//                getAcceleration().getY(),
+//                getAcceleration().getZ()
         );
     }
 

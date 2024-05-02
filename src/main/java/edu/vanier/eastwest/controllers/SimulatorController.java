@@ -539,6 +539,7 @@ public class SimulatorController {
         btnAdd.setOnAction(event -> {
             toggleToolButtons(btnAdd);
             bodyCreator.setVisible(true);
+            controller.initBody();
         });
 
         btnRemove.setOnAction(event -> {
@@ -734,6 +735,7 @@ public class SimulatorController {
     private void toggleToolButtons(ToggleButton selected) {
         // Disable selection and add body tools when other tools are selected
         selectedBody = null;
+        previewGroup.getChildren().clear();
         pane.setCursor(Cursor.DEFAULT);
         bodies().forEach(n -> n.setOnMouseClicked(null));
         bodyCreator.setVisible(false);

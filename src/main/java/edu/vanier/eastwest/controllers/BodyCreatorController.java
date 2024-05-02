@@ -5,14 +5,13 @@ import edu.vanier.eastwest.models.Body;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point3D;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 
@@ -97,11 +96,14 @@ public class BodyCreatorController {
         colorField.setOnAction(event -> {
             previewBody.setColor(colorField.getValue());
         });
-
     }
 
     public void initController(SimulatorController simulatorController) {
         this.simulatorController = simulatorController;
+    }
+
+    public void initBody() {
+        simulatorController.previewGroup.getChildren().clear();
         previewBody = new Body("", 1, 1, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.WHITE, null);
         simulatorController.previewGroup.getChildren().add(previewBody);
     }

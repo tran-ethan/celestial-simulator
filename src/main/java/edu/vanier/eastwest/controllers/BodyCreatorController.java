@@ -99,7 +99,11 @@ public class BodyCreatorController {
 
     public void initBody() {
         simulatorController.previewGroup.getChildren().clear();
-        previewBody = new Body("", 10, 1, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.WHITE, null);
+
+        // Only spawn new preview if first time
+        if (previewBody == null) {
+            previewBody = new Body("", 10, 1, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.WHITE, null);
+        }
 
         // Rotate on itself
         RotateTransition spin = new RotateTransition(Duration.seconds(30), previewBody);

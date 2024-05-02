@@ -27,6 +27,7 @@ public class Body extends Sphere {
     @Getter
     private List<Vector3D> vectors = new ArrayList<>();;
 
+    private PhongMaterial phongMaterial;
 
     /**
      * Constructor for a Body object using 4 parameters.
@@ -112,14 +113,19 @@ public class Body extends Sphere {
      */
     public void setColor(Color color) {
         this.color = color;
-        setMaterial(new PhongMaterial(color));
+        phongMaterial = new PhongMaterial(color);
+        setMaterial(phongMaterial);
     }
 
     public void setTexture(Image texture) {
         this.texture = texture;
-        PhongMaterial material = new PhongMaterial();
-        material.setDiffuseMap(texture);
-        setMaterial(material);
+        phongMaterial = new PhongMaterial();
+        phongMaterial.setDiffuseMap(texture);
+        setMaterial(phongMaterial);
+    }
+
+    public void setTransparency(double opacity) {
+        phongMaterial.setDiffuseColor(Color.rgb(255, 255, 255, opacity));
     }
 
     @Override
@@ -133,11 +139,6 @@ public class Body extends Sphere {
                 getVelocity().getX(),
                 getVelocity().getY(),
                 getVelocity().getZ()
-                // TODO Fix acceleration always 0
-                //
-//                getAcceleration().getX(),
-//                getAcceleration().getY(),
-//                getAcceleration().getZ()
         );
     }
 

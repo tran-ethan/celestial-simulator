@@ -25,6 +25,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
@@ -135,7 +136,7 @@ public class SimulatorController {
     private Group entities;
     public Group previewGroup;
     private SubScene subScene;
-    Body selectedBody;
+    public Body selectedBody;
     Body selectedBodyToRemove;
 
     private double anchorX, anchorY;
@@ -207,7 +208,7 @@ public class SimulatorController {
         subScene.setCamera(camera);
         pane.getChildren().add(subScene);
 
-        // Initialize entities
+        // Initialize
         initBodies();
         initControls();
         initPreview();
@@ -240,13 +241,11 @@ public class SimulatorController {
 
         previewGroup = new Group();
 
-        subScenePreview = new SubScene(previewGroup, 200, 200, true, SceneAntialiasing.BALANCED);
+        subScenePreview = new SubScene(previewGroup, 200, 200);
         subScenePreview.setCamera(previewCam);
         subScenePreview.setFill(Color.rgb(0, 0, 0));
 
         preview.getChildren().add(subScenePreview);
-
-        // TODO make body spin on itself
     }
 
     private void update(ActionEvent event) {
@@ -324,7 +323,7 @@ public class SimulatorController {
                 entities.getChildren().addAll(b1, b2, b3);
 
             }
-            case "five" -> {
+            case "random" -> {
                 // TODO
             }
             case "solar" -> {
@@ -337,6 +336,7 @@ public class SimulatorController {
                 entities.getChildren().addAll(sun, p1, p2, p3, p4);
             }
             case "load" -> {
+                // TODO
             }
         }
     }
@@ -636,8 +636,9 @@ public class SimulatorController {
         System.out.println("Texture: "+ texture);
 
         // Slight transparency indicates body has not been spawned in yet
-        color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 0.4);
         newBody = new Body(name, radius, mass, new Point3D(0, 0, 0), new Point3D(0, 0, 0), color, texture);
+        newBody.setTransparency(0.4);
+
         entities.getChildren().add(newBody);
 
         newBody.setOnDragDetected(event -> {
@@ -722,14 +723,10 @@ public class SimulatorController {
         // Reset mouse events
         newBody.setOnDragDetected(null);
         newBody.setOnMouseReleased(null);
+        plane.setOnMouseDragOver(null);
 
         // Full opacity indicates body has been spawned in successfully
-        if (newBody.getColor() != null) {
-            Color color = newBody.getColor();
-            Color fullAlpha = new Color(color.getRed(), color.getGreen(), color.getBlue(), 1);
-            newBody.setColor(fullAlpha);
-        }
-        plane.setOnMouseDragOver(null);
+        newBody.setTransparency(1);
 
         // Remove arrow, deselect body, reset velocity
         newBody.setVelocity(velocity.multiply(0.4));
@@ -998,7 +995,6 @@ public class SimulatorController {
                 //Summing the gravitational field forces
                 sumGravityField = sumGravityField.add(gravityField.getX(), 0, gravityField.getZ());
             }
-
 
             double newAngle = sumGravityField.angle(new Point3D(Integer.MAX_VALUE, 0, 0));
 

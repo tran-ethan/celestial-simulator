@@ -376,7 +376,12 @@ public class SimulatorController {
                 entities.getChildren().addAll(sun, mercury, venus, earth, mars, jupiter, saturn, uranus);
             }
             case "load" -> {
-                // TODO
+                try{
+                    load(new ActionEvent());
+                }
+                catch(Exception e){
+                    e.getMessage();
+                }
             }
         }
     }
@@ -793,6 +798,7 @@ public class SimulatorController {
      * @param selected ToggleButton that was clicked. This ToggleButton will remain selected.
      */
     private void toggleToolButtons(ToggleButton selected) {
+
         // Disable selection and add body tools when other tools are selected
         selectedBody = null;
         previewGroup.getChildren().clear();

@@ -36,10 +36,10 @@ public class BodyCreatorController {
     private TextField radiusField;
 
     @FXML
-    private TextField xField;
+    TextField xField;
 
     @FXML
-    private TextField zField;
+    TextField zField;
 
     @FXML
     private Button spawnBtn;
@@ -98,6 +98,10 @@ public class BodyCreatorController {
         radiusField.setTextFormatter(textFormatterRadius);
         TextFormatter<Double> textFormatterMass = new TextFormatter<>(converter, 1000.0, filter);
         massField.setTextFormatter(textFormatterMass);
+        TextFormatter<Double> textFormatterZField = new TextFormatter<>(converter, 0.0, filter);
+        zField.setTextFormatter(textFormatterZField);
+        TextFormatter<Double> textFormatterXField = new TextFormatter<>(converter, 0.0, filter);
+        xField.setTextFormatter(textFormatterXField);
 
         colorField.setOnAction(event -> previewBody.setColor(colorField.getValue()));
     }
@@ -136,10 +140,11 @@ public class BodyCreatorController {
             if (name.isEmpty() || massField.getText().isEmpty() || radiusField.getText().isEmpty()) {
                 throw new IllegalArgumentException("Text fields cannot be empty");
             }
+
             double radius = Double.parseDouble(radiusField.getText());
             double mass = Double.parseDouble(massField.getText());
             Color color = colorField.getValue();
-            simulatorController.spawnBody(name, radius, mass, color, texture);
+            simulatorController.spawnBody(name, Math.abs(radius), Math.abs(mass), color, texture);
             texture = null;
             paneImage.getChildren().clear();
 

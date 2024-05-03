@@ -772,7 +772,12 @@ public class SimulatorController {
         entities.getChildren().remove(arrow);
         arrow = null;
         newBody = null;
-        timer.play();
+        if(btnPlay.getText().equals("Play")){
+            timer.pause();
+        }
+        else{
+            timer.play();
+        }
         btnPlay.setDisable(false);
         btnReset.setDisable(false);
         toggleToolButtons(null);

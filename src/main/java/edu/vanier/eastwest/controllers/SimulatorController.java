@@ -670,7 +670,7 @@ public class SimulatorController {
         System.out.printf("Name: %s\n", name);
         System.out.printf("Mass: %.2f\n", mass);
         System.out.printf("Radius: %.2f\n", radius);
-        System.out.printf("Color: %s", color);
+        System.out.printf("Color: %s\n", color);
         System.out.println("Texture: "+ texture);
 
         // Slight transparency indicates body has not been spawned in yet
@@ -701,8 +701,8 @@ public class SimulatorController {
 
             // Move body
             newBody.setTranslateX(position.getX());
-            newBody.setTranslateY(position.getY());
             newBody.setTranslateZ(position.getZ());
+            controller.setXZ(position.getX(), position.getZ());
         });
         timer.pause();
         btnPlay.setDisable(true);

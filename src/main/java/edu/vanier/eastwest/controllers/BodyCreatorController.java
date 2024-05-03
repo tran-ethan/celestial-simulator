@@ -36,6 +36,12 @@ public class BodyCreatorController {
     private TextField radiusField;
 
     @FXML
+    private TextField xField;
+
+    @FXML
+    private TextField zField;
+
+    @FXML
     private Button spawnBtn;
 
     @FXML
@@ -57,8 +63,9 @@ public class BodyCreatorController {
     private Image texture = null;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         // Code adapted from https://stackoverflow.com/a/45981297
+        // TODO error handling, max/min radius and mass
         Pattern validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
 
         UnaryOperator<TextFormatter.Change> filter = c -> {
@@ -70,12 +77,12 @@ public class BodyCreatorController {
             }
         };
 
-        StringConverter<Double> converter = new StringConverter<Double>() {
+        StringConverter<Double> converter = new StringConverter<>() {
 
             @Override
             public Double fromString(String s) {
                 if (s.isEmpty() || "-".equals(s) || ".".equals(s) || "-.".equals(s)) {
-                    return 0.0 ;
+                    return 0.0;
                 } else {
                     return Double.valueOf(s);
                 }
@@ -92,12 +99,16 @@ public class BodyCreatorController {
         TextFormatter<Double> textFormatterMass = new TextFormatter<>(converter, 1000.0, filter);
         massField.setTextFormatter(textFormatterMass);
 
-        // TODO error handling
         colorField.setOnAction(event -> previewBody.setColor(colorField.getValue()));
     }
 
     public void initController(SimulatorController simulatorController) {
         this.simulatorController = simulatorController;
+    }
+
+    public void setXZ(double x, double z) {
+        xField.setText(String.format("%.2f", x));
+        zField.setText(String.format("%.2f", z));
     }
 
     public void initBody() {
@@ -131,14 +142,15 @@ public class BodyCreatorController {
             simulatorController.spawnBody(name, radius, mass, color, texture);
             texture = null;
             paneImage.getChildren().clear();
+
             // Disable buttons
             posBtn.setDisable(false);
             spawnBtn.setDisable(true);
+            textureBtn.setDisable(true);
             massField.setDisable(true);
             radiusField.setDisable(true);
             nameField.setDisable(true);
             colorField.setDisable(true);
-            textureBtn.setDisable(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -148,6 +160,8 @@ public class BodyCreatorController {
     void confirmPos(ActionEvent event) {
         posBtn.setDisable(true);
         confirmBtn.setDisable(false);
+        xField.setDisable(true);
+        zField.setDisable(true);
         simulatorController.confirmPos();
     }
 
@@ -164,6 +178,8 @@ public class BodyCreatorController {
         radiusField.setDisable(false);
         nameField.setDisable(false);
         colorField.setDisable(false);
+        xField.setDisable(false);
+        zField.setDisable(false);
     }
 
     @FXML

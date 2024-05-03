@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="551.0" prefWidth="255.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.BodyCreatorController">
+<AnchorPane prefHeight="551.0" prefWidth="255.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.BodyCreatorController">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -51,6 +51,27 @@
                      </font>
                   </Label>
                   <TextField fx:id="radiusField" prefHeight="26.0" prefWidth="120.0" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="255.0" spacing="30.0">
+               <children>
+                  <Label text="Position">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="71.0">
+                     <children>
+                        <Label text="X: " />
+                        <TextField prefHeight="25.0" prefWidth="58.0" fx:id="xField" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="71.0">
+                     <children>
+                        <Label text="Z:" />
+                        <TextField fx:id="zField" prefHeight="25.0" prefWidth="58.0" />
+                     </children>
+                  </HBox>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="0.0" prefWidth="600.0">

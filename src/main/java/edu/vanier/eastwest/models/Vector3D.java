@@ -97,12 +97,12 @@ public class Vector3D extends Group {
 
     /**
      * TODO @Yihweh TestCase
-     * Compare the magnitude of the vector to the highest and lowest found in
-     * the list of vectors and assign him a hexadecimal color code based on that
+     * Compares the magnitude of the vector to the highest and lowest found in
+     * the list of vectors and returns a color based on the comparison.
      *
      * @param maxMagnitude The highest magnitude found in the list of vectors
      * @param minMagnitude The lowest magnitude found in the list of vectors
-     * @return The hexadecimal color code that needs to be applied to this vector
+     * @return The hexadecimal color code calculated from the maximum and minimum magnitudes.
      */
     public String getColor(double maxMagnitude, double minMagnitude) {
         if (magnitude < 0 || maxMagnitude < 0 || minMagnitude < 0) {
@@ -123,7 +123,11 @@ public class Vector3D extends Group {
         return "rgb("+ r + "," + g + "," + b + ")";
     }
 
-    //TODO solve the color problem (comes from magnitude or hex)
+    /***
+     * Sets the fill color of the vector field arrow according to the maximum and minimum magnitudes.
+     * @param maxMagnitude The maximum magnitude amongst all the vectors.
+     * @param minMagnitude The minimum magnitude amongst all the vectors.
+     */
     public void setArrowColor(double maxMagnitude, double minMagnitude){
         String color = getColor(maxMagnitude, minMagnitude);
         if(color.contains("rgb")){

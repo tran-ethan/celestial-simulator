@@ -58,6 +58,9 @@ public class SimulatorController {
     private Button btnPlay;
 
     @FXML
+    private Button btnOrigin;
+
+    @FXML
     private FontAwesomeIconView play;
 
     @FXML
@@ -579,6 +582,13 @@ public class SimulatorController {
 
         // Selection toggle button
         btnSelection.setOnAction(event -> toggleToolButtons(btnSelection));
+
+        // Reset camera position
+        btnOrigin.setOnAction(event -> {
+            camera.setTranslateX(0);
+            camera.setTranslateY(0);
+            camera.setTranslateZ(0);
+        });
 
         // Vector Field visual toggle button
         tglVector.setOnMouseClicked(event -> {

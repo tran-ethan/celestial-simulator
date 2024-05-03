@@ -324,13 +324,25 @@ public class SimulatorController {
                 // TODO
             }
             case "solar" -> {
-                Body sun = new Body("Sun", 40, 100000, new Point3D(0, 0, 0), new Point3D(0, 0, 0), Color.YELLOW, null);
-                Body p1 = new Body("Blue", 10, 20000, new Point3D(125, 0, 120), new Point3D(0, 0, 10), Color.BLUE, null);
-                Body p2 = new Body("Green", 10, 5000, new Point3D(200, 0, 100), new Point3D(-4, 0, 0), Color.GREEN, null);
-                Body p3 = new Body("White", 10, 5000, new Point3D(150, 0, 200), new Point3D(10, 0, 10), Color.WHITE, null);
-                Body p4 = new Body("Red", 10, 5000, new Point3D(200, 0, 200), new Point3D(0, 0, -5), Color.RED, null);
-
-                entities.getChildren().addAll(sun, p1, p2, p3, p4);
+                Image sunImg = new Image(MainApp.class.getResource("images/sun.png").toExternalForm());
+                Image mercuryImg = new Image(MainApp.class.getResource("images/mercury.jpg").toExternalForm());
+                Image venusImg = new Image(MainApp.class.getResource("images/venus.jpg").toExternalForm());
+                Image earthImg = new Image(MainApp.class.getResource("images/earth.jpg").toExternalForm());
+                Image marsImg = new Image(MainApp.class.getResource("images/mars.jpg").toExternalForm());
+                Image jupiterImg = new Image(MainApp.class.getResource("images/jupiter.jpg").toExternalForm());
+                Image saturnImg = new Image(MainApp.class.getResource("images/saturn.jpg").toExternalForm());
+                Image uranusImg = new Image(MainApp.class.getResource("images/uranus.png").toExternalForm());
+                Point3D zero = new Point3D(0, 0, 0);
+                // Scale: radius 1px: 500km, Mass 1kg: 10^24kg
+                Body sun = new Body("Sun", 100, 1989000, zero, zero, null, sunImg);
+                Body mercury = new Body("Mercury", 5, 2, new Point3D(240, 0, 0), new Point3D(0, 0, 35), null, mercuryImg);
+                Body venus = new Body("Venus", 24, 4.9, new Point3D(350, 0, 0), new Point3D(0, 0, -25), null, venusImg);
+                Body earth = new Body("Earth", 24, 6, new Point3D(0, 0, 420), new Point3D(25, 0, 0), null, earthImg);
+                Body mars = new Body("Mars", 7, 3, new Point3D(-480, 0, 0), new Point3D(0, 0, 27), null, marsImg);
+                Body jupiter = new Body("Jupiter", 40, 180, new Point3D(0, 0, 650), new Point3D(-20, 0, 0), null, jupiterImg);
+                Body saturn = new Body("Saturn", 35, 160, new Point3D(0, 0, -730), new Point3D(20, 0, 0), null, saturnImg);
+                Body uranus = new Body("Saturn", 30, 160, new Point3D(-810, 0, 0), new Point3D(0, 0, 15), null, uranusImg);
+                entities.getChildren().addAll(sun, mercury, venus, earth, mars, jupiter, saturn, uranus);
             }
             case "load" -> {
                 // TODO

@@ -13,7 +13,7 @@ import org.fxyz3d.shapes.Cone;
 import java.util.List;
 
 public class Vector3D extends Group {
-    //Imported Code: https://stackoverflow.com/a/43736085
+    //Imported Code: https://stackoverflow.com/a/43736085 for the creating of the arrow
     //2D Array of the turbo colormap in rgb taken from https://gist.github.com/mikhailov-work/6a308c20e494d9e0ccc29036b28faa7a
     static int[][] turbo_srgb_bytes = {
             {48, 18, 59}, {50, 21, 67}, {51, 24, 74}, {52, 27, 81}, {53, 30, 88}, {54, 33, 95}, {55, 36, 102}, {56, 39, 109},
@@ -131,18 +131,6 @@ public class Vector3D extends Group {
     public void setArrowColor(double maxMagnitude, double minMagnitude){
         String color = getColor(maxMagnitude, minMagnitude);
         if(color.contains("rgb")){
-//        for(Node n: getChildren()){
-//            if(n instanceof Shape3D){
-//                //((Shape3D) n).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
-//            }
-//            else if(n instanceof Group){
-//                for(Node z: ((Group) n).getChildren()){
-//                    if(z instanceof MeshView){
-//                       // ((MeshView) z).setMaterial(new PhongMaterial(Color.web(getColor(maxMagnitude, minMagnitude))));
-//                    }
-//                }
-//            }
-//        }
             this.getC1().setMaterial(new PhongMaterial(Color.web(color)));
             this.getC2().setMaterial(new PhongMaterial(Color.web(color)));
             this.getMeshView().setMaterial(new PhongMaterial(Color.web(color)));
@@ -150,8 +138,9 @@ public class Vector3D extends Group {
     }
 
     /***
-     * TODO Documentation
-     * @return
+     * Creates a cone by implementing many triangles using edges and vertices.
+     *
+     * @return The triangle mesh forming the cone
      */
     private TriangleMesh creatingTriangleMesh() {
         float[] points = new float[rounds * 12];
@@ -203,8 +192,10 @@ public class Vector3D extends Group {
     }
 
     /***
-     * TODO Documentation
-     * @return
+     * Create and returns the 3D Vector shape using the triangle mesh from the
+     * creatingTriangleMesh() method along with 2 cylinder.
+     *
+     * @return The 3D Vector shape in a group object
      */
     private Group creatingArrow(){
         Group cone = new Group();
@@ -232,5 +223,4 @@ public class Vector3D extends Group {
         this.setMeshView(meshView);
         return cone;
     }
-
 }

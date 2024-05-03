@@ -126,7 +126,11 @@ public class Body extends Sphere {
     }
 
     public void setTransparency(double opacity) {
-        phongMaterial.setDiffuseColor(Color.rgb(255, 255, 255, opacity));
+        if (color == null) {
+            phongMaterial.setDiffuseColor(Color.rgb(255, 255, 255, opacity));
+        } else {
+            setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), opacity));
+        }
     }
 
     @Override

@@ -39,6 +39,7 @@ import org.fxyz3d.shapes.polygon.PolygonMeshView;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static edu.vanier.eastwest.util.Utility.getAxes;
@@ -321,9 +322,39 @@ public class SimulatorController {
 
             }
             case "random" -> {
-                // TODO
+                // Define the range
+                int min = -2500;
+                int max = 2500;
+                int maxVel = 5;
+                int minVel = -5;
+                int minRad = 20;
+                int maxRad = 50;
+
+                // Create a Random object
+                Random random = new Random();
+
+                for (int i = 0; i < 100; i++) {
+                    int x = random.nextInt((max - min) + 1) + min;
+                    int z = random.nextInt((max - min) + 1) + min;
+                    int radius = random.nextInt(maxRad - minRad + 1) + minRad;
+                    Color color = Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
+                    Body body = new Body("Body " + i,
+                            radius,
+                            radius * 1000,
+                            new Point3D(x, 0, z),
+                            new Point3D(
+                                    random.nextInt(maxVel - minVel + 1) + minVel,
+                                    0,
+                                    random.nextInt(maxVel - minVel + 1) + minVel
+                            ),
+                            color,
+                            null
+                    );
+                    entities.getChildren().add(body);
+                }
             }
             case "solar" -> {
+                // Images
                 Image sunImg = new Image(MainApp.class.getResource("images/sun.png").toExternalForm());
                 Image mercuryImg = new Image(MainApp.class.getResource("images/mercury.jpg").toExternalForm());
                 Image venusImg = new Image(MainApp.class.getResource("images/venus.jpg").toExternalForm());
@@ -332,16 +363,16 @@ public class SimulatorController {
                 Image jupiterImg = new Image(MainApp.class.getResource("images/jupiter.jpg").toExternalForm());
                 Image saturnImg = new Image(MainApp.class.getResource("images/saturn.jpg").toExternalForm());
                 Image uranusImg = new Image(MainApp.class.getResource("images/uranus.png").toExternalForm());
-                Point3D zero = new Point3D(0, 0, 0);
-                // Scale: radius 1px: 500km, Mass 1kg: 10^24kg
-                Body sun = new Body("Sun", 100, 1989000, zero, zero, null, sunImg);
-                Body mercury = new Body("Mercury", 5, 2, new Point3D(240, 0, 0), new Point3D(0, 0, 35), null, mercuryImg);
-                Body venus = new Body("Venus", 24, 4.9, new Point3D(350, 0, 0), new Point3D(0, 0, -25), null, venusImg);
-                Body earth = new Body("Earth", 24, 6, new Point3D(0, 0, 420), new Point3D(25, 0, 0), null, earthImg);
-                Body mars = new Body("Mars", 7, 3, new Point3D(-480, 0, 0), new Point3D(0, 0, 27), null, marsImg);
-                Body jupiter = new Body("Jupiter", 40, 180, new Point3D(0, 0, 650), new Point3D(-20, 0, 0), null, jupiterImg);
-                Body saturn = new Body("Saturn", 35, 160, new Point3D(0, 0, -730), new Point3D(20, 0, 0), null, saturnImg);
-                Body uranus = new Body("Saturn", 30, 160, new Point3D(-810, 0, 0), new Point3D(0, 0, 15), null, uranusImg);
+
+                // Bodies
+                Body sun = new Body("Sun", 100, 1989000, new Point3D(0, 0, 0), new Point3D(0, 0, 0), null, sunImg);
+                Body mercury = new Body("Mercury", 5, 10, new Point3D(240, 0, 0), new Point3D(0, 0, 35), null, mercuryImg);
+                Body venus = new Body("Venus", 24, 50, new Point3D(350, 0, 0), new Point3D(0, 0, -25), null, venusImg);
+                Body earth = new Body("Earth", 24, 60, new Point3D(0, 0, 420), new Point3D(25, 0, 0), null, earthImg);
+                Body mars = new Body("Mars", 7, 3, new Point3D(-480, 0, 0), new Point3D(0, 0, 21), null, marsImg);
+                Body jupiter = new Body("Jupiter", 40, 180, new Point3D(0, 0, 680), new Point3D(-20, 0, 0), null, jupiterImg);
+                Body saturn = new Body("Saturn", 35, 160, new Point3D(0, 0, -770), new Point3D(20, 0, 0), null, saturnImg);
+                Body uranus = new Body("Uranus", 30, 140, new Point3D(-850, 0, 0), new Point3D(0, 0, 15), null, uranusImg);
                 entities.getChildren().addAll(sun, mercury, venus, earth, mars, jupiter, saturn, uranus);
             }
             case "load" -> {

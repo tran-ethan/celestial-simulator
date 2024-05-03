@@ -10,8 +10,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="551.0" prefWidth="255.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.BodyCreatorController">
+<AnchorPane prefHeight="551.0" prefWidth="255.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.vanier.eastwest.controllers.BodyCreatorController">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -23,6 +24,11 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </Label>
+            <Text fx:id="txtMessage" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="244.5367455482483">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
             <HBox alignment="CENTER" prefHeight="0.0" prefWidth="600.0">
                <children>
                   <Label prefHeight="21.0" prefWidth="60.0" text="Name">

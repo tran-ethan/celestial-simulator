@@ -13,6 +13,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
@@ -55,6 +56,9 @@ public class BodyCreatorController {
 
     @FXML
     private Pane paneImage;
+
+    @FXML
+    private Text txtMessage;
 
     private Body previewBody;
 
@@ -138,9 +142,15 @@ public class BodyCreatorController {
         try {
             String name = nameField.getText();
             if (name.isEmpty() || massField.getText().isEmpty() || radiusField.getText().isEmpty()) {
+                txtMessage.setText("Radius, mass and name can not be empty");
                 throw new IllegalArgumentException("Text fields cannot be empty");
             }
-
+            if (Double.parseDouble(massField.getText()) < 1 || Double.parseDouble(massField.getText()) > Math.pow(10, 8)
+                    || Double.parseDouble(radiusField.getText()) < 4 || Double.parseDouble(radiusField.getText()) > 500){
+                txtMessage.setText("Mass should be between 1 - 10^9 and radius should be between 4 - 500");
+                throw new IllegalArgumentException("Mass should be between 1 and 10^9. Radius should be between 4 and 500");
+            }
+            txtMessage.setText("");
             double radius = Double.parseDouble(radiusField.getText());
             double mass = Double.parseDouble(massField.getText());
             Color color = colorField.getValue();

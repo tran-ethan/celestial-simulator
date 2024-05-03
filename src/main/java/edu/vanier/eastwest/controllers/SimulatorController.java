@@ -676,7 +676,7 @@ public class SimulatorController {
         // Slight transparency indicates body has not been spawned in yet
         newBody = new Body(name, radius, mass, new Point3D(0, 0, 0), new Point3D(0, 0, 0), color, texture);
         newBody.setTransparency(0.4);
-
+        controller.setXZ(0,0);
         entities.getChildren().add(newBody);
 
         newBody.setOnDragDetected(event -> {
@@ -693,7 +693,12 @@ public class SimulatorController {
             newBody.setMouseTransparent(false);
             newBody.setCursor(Cursor.OPEN_HAND);
         });
-
+        controller.xField.setOnAction(event -> {
+            newBody.setTranslateX(Math.round(Double.parseDouble(controller.xField.getText())));
+        });
+        controller.zField.setOnAction(event -> {
+            newBody.setTranslateZ(Double.parseDouble(controller.zField.getText()));
+        });
         plane.setOnMouseDragOver(event -> {
             // Localize mouse position intersect with plane
             Point3D position = event.getPickResult().getIntersectedPoint();

@@ -808,7 +808,6 @@ public class SimulatorController {
      * @param selected ToggleButton that was clicked. This ToggleButton will remain selected.
      */
     private void toggleToolButtons(ToggleButton selected) {
-
         // Disable selection and add body tools when other tools are selected
         selectedBody = null;
         previewGroup.getChildren().clear();
@@ -827,11 +826,13 @@ public class SimulatorController {
             if (selected == btnPan) {
                 pane.setCursor(Cursor.MOVE);
             } else if (selected == btnSelection) {
+                propertiesPanel.setManaged(false);
                 pane.setCursor(Cursor.CROSSHAIR);
                 preview.setVisible(true);
             } else if (selected == btnRemove) {
                 pane.setCursor(Cursor.CROSSHAIR);
             } else if (selected == btnAdd) {
+                propertiesPanel.setManaged(true);
                 pane.setCursor(Cursor.OPEN_HAND);
                 bodyCreator.setVisible(true);
                 preview.setVisible(true);

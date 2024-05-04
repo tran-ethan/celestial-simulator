@@ -69,7 +69,6 @@ public class BodyCreatorController {
     @FXML
     public void initialize() {
         // Code adapted from https://stackoverflow.com/a/45981297
-        // TODO error handling, max/min radius and mass
         Pattern validEditingState = Pattern.compile("-?(([1-9][0-9]*)|0)?(\\.[0-9]*)?");
 
         UnaryOperator<TextFormatter.Change> filter = c -> {
@@ -110,15 +109,27 @@ public class BodyCreatorController {
         colorField.setOnAction(event -> previewBody.setColor(colorField.getValue()));
     }
 
+    /**
+     * Link the simulatorController to the one being used
+     * @param simulatorController the simulatorController that is being used
+     */
     public void initController(SimulatorController simulatorController) {
         this.simulatorController = simulatorController;
     }
 
+    /**
+     * Set and format the x and z text fields
+     * @param x The x coordinate of the created body
+     * @param z The z coordinate of the created body
+     */
     public void setXZ(double x, double z) {
         xField.setText(String.format("%.2f", x));
         zField.setText(String.format("%.2f", z));
     }
 
+    /**
+     * Creates the preview of the created body
+     */
     public void initBody() {
         simulatorController.previewGroup.getChildren().clear();
 
@@ -137,10 +148,15 @@ public class BodyCreatorController {
         simulatorController.previewGroup.getChildren().add(previewBody);
     }
 
+    /**
+     * Create the body with the inputs of the user while verifying if the inputs don't have any problem
+     * @param event the click on the spawn button
+     */
     @FXML
     public void spawn(ActionEvent event) {
         try {
             String name = nameField.getText();
+            //Verify for any problems
             if (name.isEmpty() || massField.getText().isEmpty() || radiusField.getText().isEmpty()) {
                 txtMessage.setText("Radius, mass and name can not be empty");
                 throw new IllegalArgumentException("Text fields cannot be empty");
@@ -151,6 +167,8 @@ public class BodyCreatorController {
                 throw new IllegalArgumentException("Mass should be between 1 and 10^8. Radius should be between 4 and 500");
             }
             txtMessage.setText("");
+
+            //Collect the inputs and create the body
             double radius = Double.parseDouble(radiusField.getText());
             double mass = Double.parseDouble(massField.getText());
             Color color = colorField.getValue();
@@ -171,6 +189,10 @@ public class BodyCreatorController {
         }
     }
 
+    /**
+     * Confirms the position of the created body.
+     * @param event the click on the confirm position button.
+     */
     @FXML
     void confirmPos(ActionEvent event) {
         posBtn.setDisable(true);
@@ -180,6 +202,10 @@ public class BodyCreatorController {
         simulatorController.confirmPos();
     }
 
+    /**
+     * Confirms the creation of the body.
+     * @param event the click on the confirm button.
+     */
     @FXML
     void confirm(ActionEvent event) {
         simulatorController.confirmBody();
@@ -197,6 +223,10 @@ public class BodyCreatorController {
         zField.setDisable(false);
     }
 
+    /**
+     * Select the image that will be represented on the sphere.
+     * @param event click on the texture button
+     */
     @FXML
     void selectFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();

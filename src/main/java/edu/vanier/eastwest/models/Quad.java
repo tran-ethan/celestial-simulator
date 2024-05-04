@@ -85,7 +85,10 @@ public class Quad {
      * @return An integer representing the quadrant index:
      *         0 for North West, 1 for North East, 2 for South West, 3 for South East
      */
-    int getQuadrant(Point3D pos) {
+    public int getQuadrant(Point3D pos) {
+        if(pos == null){
+            return -1;
+        }
         double half = length / 2;
         boolean isTop = pos.getZ() < z + half;
         boolean isLeft = pos.getX() < x + half;

@@ -112,7 +112,7 @@ public class Body extends Sphere {
         this.velocity = new Point3D(velocity.getX(), 0, velocity.getZ());
     }
 
-    /***
+    /**
      * Sets the color of the Body object.
      * @param color The color of the body
      */
@@ -122,6 +122,10 @@ public class Body extends Sphere {
         setMaterial(phongMaterial);
     }
 
+    /**
+     * Sets the texture of the Body object
+     * @param texture The Image texture to be applied
+     */
     public void setTexture(Image texture) {
         this.texture = texture;
         phongMaterial = new PhongMaterial();
@@ -129,6 +133,10 @@ public class Body extends Sphere {
         setMaterial(phongMaterial);
     }
 
+    /**
+     * Sets the opacity of the Body object
+     * @param opacity The opacity of the Body object
+     */
     public void setTransparency(double opacity) {
         if (color == null) {
             phongMaterial.setDiffuseColor(Color.rgb(255, 255, 255, opacity));

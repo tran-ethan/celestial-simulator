@@ -10,6 +10,13 @@ import javafx.scene.paint.Color;
 import java.lang.reflect.Type;
 
 public class TypeAdapter implements JsonSerializer<Body>, JsonDeserializer<Body> {
+    /**
+     * Serializes a Body instances by storing all of its properties
+     * @param body The Body instance to be serialized
+     * @param type
+     * @param jsonSerializationContext
+     * @return The serialized JsonElement
+     */
     @Override
     public JsonElement serialize(Body body, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject serializedObject = new JsonObject();
@@ -31,6 +38,13 @@ public class TypeAdapter implements JsonSerializer<Body>, JsonDeserializer<Body>
         return serializedObject;
     }
 
+    /**
+     * Deserializes a JsonElement into a Body instances by reading all the properties
+     * @param jsonElement The JsonElement to be deserialized
+     * @param type
+     * @param jsonDeserializationContext
+     * @return The deserialized Body instance
+     */
     @Override
     public Body deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
         JsonObject serializedObject = jsonElement.getAsJsonObject();

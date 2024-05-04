@@ -35,7 +35,7 @@ public class Body extends Sphere {
      * @param mass The mass of the body
      * @param position The position of the body in the space
      */
-    private Body(String name, double radius, double mass, Point3D position, Point3D velocity) {
+    public Body(String name, double radius, double mass, Point3D position, Point3D velocity) {
         super(radius);
         this.name = name;
         this.mass = mass;

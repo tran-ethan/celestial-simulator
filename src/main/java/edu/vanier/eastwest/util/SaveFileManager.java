@@ -13,6 +13,11 @@ import java.util.List;
 public class SaveFileManager {
     private static Gson gson = new GsonBuilder().registerTypeAdapter(Body.class, new TypeAdapter()).create();
 
+    /**
+     * Writes all Body instances into a json file
+     * @param list The List of Body instances
+     * @param filePath The file path to save the file in
+     */
     public static void toJson(List<Body> list, String filePath) {
         try (FileWriter fileWriter = new FileWriter(filePath)) {
             gson.toJson(list, fileWriter);
@@ -21,6 +26,11 @@ public class SaveFileManager {
         }
     }
 
+    /**
+     * Reads all Body instances previously saved in a json file and adds them all to a List
+     * @param filePath The file path of the json file
+     * @return List of Body instances that was previously saved
+     */
     public static List<Body> fromJson(String filePath) {
         try (FileReader reader = new FileReader(filePath)){
             Type type = new TypeToken<List<Body>>(){}.getType();

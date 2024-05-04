@@ -293,6 +293,11 @@ public class SimulatorController {
      * @return Point3D vector representing the vector gravitational force on p1 by p2.
      */
     public Point3D getGravity(Point3D p1, Point3D p2, double m2, double r1, double r2) {
+        //Mass and radius can't be zero or even less than zero
+        if(p1 == null || p2 == null || r1 <= 0 || r2 <= 0 || m2 <= 0){
+            return new Point3D(0,0,0);
+        }
+
         // Gravity formula from https://en.wikipedia.org/wiki/Newton%27s_law_of_universal_gravitation
         Point3D r = p2.subtract(p1);
         double rMag = r.magnitude();

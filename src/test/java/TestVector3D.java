@@ -7,34 +7,31 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestVector3D {
     @Test
-    /**
-     * --scan
-     */
-    public void VerifyZeroMin() {
+    public void GetColorVerifyZeroMin() {
         var vector = new Vector3D(1,1,new Point3D(1.0,1.0,1.0));
         assertEquals("zeroMinMax", vector.getColor(100, 0));
     }
 
     @Test
-    public void VerifyZeroMax() {
+    public void GetColorVerifyZeroMax() {
         var vector = new Vector3D(1,1,new Point3D(1.0,1.0,1.0));
         assertEquals("zeroMinMax", vector.getColor(0, 100));
     }
 
     @Test
-    public void VerifyZeroMinMax() {
+    public void GetColorVerifyZeroMinMax() {
         var vector = new Vector3D(1,1,new Point3D(1.0,1.0,1.0));
         assertEquals("zeroMinMax", vector.getColor(0, 0));
     }
 
     @Test
-    public void VerifyZeroMagnitude(){
+    public void GetColorVerifyZeroMagnitude(){
         var vector = new Vector3D(1,1,new Point3D(1.0,1.0,1.0));
         assertEquals("zeroMagnitude", vector.getColor(100, 100));
     }
 
     @Test
-    public void VerifyMagnitudeOutOfBounds(){
+    public void GetColorVerifyMagnitudeOutOfBounds(){
         var vector = new Vector3D(1,1,new Point3D(1.0,1.0,1.0));
         vector.setMagnitude(1001);
         assertEquals("magnitudeOutOfBounds", vector.getColor(100, 100));
@@ -43,7 +40,7 @@ public class TestVector3D {
     }
 
     @Test
-    public void VerifyNegativeMagnitude(){
+    public void GetColorVerifyNegativeMagnitude(){
         var vector = new Vector3D(1,1,new Point3D(1.0,1.0,1.0));
         assertEquals("negativeMagnitude", vector.getColor(-1, 100));
         assertEquals("negativeMagnitude", vector.getColor(1, -1));
@@ -52,13 +49,13 @@ public class TestVector3D {
     }
 
     @Test
-    public void VerifyBrokenBounds(){
+    public void GetColorVerifyBrokenBounds(){
         var vector = new Vector3D(1,1,new Point3D(1.0,1.0,1.0));
         vector.setMagnitude(1);
         assertEquals("brokenBounds", vector.getColor(1, 100));
     }
     @Test
-    public void VerifyDifferentColor(){
+    public void GetColorVerifyDifferentColor(){
         var vector = new Vector3D(1,1,new Point3D(1.0,1.0,1.0));
         vector.setMagnitude(100);
         assertEquals("rgb(122,4,3)", vector.getColor(100, 1));

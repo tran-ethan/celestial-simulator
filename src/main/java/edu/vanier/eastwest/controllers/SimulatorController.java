@@ -154,7 +154,7 @@ public class SimulatorController {
     // Simulator parameters
     private static boolean usingBarnes = false;
     private static double theta = 0.5;
-    private static double G = 1;
+    private static double G = 0.1;
     private static final double dt = 0.015; // Time between frames in seconds
 
     BodyCreatorController controller;
@@ -320,12 +320,12 @@ public class SimulatorController {
     private void initBodies() {
         switch (MainApp.preset) {
             case "three" -> {
-                double l = 100;
+                double l = 210;
                 Point3D p1 = new Point3D(0, 0, l);
                 Point3D p2 = new Point3D(l * Math.sqrt(3) / 2, 0, -l * 0.5);
                 Point3D p3 = new Point3D(-l * Math.sqrt(3) / 2, 0, -l * 0.5);
 
-                double v = 10;
+                double v = 30;
                 Point3D v1 = new Point3D(v, 0, 0);
                 Point3D v2 = new Point3D(-v * 0.5, 0, -v * Math.sqrt(3) / 2);
                 Point3D v3 = new Point3D(-v * 0.5, 0, v * Math.sqrt(3) / 2);
@@ -333,9 +333,9 @@ public class SimulatorController {
                 double mass = 50000;
                 double radius = 20;
 
-                Body b1 = new Body("Mass 1", radius, mass, p1, v1, Color.RED, null);
-                Body b2 = new Body("Mass 2", radius, mass, p2, v2, Color.YELLOW, null);
-                Body b3 = new Body("Mass 3", radius, mass, p3, v3, Color.BLUE, null);
+                Body b1 = new Body("Fire ball", radius, mass, p1, v1, Color.RED, null);
+                Body b2 = new Body("Sunshine", radius, mass, p2, v2, Color.YELLOW, null);
+                Body b3 = new Body("Ocean", radius, mass, p3, v3, Color.BLUE, null);
                 entities.getChildren().addAll(b1, b2, b3);
 
             }
@@ -394,10 +394,9 @@ public class SimulatorController {
                 entities.getChildren().addAll(sun, mercury, venus, earth, mars, jupiter, saturn, uranus);
             }
             case "load" -> {
-                try{
+                try {
                     load(new ActionEvent());
-                }
-                catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -423,9 +422,9 @@ public class SimulatorController {
                 }
             }
         }
-        if(usingBarnes){
+        if (usingBarnes) {
             updateVectorsBarnes();
-        }else{
+        } else {
             updateVectors();
         }
     }
@@ -908,12 +907,12 @@ public class SimulatorController {
                     double m2 = comparedBody.getMass();
 
                     Point3D a = getGravity(p1, p2, m2, currentBody.getRadius(), comparedBody.getRadius());
-                    currentBody.setAcceleration(a);
+                    currentBody.setVelocity(currentBody.getVelocity().add(a));
 
                     collide(currentBody, comparedBody);
                 }
-                currentBody.update(dt);
             }
+            currentBody.update(dt);
         }
     }
 
@@ -948,7 +947,8 @@ public class SimulatorController {
 
         // Compute gravity and collisions for all bodies
         for (Body body: bodies()) {
-             attract(body, root);
+            attract(body, root);
+            body.update(dt);
         }
     }
 
@@ -966,12 +966,11 @@ public class SimulatorController {
                 if (body != quad.body) {
                     // Gravity
                     Point3D a = getGravity(body.getPosition(), quad.body.getPosition(), quad.body.getMass(), quad.body.getRadius(), body.getRadius());
-                    body.setAcceleration(a);
+                    body.setVelocity(body.getVelocity().add(a));
 
                     // Collisions
                     collide(body, quad.body);
                 }
-                body.update(dt);
             }
         } else {
             // Center of mass obtained by diving sum of weighted positions with total mass
@@ -982,8 +981,7 @@ public class SimulatorController {
             if ((quad.getLength() / body.getPosition().distance(centerMass)) < theta) {
                 // Base case - Estimate internal node as a single body
                 Point3D a = getGravity(body.getPosition(), centerMass, quad.totalMass, body.getRadius(), body.getRadius());
-                body.setAcceleration(a);
-                body.update(dt);
+                body.setVelocity(body.getVelocity().add(a));
             } else {
                 // Recursive case - Barnes-Hut criterion has not been met
                 for (Quad child : quad.children) {
@@ -991,6 +989,7 @@ public class SimulatorController {
                 }
             }
         }
+
     }
 
     /**

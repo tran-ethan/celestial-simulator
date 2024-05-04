@@ -188,7 +188,7 @@ public class BodyCreatorController {
             nameField.setDisable(true);
             colorField.setDisable(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error spawning body");
         }
     }
 

@@ -384,13 +384,13 @@ public class SimulatorController {
 
                 // Bodies
                 Body sun = new Body("Sun", 100, 1989000, new Point3D(0, 0, 0), new Point3D(0, 0, 0), null, sunImg);
-                Body mercury = new Body("Mercury", 5, 10, new Point3D(240, 0, 0), new Point3D(0, 0, 35), null, mercuryImg);
-                Body venus = new Body("Venus", 24, 50, new Point3D(350, 0, 0), new Point3D(0, 0, -25), null, venusImg);
-                Body earth = new Body("Earth", 24, 60, new Point3D(0, 0, 420), new Point3D(25, 0, 0), null, earthImg);
-                Body mars = new Body("Mars", 7, 3, new Point3D(-480, 0, 0), new Point3D(0, 0, 21), null, marsImg);
-                Body jupiter = new Body("Jupiter", 40, 180, new Point3D(0, 0, 680), new Point3D(-20, 0, 0), null, jupiterImg);
-                Body saturn = new Body("Saturn", 35, 160, new Point3D(0, 0, -770), new Point3D(20, 0, 0), null, saturnImg);
-                Body uranus = new Body("Uranus", 30, 140, new Point3D(-850, 0, 0), new Point3D(0, 0, 15), null, uranusImg);
+                Body mercury = new Body("Mercury", 5, 10, new Point3D(340, 0, 0), new Point3D(0, 0, 180), null, mercuryImg);
+                Body venus = new Body("Venus", 24, 50, new Point3D(450, 0, 0), new Point3D(0, 0, -170), null, venusImg);
+                Body earth = new Body("Earth", 24, 60, new Point3D(0, 0, 530), new Point3D(170, 0, 0), null, earthImg);
+                Body mars = new Body("Mars", 7, 3, new Point3D(-630, 0, 0), new Point3D(0, 0, 150), null, marsImg);
+                Body jupiter = new Body("Jupiter", 40, 180, new Point3D(0, 0, 800), new Point3D(-140, 0, 0), null, jupiterImg);
+                Body saturn = new Body("Saturn", 35, 160, new Point3D(0, 0, -890), new Point3D(120, 0, 0), null, saturnImg);
+                Body uranus = new Body("Uranus", 30, 140, new Point3D(-1000, 0, 0), new Point3D(0, 0, 115), null, uranusImg);
                 entities.getChildren().addAll(sun, mercury, venus, earth, mars, jupiter, saturn, uranus);
             }
             case "load" -> {
@@ -699,12 +699,6 @@ public class SimulatorController {
      * @param texture The image texture of the Body.
      */
     public void spawnBody(String name, double radius, double mass, Color color, Image texture) {
-        System.out.printf("Name: %s\n", name);
-        System.out.printf("Mass: %.2f\n", mass);
-        System.out.printf("Radius: %.2f\n", radius);
-        System.out.printf("Color: %s\n", color);
-        System.out.println("Texture: "+ texture);
-
         // Slight transparency indicates body has not been spawned in yet
         newBody = new Body(name, radius, mass, new Point3D(0, 0, 0), new Point3D(0, 0, 0), color, texture);
         newBody.setTransparency(0.4);

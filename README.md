@@ -1,15 +1,16 @@
-# East Meets West Production
-INTEGRATIVE PROJECT IN COMPUTER SCIENCE AND MATHEMATICS
+# Celestial Simulator
+A star system simulation with vector visualization
+
+## Executing
+To execute this program, run the `MainApp` class
+
+Alternatively, run from the root of the project:
+```agsl
+./gradlew run
+```
 
 ## Project Information
-- IDE: IntelliJ
+- Run and tested IntelliJ IDEA
 - Build System: Gradle 8.5
 - Project management app: Jira Software
 - JDK: Oracle OpenJDK 21.0.2
-
-## Google Doc for logging activity
-https://docs.google.com/document/d/1ADGOYtEDAVSHStxnmICAtHxXOz00U6HfHcXjOGkUGDc/edit?usp=sharing
-
-## Links
-- https://stackoverflow.com/a/43736085
-- https://gist.github.com/mikhailov-work/6a308c20e494d9e0ccc29036b28faa7a 

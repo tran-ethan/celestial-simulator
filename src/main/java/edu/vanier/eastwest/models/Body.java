@@ -70,14 +70,13 @@ public class Body extends Sphere {
         // Update position
         setPosition(getPosition().add(velocity.multiply(time)));
 
-        //Moving the vectors
+        // Moving the vectors
         for (Vector3D vector : this.vectors){
             vector.setTruePosition(new Point3D(vector.getTruePosition().getX() + this.getVelocity().multiply(time).getX(), 0, vector.getTruePosition().getZ() + this.getVelocity().multiply(time).getZ()));
             double vectorX = Math.round(vector.getTruePosition().getX() / 100) * 100;
             double vectorZ = Math.round(vector.getTruePosition().getZ() / 100) * 100;
             vector.setPosition(new Point3D(vectorX, 0, vectorZ));
         }
-
 
         // Update velocity
         setVelocity(velocity.add(acceleration.multiply(time)));

@@ -314,7 +314,7 @@ public class SimulatorController {
         return r.multiply(G * (m2 / Math.pow(Math.max(rMag, rMin), 3)));
     }
 
-    /***
+    /**
      * Initializes Body instances depending on the preset and adds them to the entities group.
      */
     private void initBodies() {
@@ -404,7 +404,7 @@ public class SimulatorController {
         }
     }
 
-    /***
+    /**
      * Creates Vector3D arrows around each Body instance.
      */
     private void initVectors() {
@@ -430,7 +430,7 @@ public class SimulatorController {
         }
     }
 
-    /***
+    /**
      * Initializes all the EventHandlers for the UI controls.
      */
     private void initControls() {
@@ -693,7 +693,7 @@ public class SimulatorController {
         menuLoad.setOnAction(this::load);
     }
 
-    /***
+    /**
      * Spawns in the simulation a preview of the created Body. This preview can be dragged to difference positions.
      * @param name The name of the Body.
      * @param radius The radius of the Body.
@@ -749,7 +749,7 @@ public class SimulatorController {
         btnReset.setDisable(true);
     }
 
-    /***
+    /**
      * Confirms the position of the created Body. A velocity can be dragged from the created Body.
      */
     public void confirmPos() {
@@ -800,7 +800,7 @@ public class SimulatorController {
         });
     }
 
-    /***
+    /**
      * Confirms the creation of the Body instance.
      */
     public void confirmBody() {
@@ -877,7 +877,7 @@ public class SimulatorController {
         }
     }
 
-    /***
+    /**
      * Filters the Group entities for Body objects and returns them in a list.
      * @return A List containing all the Body objects in the simulation.
      */
@@ -888,7 +888,7 @@ public class SimulatorController {
                 .collect(Collectors.toList());
     }
 
-    /***
+    /**
      * Filters the Group entities for Vector3D objects and returns them in a list.
      * @return A List containing all the Vector3D objects in the simulation.
      */
@@ -899,7 +899,7 @@ public class SimulatorController {
                 .collect(Collectors.toList());
     }
 
-    /***
+    /**
      * Updates all Body instances in the simulation using the Direct Sum Algorithm. This method is called each frame if the calculation mode is Barnes-Hut.
      */
     public void updateBodies() {
@@ -920,7 +920,7 @@ public class SimulatorController {
         }
     }
 
-    /***
+    /**
      * Updates all Body instances in the simulation using the Barnes-Hut Algorithm. This method is called each frame if the calculation mode is Barnes-Hut.
      */
     public void updateBodiesBarnes() {
@@ -955,10 +955,11 @@ public class SimulatorController {
         }
     }
 
-    /***
-     * TODO JavaDoc
-     * @param body
-     * @param quad
+    /**
+     * Updates the gravity for bodies using the Barnes-Hut algorithm
+     *
+     * @param body The body to that will be attracted
+     * @param quad The quadrant that the body will be attracted to
      */
     private void attract(Body body, Quad quad) {
         // Base case - External nodes
@@ -995,7 +996,7 @@ public class SimulatorController {
         }
     }
 
-    /***
+    /**
      * Updates all Vector3D instances in the simulation using the Barnes-Hut Algorithm. This method is called each frame if the calculation mode is Barnes-Hut.
      */
     public void updateVectorsBarnes() {
@@ -1033,10 +1034,11 @@ public class SimulatorController {
 
     }
 
-    /***
-     * TODO JavaDoc
-     * @param vector
-     * @param quad
+    /**
+     * TODO
+     *
+     * @param vector The vector that whose gravity will be updated
+     * @param quad Quadrant to which
      * @return
      */
     private Point3D attractVector(Vector3D vector, Quad quad) {
@@ -1119,7 +1121,7 @@ public class SimulatorController {
         }
     }
 
-    /***
+    /**
      * Hides Vector3D instances that are at the same position as another Vector3D instance
      */
     private void toggleDuplicateVector(){
@@ -1135,7 +1137,7 @@ public class SimulatorController {
         }
     }
 
-    /***
+    /**
      * Rotates a Vector3D instance by setting its angle formed with the positive x-axis.
      * @param vector The vector to rotate.
      * @param newAngle Angle from position x-axis.
@@ -1158,7 +1160,7 @@ public class SimulatorController {
         vector.setMagnitude(sumGravityField.magnitude());
     }
 
-    /***
+    /**
      * Checks and handles collisions between two Body objects.
      * @param a The first Body instance;
      * @param b The second Body instance;
@@ -1205,7 +1207,7 @@ public class SimulatorController {
         b.setVelocity(b.getVelocity().subtract(impulse.multiply(im2)));
     }
 
-    /***
+    /**
      * Saves all the Body objects into a Json file.
      */
     public void save(ActionEvent event) {
@@ -1219,7 +1221,7 @@ public class SimulatorController {
         }
     }
 
-    /***
+    /**
      * Loads all the Body objects saved in a Json file.
      */
     public void load(ActionEvent event) {

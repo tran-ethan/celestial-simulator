@@ -106,7 +106,10 @@ public class BodyCreatorController {
         TextFormatter<Double> textFormatterXField = new TextFormatter<>(converter, 0.0, filter);
         xField.setTextFormatter(textFormatterXField);
 
-        colorField.setOnAction(event -> previewBody.setColor(colorField.getValue()));
+        colorField.setOnAction(event -> {
+            previewBody.setColor(colorField.getValue());
+            texture = null;
+        });
     }
 
     /**

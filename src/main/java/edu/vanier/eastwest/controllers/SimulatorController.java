@@ -1032,11 +1032,11 @@ public class SimulatorController {
     }
 
     /**
-     * TODO
+     * Updates the specified vector by computer the gravity for the quadrant
      *
      * @param vector The vector that whose gravity will be updated
-     * @param quad Quadrant to which
-     * @return
+     * @param quad Quadrant to which vector will be attracted
+     * @return A 3D coordinate representing the attracted point
      */
     private Point3D attractVector(Vector3D vector, Quad quad) {
         double x = 0, z = 0;
@@ -1137,9 +1137,9 @@ public class SimulatorController {
     /**
      * Rotates a Vector3D instance by setting its angle formed with the positive x-axis.
      *
-     * @param vector The vector to rotate.
-     * @param newAngle Angle from position x-axis.
-     * @param sumGravityField
+     * @param vector The vector to rotate
+     * @param newAngle Angle from position x-axis
+     * @param sumGravityField The point calculated to be the sum of all the gravity
      */
     private void rotateVector(Vector3D vector, double newAngle, Point3D sumGravityField) {
         double angle;

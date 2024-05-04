@@ -139,7 +139,7 @@
                                              <font>
                                                 <Font size="13.0" />
                                              </font></ToggleSwitch>
-                                          <ToggleSwitch fx:id="tglBarnes" disable="true" prefHeight="18.0" prefWidth="200.0" selected="true" text="Visualize Barnes-Hut (Lag) ">
+                                          <ToggleSwitch fx:id="tglBarnes" disable="true" prefHeight="18.0" prefWidth="200.0" text="Visualize Barnes-Hut (Lag) ">
                                              <font>
                                                 <Font size="13.0" />
                                              </font></ToggleSwitch>

@@ -68,10 +68,10 @@ public class Utility {
         final int faceSize = 8;
         int numDivX = subDivX + 1;
         int numVerts = (subDivY + 1) * numDivX;
-        float points[] = new float[numVerts * pointSize];
-        float texCoords[] = new float[numVerts * texCoordSize];
+        float[] points = new float[numVerts * pointSize];
+        float[] texCoords = new float[numVerts * texCoordSize];
         int faceCount = subDivX * subDivY;
-        int faces[][] = new int[faceCount][faceSize];
+        int[][] faces = new int[faceCount][faceSize];
 
         // Create points and texCoords
         for (int y = 0; y <= subDivY; y++) {

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Body extends Sphere {
+
     @Getter
     private String name;
     @Getter
@@ -89,7 +90,7 @@ public class Body extends Sphere {
         acceleration = new Point3D(0, 0, 0);
     }
 
-    /***
+    /**
      * Returns the position of the Body object within the simulation.
      * @return Point3D position
      */

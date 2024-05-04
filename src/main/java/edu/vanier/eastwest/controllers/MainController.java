@@ -10,15 +10,6 @@ import java.io.IOException;
 public class MainController {
 
     @FXML
-    private Button five;
-
-    @FXML
-    private Button solar;
-
-    @FXML
-    private Button three;
-
-    @FXML
     void start() {
         try {
             MainApp.setRoot("simulator.fxml");

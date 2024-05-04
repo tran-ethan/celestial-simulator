@@ -1,4 +1,4 @@
-package edu.vanier.eastwest.models;
+package edu.vanier.eastwest.util;
 
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.skin.SplitPaneSkin;

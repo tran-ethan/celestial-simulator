@@ -2,12 +2,16 @@ package edu.vanier.eastwest.controllers;
 
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+
 import edu.vanier.eastwest.MainApp;
 import edu.vanier.eastwest.models.Body;
-import edu.vanier.eastwest.models.MySplitPaneSkin;
 import edu.vanier.eastwest.models.Quad;
 import edu.vanier.eastwest.models.Vector3D;
+import edu.vanier.eastwest.util.MySplitPaneSkin;
 import edu.vanier.eastwest.util.SaveFileManager;
+import static edu.vanier.eastwest.util.Utility.getAxes;
+import static edu.vanier.eastwest.util.Utility.getGrid;
+
 import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -33,6 +37,7 @@ import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 import org.controlsfx.control.ToggleSwitch;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
@@ -41,9 +46,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
-
-import static edu.vanier.eastwest.util.Utility.getAxes;
-import static edu.vanier.eastwest.util.Utility.getGrid;
 
 
 public class SimulatorController {

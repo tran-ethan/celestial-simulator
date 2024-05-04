@@ -9,7 +9,7 @@ public class TestSimulatorController {
     SimulatorController controller = new SimulatorController();
 
     @Test
-    public void GetGravityVerifyNullPoint3D(){
+    public void TestGetGravityVerifyNullPoint3D(){
         Point3D p1 = null;
         Point3D p2 = new Point3D(0,0,0);
         assertEquals(new Point3D(0,0,0), controller.getGravity(p1,p2,1,1,1));
@@ -17,7 +17,7 @@ public class TestSimulatorController {
     }
 
     @Test
-    public void GetGravityVerifyZeroPoint3D(){
+    public void TestGetGravityVerifyZeroPoint3D(){
         Point3D p1 = new Point3D(1,0,1);
         Point3D p2 = new Point3D(0,0,0);
         assertEquals(new Point3D(-0.125,0,-0.125), controller.getGravity(p1,p2,1,1,1));
@@ -25,7 +25,7 @@ public class TestSimulatorController {
     }
 
     @Test
-    public void GetGravityVerifyZeroVariables(){
+    public void TestGetGravityVerifyZeroVariables(){
         Point3D p1 = new Point3D(1, 0,1);
         Point3D p2 = new Point3D(0,0,0);
         assertEquals(new Point3D(0,0,0), controller.getGravity(p1,p2,0,1,1));
@@ -35,7 +35,7 @@ public class TestSimulatorController {
     }
 
     @Test
-    public void GetGravityVerifyNegativeVariables(){
+    public void TestGetGravityVerifyNegativeVariables(){
         Point3D p1 = new Point3D(1, 0,1);
         Point3D p2 = new Point3D(0,0,0);
         assertEquals(new Point3D(0,0,0), controller.getGravity(p1,p2,-2131,1,1));
@@ -46,7 +46,7 @@ public class TestSimulatorController {
 
 
     @Test
-    public void GetGravityVerifyNormalExamples(){
+    public void TestGetGravityVerifyNormalExamples(){
         Point3D p1 = new Point3D(1, 0,1);
         Point3D p2 = new Point3D(-242,0,-300);
         Point3D p3 = new Point3D(422, 32, 23);

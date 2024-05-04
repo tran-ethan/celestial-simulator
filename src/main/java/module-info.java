@@ -15,5 +15,6 @@ module edu.vanier.eastwest {
     opens edu.vanier.eastwest.controllers to javafx.fxml;
     exports edu.vanier.eastwest.models;
     opens edu.vanier.eastwest.models to javafx.fxml;
-    exports edu.vanier.eastwest.util to com.google.gson;
+    exports edu.vanier.eastwest.util;
+    opens edu.vanier.eastwest.util to javafx.fxml;
 }

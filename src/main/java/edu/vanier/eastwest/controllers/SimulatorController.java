@@ -441,7 +441,7 @@ public class SimulatorController {
         Rotate yRotate = new Rotate(0, Rotate.Y_AXIS);
         Rotate initX = new Rotate(-30, Rotate.X_AXIS);
         Rotate autoRotateY = new Rotate(0, Rotate.Y_AXIS);
-        Translate zoom = new Translate(0, 0, -500);
+        Translate zoom = new Translate(0, 0, -2000);
         camera.getTransforms().addAll(
                 x1Rotate,
                 x2Rotate,

@@ -30,10 +30,12 @@ public class Body extends Sphere {
     private PhongMaterial phongMaterial;
 
     /**
-     * Constructor for a Body object using 4 parameters.
-     * @param radius The radius of the Sphere
-     * @param mass The mass of the body
-     * @param position The position of the body in the space
+     * Constructor for a Body object using 5 parameters.
+     * @param name The name of the Body
+     * @param radius The radius of the Body
+     * @param mass The mass of the Body
+     * @param position The position of the Body in the simulation
+     * @param velocity The velocity of the Body
      */
     public Body(String name, double radius, double mass, Point3D position, Point3D velocity) {
         super(radius);
@@ -45,12 +47,14 @@ public class Body extends Sphere {
     }
 
     /**
-     * Constructor for a Body object using 4 parameters.
-     * @param radius The radius of the Sphere
-     * @param mass The mass of the body
-     * @param position The position of the body in the space
-     * @param color The color of the object
-     * @param texture The image on the body
+     * Constructor for a Body object using 7 parameters.
+     * @param name The name of the Body
+     * @param radius The radius of the Body
+     * @param mass The mass of the Body
+     * @param position The position of the Body in the simulation
+     * @param velocity The velocity of the Body
+     * @param color The color of the Body
+     * @param texture The image texture on the Body
      */
     public Body(String name, double radius, double mass, Point3D position, Point3D velocity, Color color, Image texture) {
         this(name, radius, mass, position, velocity);

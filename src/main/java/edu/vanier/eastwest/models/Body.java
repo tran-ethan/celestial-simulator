@@ -124,7 +124,7 @@ public class Body extends Sphere {
 
     /**
      * Sets the texture of the Body object
-     * @param texture
+     * @param texture The Image texture to be applied
      */
     public void setTexture(Image texture) {
         this.texture = texture;
@@ -135,7 +135,7 @@ public class Body extends Sphere {
 
     /**
      * Sets the opacity of the Body object
-     * @param opacity
+     * @param opacity The opacity of the Body object
      */
     public void setTransparency(double opacity) {
         if (color == null) {

@@ -252,7 +252,7 @@ public class SimulatorController {
 
     /***
      * The update method for the main animation.
-     * @param event
+     * @param event Event called every time interval
      */
     private void update(ActionEvent event) {
         // Update size of subScene
@@ -373,14 +373,14 @@ public class SimulatorController {
             }
             case "solar" -> {
                 // Images
-                Image sunImg = new Image(MainApp.class.getResource("images/sun.png").toExternalForm());
-                Image mercuryImg = new Image(MainApp.class.getResource("images/mercury.jpg").toExternalForm());
-                Image venusImg = new Image(MainApp.class.getResource("images/venus.jpg").toExternalForm());
-                Image earthImg = new Image(MainApp.class.getResource("images/earth.jpg").toExternalForm());
-                Image marsImg = new Image(MainApp.class.getResource("images/mars.jpg").toExternalForm());
-                Image jupiterImg = new Image(MainApp.class.getResource("images/jupiter.jpg").toExternalForm());
-                Image saturnImg = new Image(MainApp.class.getResource("images/saturn.jpg").toExternalForm());
-                Image uranusImg = new Image(MainApp.class.getResource("images/uranus.png").toExternalForm());
+                Image sunImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/sun.png")).toExternalForm());
+                Image mercuryImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/mercury.jpg")).toExternalForm());
+                Image venusImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/venus.jpg")).toExternalForm());
+                Image earthImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/earth.jpg")).toExternalForm());
+                Image marsImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/mars.jpg")).toExternalForm());
+                Image jupiterImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/jupiter.jpg")).toExternalForm());
+                Image saturnImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/saturn.jpg")).toExternalForm());
+                Image uranusImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/uranus.png")).toExternalForm());
 
                 // Bodies
                 Body sun = new Body("Sun", 100, 1989000, new Point3D(0, 0, 0), new Point3D(0, 0, 0), null, sunImg);
@@ -623,9 +623,7 @@ public class SimulatorController {
             controller.initBody();
         });
 
-        btnRemove.setOnAction(event -> {
-            toggleToolButtons(btnRemove);
-        });
+        btnRemove.setOnAction(event -> toggleToolButtons(btnRemove));
 
         // Switch between Direct sum and Barnes Hut algorithms
         btnAlgorithm.setOnAction(event -> {
@@ -728,12 +726,11 @@ public class SimulatorController {
             newBody.setMouseTransparent(false);
             newBody.setCursor(Cursor.OPEN_HAND);
         });
-        controller.xField.setOnAction(event -> {
-            newBody.setTranslateX(Math.round(Double.parseDouble(controller.xField.getText())));
-        });
-        controller.zField.setOnAction(event -> {
-            newBody.setTranslateZ(Double.parseDouble(controller.zField.getText()));
-        });
+
+        controller.xField.setOnAction(event -> newBody.setTranslateX(Math.round(Double.parseDouble(controller.xField.getText()))));
+
+        controller.zField.setOnAction(event -> newBody.setTranslateZ(Double.parseDouble(controller.zField.getText())));
+
         plane.setOnMouseDragOver(event -> {
             // Localize mouse position intersect with plane
             Point3D position = event.getPickResult().getIntersectedPoint();
@@ -1076,7 +1073,7 @@ public class SimulatorController {
     }
 
 
-    /***
+    /**
      * Updates all Vector3D instances in the simulation using a Direct Sum Algorithm. This method is called each frame if the calculation mode is Direct Sum.
      */
     public void updateVectors() {
@@ -1139,6 +1136,7 @@ public class SimulatorController {
 
     /**
      * Rotates a Vector3D instance by setting its angle formed with the positive x-axis.
+     *
      * @param vector The vector to rotate.
      * @param newAngle Angle from position x-axis.
      * @param sumGravityField

@@ -110,7 +110,7 @@ public class Body extends Sphere {
 
     /***
      * Sets the color of the Body object.
-     * @param color
+     * @param color The color of the body
      */
     public void setColor(Color color) {
         this.color = color;

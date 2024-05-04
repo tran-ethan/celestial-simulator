@@ -93,15 +93,15 @@ public class Vector3D extends Group {
     }
 
     /**
-     * TODO @Yihweh TestCase
      * Compares the magnitude of the vector to the highest and lowest found in
      * the list of vectors and returns a color based on the comparison.
      *
      * @param maxMagnitude The highest magnitude found in the list of vectors
      * @param minMagnitude The lowest magnitude found in the list of vectors
-     * @return The hexadecimal color code calculated from the maximum and minimum magnitudes.
+     * @return The rgb color code calculated from the maximum and minimum magnitudes.
      */
     public String getColor(double maxMagnitude, double minMagnitude) {
+        //Checks all possible problems
         if (magnitude < 0 || maxMagnitude < 0 || minMagnitude < 0) {
             return "negativeMagnitude";
         } else if (maxMagnitude == 0 || minMagnitude == 0) {
@@ -113,6 +113,7 @@ public class Vector3D extends Group {
         } else if (magnitude > maxMagnitude || magnitude < minMagnitude) {
             return "magnitudeOutOfBounds";
         }
+
         float percentage = (float) ((magnitude - minMagnitude) / (maxMagnitude - minMagnitude));
         int r = turbo_srgb_bytes[Math.round(255.0f * (percentage))][0];
         int g = turbo_srgb_bytes[Math.round(255.0f * (percentage))][1];
@@ -147,6 +148,7 @@ public class Vector3D extends Group {
                 1, 1
         };
         int[] faces = new int[rounds * 12];
+        //Creates all the points
         for (int i = 0; i < rounds; i++) {
             int index = i * 12;
             //0
@@ -163,6 +165,7 @@ public class Vector3D extends Group {
             points[index + 11] = height / 2;
         }
 
+        //Create all the faces
         for (int i = 0; i < rounds; i++) {
             int index = i * 12;
             faces[index] = i * 4;
@@ -180,6 +183,7 @@ public class Vector3D extends Group {
             faces[index + 11] = 2;
         }
 
+        //Add them all together to form the cone
         TriangleMesh mesh = new TriangleMesh();
         mesh.getPoints().addAll(points);
         mesh.getTexCoords().addAll(textCoords);
@@ -198,7 +202,7 @@ public class Vector3D extends Group {
         Group cone = new Group();
         PhongMaterial material = new PhongMaterial(Color.BLUE);
 
-
+        //Create the shapes
         TriangleMesh mesh = creatingTriangleMesh();
 
         Cylinder c1 = new Cylinder(radius, 0.01);
@@ -210,6 +214,7 @@ public class Vector3D extends Group {
         c2.setMaterial(material);
         this.setC2(c2);
 
+        //Put the shapes together
         MeshView meshView = new MeshView();
         meshView.setMesh(mesh);
         meshView.setMaterial(material);

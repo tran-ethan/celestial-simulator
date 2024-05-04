@@ -135,7 +135,6 @@ public class SimulatorController {
     private SubScene subScenePreview;
 
     private Timeline timer;
-    private int frame = 0;
     private Camera camera;
     private Group entities;
     public Group previewGroup;
@@ -232,6 +231,9 @@ public class SimulatorController {
         }
     }
 
+    /***
+     * Initializes the mini viewer for body selection and body creation.
+     */
     private void initPreview() {
         PerspectiveCamera previewCam = new PerspectiveCamera(true);
         previewCam.setFarClip(500);
@@ -246,6 +248,10 @@ public class SimulatorController {
         preview.getChildren().add(subScenePreview);
     }
 
+    /***
+     * The update method for the main animation.
+     * @param event
+     */
     private void update(ActionEvent event) {
         // Update size of subScene
         subScene.setHeight(pane.getHeight());
@@ -253,12 +259,12 @@ public class SimulatorController {
         subScenePreview.setHeight(preview.getHeight());
         subScenePreview.setWidth(preview.getWidth());
 
+        // Disable tglVectors if there are too many Body objects to prevent a crash
+        tglVector.setDisable(bodies().size() > 20);
+
         // Remove all previous rectangles
         entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);
-        if (tglVector.isSelected() && frame % 500 == 0){
-            entities.getChildren().removeAll(vectors());
-            initVectors();
-        }
+
         if (usingBarnes) {
             updateBodiesBarnes();
             updateVectorsBarnes();
@@ -279,7 +285,6 @@ public class SimulatorController {
             lblSelected.setText("<No Body Selected>");
             lblProperties.setText("");
         }
-        frame++;
     }
 
     /**
@@ -307,6 +312,9 @@ public class SimulatorController {
         return r.multiply(G * (m2 / Math.pow(Math.max(rMag, rMin), 3)));
     }
 
+    /***
+     * Initializes Body instances depending on the preset and adds them to the entities group.
+     */
     private void initBodies() {
         switch (MainApp.preset) {
             case "three" -> {
@@ -388,32 +396,30 @@ public class SimulatorController {
                     load(new ActionEvent());
                 }
                 catch(Exception e){
-                    e.getMessage();
+                    e.printStackTrace();
                 }
             }
         }
     }
 
     /***
-     * Creates Vector3D arrows around Body object with the most mass.
+     * Creates Vector3D arrows around each Body instance.
      */
     private void initVectors() {
         for (Body body : bodies()){
-            //if(body.getName().equals("Sun")) {
-                int xVariableForVectorSpawning = 2 + (int) Math.ceil(Math.log10(body.getRadius()));
-                int zVariableForVectorSpawning = 2 + (int) Math.ceil(Math.log10(body.getRadius()));
-                int xDistanceForVectorSpawning = 100;
-                int zDistanceForVectorSpawning = 100;
-                for (int i = -xVariableForVectorSpawning; i <= xVariableForVectorSpawning; i++) {
-                    for (int j = -zVariableForVectorSpawning; j <= zVariableForVectorSpawning; j++) {
-                        Vector3D v = new Vector3D(7, 25, new Point3D(i * xDistanceForVectorSpawning + (int) Math.round(body.getTranslateX() / 100) * 100, 0, j * zDistanceForVectorSpawning + (int) Math.round(body.getTranslateZ() / 100) * 100));
-                        v.getTransforms().add(new Rotate(90, 1, 0, 0));
-                        v.getTransforms().add(v.getXRotate());
-                        body.getVectors().add(v);
-                        entities.getChildren().add(v);
-                    }
+            int xVariableForVectorSpawning = 2 + (int) Math.ceil(Math.log10(body.getRadius()));
+            int zVariableForVectorSpawning = 2 + (int) Math.ceil(Math.log10(body.getRadius()));
+            int xDistanceForVectorSpawning = 100;
+            int zDistanceForVectorSpawning = 100;
+            for (int i = -xVariableForVectorSpawning; i <= xVariableForVectorSpawning; i++) {
+                for (int j = -zVariableForVectorSpawning; j <= zVariableForVectorSpawning; j++) {
+                    Vector3D v = new Vector3D(7, 25, new Point3D(i * xDistanceForVectorSpawning + (int) Math.round(body.getTranslateX() / 100) * 100, 0, j * zDistanceForVectorSpawning + (int) Math.round(body.getTranslateZ() / 100) * 100));
+                    v.getTransforms().add(new Rotate(90, 1, 0, 0));
+                    v.getTransforms().add(v.getXRotate());
+                    body.getVectors().add(v);
+                    entities.getChildren().add(v);
                 }
-            //}
+            }
         }
         if(usingBarnes){
             updateVectorsBarnes();
@@ -423,7 +429,7 @@ public class SimulatorController {
     }
 
     /***
-     * Initializes all the EventHandlers for user inputs.
+     * Initializes all the EventHandlers for the UI controls.
      */
     private void initControls() {
 
@@ -616,7 +622,6 @@ public class SimulatorController {
         });
 
         btnRemove.setOnAction(event -> {
-            btnRemove.setSelected(true);
             toggleToolButtons(btnRemove);
         });
 
@@ -686,6 +691,14 @@ public class SimulatorController {
         menuLoad.setOnAction(this::load);
     }
 
+    /***
+     * Spawns in the simulation a preview of the created Body. This preview can be dragged to difference positions.
+     * @param name The name of the Body.
+     * @param radius The radius of the Body.
+     * @param mass The mass of the Body.
+     * @param color The color of the Body.
+     * @param texture The image texture of the Body.
+     */
     public void spawnBody(String name, double radius, double mass, Color color, Image texture) {
         System.out.printf("Name: %s\n", name);
         System.out.printf("Mass: %.2f\n", mass);
@@ -734,6 +747,9 @@ public class SimulatorController {
         btnReset.setDisable(true);
     }
 
+    /***
+     * Confirms the position of the created Body. A velocity can be dragged from the created Body.
+     */
     public void confirmPos() {
         // Cylinder start and end point https://netzwerg.ch/blog/2015/03/22/javafx-3d-line/
         Point3D yAxis = new Point3D(0, 1, 0);
@@ -782,6 +798,9 @@ public class SimulatorController {
         });
     }
 
+    /***
+     * Confirms the creation of the Body instance.
+     */
     public void confirmBody() {
         // Reset mouse events
         newBody.setOnDragDetected(null);
@@ -805,11 +824,12 @@ public class SimulatorController {
         }
         btnPlay.setDisable(false);
         btnReset.setDisable(false);
-        toggleToolButtons(null);
+        btnAdd.setSelected(false);
+        toggleToolButtons(selectedTool);
     }
 
     /**
-     * Unselects all ToggleButtons within the vbox that were not clicked.
+     * Manages the ToggleButtons to determine UI behaviour. Unselects all ToggleButtons within the vbox that were not clicked.
      * @param selected ToggleButton that was clicked. This ToggleButton will remain selected.
      */
     private void toggleToolButtons(ToggleButton selected) {
@@ -825,7 +845,7 @@ public class SimulatorController {
         if (selected == selectedTool) {
             // User clicks on same button twice to deselect the tool
             selectedTool = null;
-        } else if (selected != null) {
+        }else {
             // Tool selection
             selectedTool = selected;
             if (selected == btnPan) {
@@ -855,6 +875,10 @@ public class SimulatorController {
         }
     }
 
+    /***
+     * Filters the Group entities for Body objects and returns them in a list.
+     * @return A List containing all the Body objects in the simulation.
+     */
     public List<Body> bodies() {
         return entities.getChildren().stream()
                 .filter(n -> n instanceof Body)
@@ -862,13 +886,19 @@ public class SimulatorController {
                 .collect(Collectors.toList());
     }
 
+    /***
+     * Filters the Group entities for Vector3D objects and returns them in a list.
+     * @return A List containing all the Vector3D objects in the simulation.
+     */
     public List<Vector3D> vectors() {
-        return entities.getChildren().stream().filter(n -> n instanceof Vector3D).map(n -> (Vector3D) n).collect(Collectors.toList());
+        return entities.getChildren().stream()
+                .filter(n -> n instanceof Vector3D)
+                .map(n -> (Vector3D) n)
+                .collect(Collectors.toList());
     }
 
     /***
-     * Calculates the gravity between each Body object using a direct sum algorithm.
-     *
+     * Updates all Body instances in the simulation using the Direct Sum Algorithm. This method is called each frame if the calculation mode is Barnes-Hut.
      */
     public void updateBodies() {
         for (Body currentBody : bodies()) {
@@ -889,8 +919,7 @@ public class SimulatorController {
     }
 
     /***
-     * Calculates the gravity between each Body object using the Barnes-Hut algorithm.
-     *
+     * Updates all Body instances in the simulation using the Barnes-Hut Algorithm. This method is called each frame if the calculation mode is Barnes-Hut.
      */
     public void updateBodiesBarnes() {
         // https://www.cs.princeton.edu/courses/archive/fall03/cs126/assignments/barnes-hut.html
@@ -924,7 +953,12 @@ public class SimulatorController {
         }
     }
 
-    void attract(Body body, Quad quad) {
+    /***
+     * TODO JavaDoc
+     * @param body
+     * @param quad
+     */
+    private void attract(Body body, Quad quad) {
         // Base case - External nodes
         if (quad.isExternal()) {
             // Ignore if compared body is the same as current body or node does not contain a body
@@ -959,20 +993,22 @@ public class SimulatorController {
         }
     }
 
+    /***
+     * Updates all Vector3D instances in the simulation using the Barnes-Hut Algorithm. This method is called each frame if the calculation mode is Barnes-Hut.
+     */
     public void updateVectorsBarnes() {
-        //moveVectors();
+        toggleDuplicateVector();
+
         double minMagnitude = 0, maxMagnitude = 0;
         boolean start = false;
 
         for (Vector3D vector : vectors()) {
-            double currentAngle = vector.getAngle();
-
             // Compute gravity
             Point3D temp = attractVector(vector, root);
             Point3D sumGravityField = new Point3D(temp.getX(), 0, temp.getZ());
             double newAngle = sumGravityField.angle(new Point3D(100, 0, 0));
 
-            rotateVector(vector, newAngle, currentAngle, sumGravityField);
+            rotateVector(vector, newAngle, sumGravityField);
 
             // Updating colors
             if (!start) {
@@ -995,8 +1031,13 @@ public class SimulatorController {
 
     }
 
-
-    Point3D attractVector(Vector3D vector, Quad quad) {
+    /***
+     * TODO JavaDoc
+     * @param vector
+     * @param quad
+     * @return
+     */
+    private Point3D attractVector(Vector3D vector, Quad quad) {
         double x = 0, z = 0;
         // Base case - External nodes
         if (quad.isExternal()) {
@@ -1032,86 +1073,94 @@ public class SimulatorController {
 
 
     /***
-     * Rotates the vectors towards the direction of the net gravitational field caused by all the Body objects using a direct sum algorithm.
-     *
+     * Updates all Vector3D instances in the simulation using a Direct Sum Algorithm. This method is called each frame if the calculation mode is Direct Sum.
      */
     public void updateVectors() {
-        //moveVectors();
+        toggleDuplicateVector();
         double minMagnitude = 0, maxMagnitude = 0;
         boolean start = false;
         // Update angles
         for (Vector3D vector : vectors()) {
-            Point3D vectorPosition = vector.getPosition();
-            double currentAngle = vector.getAngle();
-            Point3D sumGravityField = new Point3D(0, 0, 0);
+            if(vector.isVisible()) {
+                Point3D vectorPosition = vector.getPosition();
+                Point3D sumGravityField = new Point3D(0, 0, 0);
 
-            for (Body body : bodies()) {
-                Point3D bodyPosition = body.getPosition();
-                double bodyMass = body.getMass();
-                Point3D gravityField = getGravity(vectorPosition, bodyPosition, bodyMass, body.getRadius(), body.getRadius());
-                //Summing the gravitational field forces
-                sumGravityField = sumGravityField.add(gravityField.getX(), 0, gravityField.getZ());
-            }
-
-            double newAngle = sumGravityField.angle(new Point3D(Integer.MAX_VALUE, 0, 0));
-            rotateVector(vector, newAngle, currentAngle, sumGravityField);
-
-            // Update colors
-            if (!start) {
-                maxMagnitude = vector.getMagnitude();
-                minMagnitude = vector.getMagnitude();
-                start = true;
-            } else {
-                if (vector.getMagnitude() > maxMagnitude) {
-                    maxMagnitude = vector.getMagnitude();
+                for (Body body : bodies()) {
+                    Point3D bodyPosition = body.getPosition();
+                    double bodyMass = body.getMass();
+                    Point3D gravityField = getGravity(vectorPosition, bodyPosition, bodyMass, body.getRadius(), body.getRadius());
+                    //Summing the gravitational field forces
+                    sumGravityField = sumGravityField.add(gravityField.getX(), 0, gravityField.getZ());
                 }
-                if (vector.getMagnitude() < minMagnitude) {
+
+                double newAngle = sumGravityField.angle(new Point3D(Integer.MAX_VALUE, 0, 0));
+                rotateVector(vector, newAngle, sumGravityField);
+
+                // Finding the maximum and minimum magnitudes
+                if (!start) {
+                    maxMagnitude = vector.getMagnitude();
                     minMagnitude = vector.getMagnitude();
+                    start = true;
+                } else {
+                    if (vector.getMagnitude() > maxMagnitude) {
+                        maxMagnitude = vector.getMagnitude();
+                    }
+                    if (vector.getMagnitude() < minMagnitude) {
+                        minMagnitude = vector.getMagnitude();
+                    }
                 }
             }
         }
-
+        // Updating the colors
         for (Vector3D vectorM : vectors()) {
             vectorM.setArrowColor(maxMagnitude, minMagnitude);
         }
     }
 
-    private void moveVectors() {
-        //Moving the vectors
-        for(Body body : bodies()) {
-            for (Vector3D vector : body.getVectors()) {
-                vector.setTruePosition(new Point3D(vector.getTruePosition().getX() + body.getVelocity().multiply(dt).getX(), 0, vector.getTruePosition().getZ() + body.getVelocity().multiply(dt).getZ()));
-                double vectorX = Math.round(vector.getTruePosition().getX() / 100) * 100;
-                double vectorZ = Math.round(vector.getTruePosition().getZ() / 100) * 100;
-                vector.setPosition(new Point3D(vectorX, 0, vectorZ));
-            }
-        }
+    /***
+     * Hides Vector3D instances that are at the same position as another Vector3D instance
+     */
+    private void toggleDuplicateVector(){
         // Removing duplicate vector that is at the same position as another vector
-        for (Vector3D vector : vectors()){
-            entities.getChildren().removeIf(node -> {
-                return node instanceof Vector3D && ((Vector3D) node).getPosition() == vector.getPosition();
-            });
+        for (Vector3D vectorIterated : vectors()) {
+            for (Vector3D vectorLooped : vectors()) {
+                if(!(vectorIterated == vectorLooped) && (vectorIterated.getPosition().equals(vectorLooped.getPosition())) && (vectorLooped.isVisible())) {
+                    vectorLooped.setVisible(false);
+                    break;
+                }
+                vectorIterated.setVisible(true);
+            }
         }
     }
 
-    private void rotateVector(Vector3D vector, double newAngle, double currentAngle, Point3D sumGravityField) {
+    /***
+     * Rotates a Vector3D instance by setting its angle formed with the positive x-axis.
+     * @param vector The vector to rotate.
+     * @param newAngle Angle from position x-axis.
+     * @param sumGravityField
+     */
+    private void rotateVector(Vector3D vector, double newAngle, Point3D sumGravityField) {
         double angle;
         if (vector.getPosition().getZ() > 0) {
-            angle = newAngle - currentAngle;
+            angle = newAngle;
             if (sumGravityField.getZ() >= 0) {
                 angle = -angle;
             }
         } else {
-            angle = currentAngle - newAngle;
+            angle = -newAngle;
             if (sumGravityField.getZ() < 0) {
                 angle = -angle;
             }
         }
-        vector.getXRotate().setAngle(vector.getXRotate().getAngle() + angle);
-        vector.setAngle(newAngle);
+        vector.getXRotate().setAngle(angle);
         vector.setMagnitude(sumGravityField.magnitude());
     }
 
+    /***
+     * Checks and handles collisions between two Body objects.
+     * @param a The first Body instance;
+     * @param b The second Body instance;
+     */
     private void collide(Body a, Body b) {
         // Code adapted from https://stackoverflow.com/questions/345838/ball-to-ball-collision-detection-and-handling
         double distance = a.getPosition().distance(b.getPosition());

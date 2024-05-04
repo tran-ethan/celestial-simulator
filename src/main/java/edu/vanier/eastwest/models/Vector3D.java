@@ -50,8 +50,6 @@ public class Vector3D extends Group {
             {146, 11, 1}, {142, 10, 1}, {139, 9, 2}, {136, 8, 2}, {133, 7, 2}, {129, 6, 2}, {126, 5, 2}, {122, 4, 3}
     };
     @Getter @Setter
-    private double angle;
-    @Getter @Setter
     private double magnitude;
     private int height;
     private int radius;
@@ -73,7 +71,6 @@ public class Vector3D extends Group {
         radius = r;
         magnitude = 0;
         height = h / 5 * 2;
-        angle = 0;
         arrow = creatingArrow();
     }
 
@@ -223,4 +220,5 @@ public class Vector3D extends Group {
         this.setMeshView(meshView);
         return cone;
     }
+
 }

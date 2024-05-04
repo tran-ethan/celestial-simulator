@@ -138,7 +138,7 @@ public class BodyCreatorController {
     }
 
     @FXML
-    void spawn(ActionEvent event) {
+    public void spawn(ActionEvent event) {
         try {
             String name = nameField.getText();
             if (name.isEmpty() || massField.getText().isEmpty() || radiusField.getText().isEmpty()) {

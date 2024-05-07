@@ -648,7 +648,6 @@ public class SimulatorController {
 
         btnReset.setOnAction(event -> {
             entities.getChildren().removeIf(object -> object instanceof Body);
-            timer.play();
         });
 
         tglAxes.setOnMouseClicked(event -> {

@@ -166,6 +166,8 @@ public class BodyCreatorController {
             }
             if (Double.parseDouble(massField.getText()) < 1 || Double.parseDouble(massField.getText()) > Math.pow(10, 8)
                     || Double.parseDouble(radiusField.getText()) < 4 || Double.parseDouble(radiusField.getText()) > 500){
+                massField.clear();
+                radiusField.clear();
                 txtMessage.setText("Mass should be between 1 - 10^8 and radius should be between 4 - 500");
                 throw new IllegalArgumentException("Mass should be between 1 and 10^8. Radius should be between 4 and 500");
             }

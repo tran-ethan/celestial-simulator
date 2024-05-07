@@ -655,7 +655,7 @@ public class SimulatorController {
                 entities.getChildren().add(getAxes(1));
             } else {
                 // Only group in entities is the group containing cylinders
-                entities.getChildren().removeIf(object -> object instanceof Group);
+                entities.getChildren().removeIf(object -> object instanceof Group && !(object instanceof  Vector3D));
             }
         });
 

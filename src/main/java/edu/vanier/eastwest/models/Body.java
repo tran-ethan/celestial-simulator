@@ -147,9 +147,10 @@ public class Body extends Sphere {
 
     @Override
     public String toString() {
-        return String.format("Name: %s\nMass (kg): %.2f\nPosition (m): [%.0f, %.0f, %.0f]\nVelocity (m/s): [%.0f, %.0f, %.0f]",
+        return String.format("Name: %s\nMass (kg): %.2f\nRadius (km): %.2f\nPosition (km): [%.0f, %.0f, %.0f]\nVelocity (km/s): [%.0f, %.0f, %.0f]",
                 getName(),
                 getMass(),
+                getRadius(),
                 getTranslateX(),
                 getTranslateY(),
                 getTranslateZ(),

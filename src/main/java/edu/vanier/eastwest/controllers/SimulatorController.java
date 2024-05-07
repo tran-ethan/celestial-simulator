@@ -262,7 +262,7 @@ public class SimulatorController {
         subScenePreview.setWidth(preview.getWidth());
 
         // Disable tglVectors if there are too many Body objects to prevent a crash
-        tglVector.setDisable(bodies().size() > 20);
+        tglVector.setDisable(bodies().size() > 10);
 
         // Remove all previous rectangles
         entities.getChildren().removeIf(node -> node instanceof Rectangle && node != plane);

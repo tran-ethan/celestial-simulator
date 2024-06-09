@@ -14,7 +14,7 @@ A fully interactive 3D **n-body** simulation using Barnes-Hut algorithm with gra
 ## Getting started
 ### Prerequisites
 Before you can build and run this project, ensure you have the following software installed on your system:
-- Oracle OpenJDK 21.0.2 - You can download the JDK [here](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html).
+- [Oracle OpenJDK 21.0.2](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)
 
 ### Installation
 Make sure Git is installed on your system before continuing with the installation
@@ -39,8 +39,8 @@ To run the application using the Gradle Wrapper, execute the following command:
 ./gradlew run
 ```
 
-### Running MainApp
+### Using IDE
 You can run the program by directly executing the `main` method in the `MainApp` class directly from within your IDE. Ensure your IDE is configured to use the correct Java SDK and has the necessary dependencies in `build.gradle` installed.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for further details. Planet textures were sourced from [Solar System Scope](https://www.solarsystemscope.com/textures/) in accordance with the Attribution 4.0 International License.
+This project is licensed under the [MIT License](LICENSE). Planet textures were sourced from [Solar System Scope](https://www.solarsystemscope.com/textures/) in accordance with the Attribution 4.0 International License.

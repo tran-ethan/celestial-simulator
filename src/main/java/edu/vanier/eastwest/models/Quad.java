@@ -28,7 +28,7 @@ public class Quad {
     private final double length;
     @Getter
     private boolean external; // Whether this node is an external or internal node
-    private boolean spawn; // Whether to spawn rectangles to visualize barnes hut
+    private final boolean spawn; // Whether to spawn rectangles to visualize barnes hut
 
     public Body body;
     public Quad[] children; // Reference to children

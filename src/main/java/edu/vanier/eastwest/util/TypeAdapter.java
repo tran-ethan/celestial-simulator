@@ -4,7 +4,6 @@ import com.google.gson.*;
 import edu.vanier.eastwest.models.Body;
 import javafx.geometry.Point3D;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 import java.lang.reflect.Type;
@@ -13,8 +12,8 @@ public class TypeAdapter implements JsonSerializer<Body>, JsonDeserializer<Body>
     /**
      * Serializes a Body instances by storing all of its properties
      * @param body The Body instance to be serialized
-     * @param type
-     * @param jsonSerializationContext
+     * @param type The actual type (fully generic type) of the source object
+     * @param jsonSerializationContext Context for serialization that is passed to a custom serializer during invocation
      * @return The serialized JsonElement
      */
     @Override
@@ -23,7 +22,7 @@ public class TypeAdapter implements JsonSerializer<Body>, JsonDeserializer<Body>
         serializedObject.addProperty("name", body.getName());
         serializedObject.addProperty("mass", body.getMass());
         serializedObject.addProperty("radius", body.getRadius());
-        if(body.getColor() != null) {
+        if (body.getColor() != null) {
             serializedObject.addProperty("color", body.getColor().toString());
         }
         serializedObject.addProperty("velocityX", body.getVelocity().getX());
@@ -32,7 +31,7 @@ public class TypeAdapter implements JsonSerializer<Body>, JsonDeserializer<Body>
         serializedObject.addProperty("positionX", body.getPosition().getX());
         serializedObject.addProperty("positionY", body.getPosition().getY());
         serializedObject.addProperty("positionZ", body.getPosition().getZ());
-        if(body.getTexture() != null) {
+        if (body.getTexture() != null) {
             serializedObject.addProperty("texture", body.getTexture().getUrl());
         }
         return serializedObject;
@@ -41,8 +40,8 @@ public class TypeAdapter implements JsonSerializer<Body>, JsonDeserializer<Body>
     /**
      * Deserializes a JsonElement into a Body instances by reading all the properties
      * @param jsonElement The JsonElement to be deserialized
-     * @param type
-     * @param jsonDeserializationContext
+     * @param type The actual type (fully generic type) of the source object
+     * @param jsonDeserializationContext Context for deserialization that is passed to a custom deserializer during invocation
      * @return The deserialized Body instance
      */
     @Override
@@ -52,7 +51,7 @@ public class TypeAdapter implements JsonSerializer<Body>, JsonDeserializer<Body>
         double mass = serializedObject.get("mass").getAsDouble();
         double radius = serializedObject.get("radius").getAsDouble();
         Color color = null;
-        if(serializedObject.get("color") != null) {
+        if (serializedObject.get("color") != null) {
             color = Color.valueOf(serializedObject.get("color").getAsString());
         }
         double velocityX = serializedObject.get("velocityX").getAsDouble();
@@ -64,7 +63,7 @@ public class TypeAdapter implements JsonSerializer<Body>, JsonDeserializer<Body>
         double positionZ = serializedObject.get("positionZ").getAsDouble();
         Point3D position = new Point3D(positionX, positionY, positionZ);
         Image texture = null;
-        if(serializedObject.get("texture") != null){
+        if (serializedObject.get("texture") != null){
             texture = new Image(serializedObject.get("texture").getAsString());
         }
         return new Body(name, radius, mass, position, velocity, color, texture);

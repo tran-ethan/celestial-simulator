@@ -11,7 +11,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class SaveFileManager {
-    private static Gson gson = new GsonBuilder().registerTypeAdapter(Body.class, new TypeAdapter()).create();
+
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(Body.class, new TypeAdapter()).create();
 
     /**
      * Writes all Body instances into a json file

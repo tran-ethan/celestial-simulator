@@ -2,15 +2,14 @@ package edu.vanier.eastwest.models;
 
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Cylinder;
+import javafx.scene.shape.MeshView;
+import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
-import lombok.*;
-import org.fxyz3d.shapes.Cone;
-
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Vector3D extends Group {
     //Imported Code: https://stackoverflow.com/a/43736085 for the creating of the arrow
@@ -51,9 +50,9 @@ public class Vector3D extends Group {
     };
     @Getter @Setter
     private double magnitude;
-    private int height;
-    private int radius;
-    private int rounds = 360;
+    private final int height;
+    private final int radius;
+    private final int rounds = 360;
     private Group arrow;
     @Getter @Setter
     private Cylinder c1 = new Cylinder(), c2 = new Cylinder();

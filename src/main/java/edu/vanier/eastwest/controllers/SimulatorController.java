@@ -373,14 +373,14 @@ public class SimulatorController {
             }
             case "solar" -> {
                 // Images
-                Image sunImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/sun.png")).toExternalForm());
+                Image sunImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/sun.jpg")).toExternalForm());
                 Image mercuryImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/mercury.jpg")).toExternalForm());
                 Image venusImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/venus.jpg")).toExternalForm());
                 Image earthImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/earth.jpg")).toExternalForm());
                 Image marsImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/mars.jpg")).toExternalForm());
                 Image jupiterImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/jupiter.jpg")).toExternalForm());
                 Image saturnImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/saturn.jpg")).toExternalForm());
-                Image uranusImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/uranus.png")).toExternalForm());
+                Image uranusImg = new Image(Objects.requireNonNull(MainApp.class.getResource("images/uranus.jpg")).toExternalForm());
 
                 // Bodies
                 Body sun = new Body("Sun", 100, 1989000, new Point3D(0, 0, 0), new Point3D(0, 0, 0), null, sunImg);

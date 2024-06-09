@@ -24,19 +24,19 @@ cd celestial-simulator
 
 ## Usage
 ### Using Gradle Wrapper
-Run the application using the Gradle Wrapper:
+To run the application using the Gradle Wrapper, execute the following command:
 ```shell
 ./gradlew run
 ```
 
 ### Running MainApp
-You can execute the program by executing the `main` method in the `MainApp` class directly from within your IDE. Ensure your IDE is configured to use Oracle OpenJDK 21.0.2 and has the necessary dependencies installed.
+You can execute the program by executing the `main` method in the `MainApp` class directly from within your IDE. Ensure your IDE is configured to use Oracle OpenJDK 21.0.2 and has the necessary dependencies in `build.gradle` installed.
 
 ### Executing the JAR file
-Execute the JAR file:
+To run the compiled JAR file, execute the following command:
 ```shell
 java -jar ?
 ```
 
 ## License
-This project is licensed under the MIT License. See the `LICENSE` file for further details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for further details. Planet textures were sourced from [Solar System Scope](https://www.solarsystemscope.com/textures/) in accordance with the Attribution 4.0 International License.

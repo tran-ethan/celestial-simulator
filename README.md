@@ -1,6 +1,9 @@
 # Celestial Simulator
 A fully interactive 3D **n-body** simulation using Barnes-Hut algorithm with gravitational vector fields
 
+https://github.com/exisodd/celestial-simulator/assets/96459404/a9a8290b-c3eb-4db2-9a7a-8adce2195985
+Click [here](https://youtu.be/OuzEwJo1PQY) to see a full demonstration of the application
+
 ## Features
 - **N-Body simulation**: Predicting the trajectory of celestial objects under the influence gravity according to Newton's Law of Universal Gravitation
 - **Gravitational fields**: Toggle on/off vector fields for gravity

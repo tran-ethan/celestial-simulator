@@ -4,7 +4,7 @@ A fully interactive 3D **n-body** simulation using Barnes-Hut algorithm with gra
 ## Features
 - **N-Body simulation**: Predicting the trajectory of celestial objects under the influence gravity according to Newton's Law of Universal Gravitation
 - **Gravitational fields**: Toggle on/off vector fields for gravity
-- **Algorithms**: Switch between Direct Sum $$O(n^2)$$ and Barnes-Hut algorithm $$O(n log n)$$ for computing gravitational forces. Option to change Barnes-Hut Criterion (threshold for estimation) and toggling visualization for Barnes-Hut quadrants
+- **Algorithms**: Switch between Direct Sum $O(n^2)$ and Barnes-Hut algorithm $O(n \log n)$ for computing gravitational forces. Option to change Barnes-Hut Criterion (threshold for estimation) and toggling visualization for Barnes-Hut quadrants
 - **Camera Controls**: Panning, zooming, rotating, position resetting, locking in 2D view, follow planets, automatic rotation around axis
 - **Interacting with bodies**: Create bodies with custom radius, mass, textures/colors, positions, velocity. Select/delete bodies, and remove all bodies
 - **Simulation parameters**: Pausing/playing, simulation speed, gravitational constant, toggling grid/axes

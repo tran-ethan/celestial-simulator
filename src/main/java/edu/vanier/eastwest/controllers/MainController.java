@@ -19,7 +19,6 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        System.out.println("starting main");
         background.fitWidthProperty().bind(pane.widthProperty());
         background.fitHeightProperty().bind(pane.heightProperty());
     }

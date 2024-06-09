@@ -42,6 +42,7 @@ import org.controlsfx.control.ToggleSwitch;
 import org.fxyz3d.shapes.polygon.PolygonMeshView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -1223,6 +1224,15 @@ public class SimulatorController {
         if (saveFile != null){
             entities.getChildren().removeAll(bodies());
             entities.getChildren().addAll(Objects.requireNonNull(SaveFileManager.fromJson(saveFile.getPath())));
+        }
+    }
+
+    @FXML
+    void home(ActionEvent event) {
+        try {
+            MainApp.setRoot("main.fxml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

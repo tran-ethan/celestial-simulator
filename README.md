@@ -22,11 +22,11 @@ Before you can build and run this project, ensure you have the following softwar
 Make sure Git is installed on your system before continuing with the installation
 1. Clone the repository
 ```shell
-git clone https://github.com/tran-ethan/animals-revenge.git
+git clone https://github.com/tran-ethan/celestial-simulator.git
 ```
 2. Navigate to the project directory
 ```shell
-cd animals-revenge
+cd celestial-simulator
 ```
 3. Build the project
 ```shell
@@ -35,7 +35,7 @@ cd animals-revenge
 
 ## Usage
 ### Using Gradle Wrapper
-Make sure Oracle OpenJDK 18.0.2 is properly configured in the `JAVA_HOME` environment variable before trying this method. To run the application using the Gradle Wrapper, execute the following command:
+Make sure Oracle OpenJDK 21.0.2 is properly configured in the `JAVA_HOME` environment variable before trying this method. To run the application using the Gradle Wrapper, execute the following command:
 ```shell
 ./gradlew run
 ```
